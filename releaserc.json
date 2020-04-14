@@ -1,0 +1,25 @@
+{
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "releaseRules": [
+          {
+            "scope": "readme",
+            "release": "patch"
+          },
+          {
+            "type": "refactor",
+            "release": "patch"
+          }
+        ]
+      }
+    ],
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/npm",
+    "@semantic-release/github",
+    {
+      "preset": "angular"
+    }
+  ]
+}

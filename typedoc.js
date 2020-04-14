@@ -1,0 +1,18 @@
+module.exports = {
+  categorizeByGroup: true,
+  categoryOrder: ['Data Type', 'Constructor', 'Typeclass Instance', 'Primary Namespace', '*'],
+  defaultCategory: 'Constant',
+  exclude: '**/*Internal.ts',
+  excludeExternals: true,
+  excludeNotExported: true,
+  excludePrivate: true,
+  excludeProtected: true,
+  hideGenerator: true,
+  ignoreCompilerErrors: true,
+  includeDeclarations: true,
+  mode: 'modules',
+  name: 'fp-ts-numerics',
+  out: './docs',
+  stripInternal: true,
+  theme: 'default',
+}

@@ -1,0 +1,138 @@
+import { option, ord } from 'fp-ts'
+import { Bounded } from 'fp-ts/lib/Bounded'
+import { unsafeCoerce } from 'fp-ts/lib/function'
+import { pipe } from 'fp-ts/lib/pipeable'
+import { Show } from 'fp-ts/lib/Show'
+
+import { Enum, instanceEnum } from './Enum'
+import { Int } from './Int'
+import { instanceIntegral, Integral } from './Integral'
+import { NonZero } from './NonZero'
+import { instanceNumeric, Numeric } from './Numeric'
+import { Ratio } from './Ratio'
+import { instanceReal } from './Real'
+import { Real } from './Real'
+
+export function getTypeclasses<T>(N: {
+  bottom: T
+  top: T
+  fromNumber: (n: number) => T
+  isTypeOf: (x: unknown) => x is T
+}): Bounded<T> & Enum<T> & Integral<T> & Numeric<T> & Show<T> {
+  // ### Transformations
+
+  function fromNumber(n: number): option.Option<T> {
+    return N.isTypeOf(n) ? option.some(n) : option.none
+  }
+
+  function toNumber(i: T): number {
+    return unsafeCoerce(i)
+  }
+
+  // ## Math Operations
+
+  const one: T = N.fromNumber(1)
+  const zero: T = N.fromNumber(0)
+
+  function add(a: T, b: T): T {
+    const res = toNumber(a) + toNumber(b)
+    return N.fromNumber(res)
+  }
+
+  function mul(a: T, b: T): T {
+    const res = toNumber(a) * toNumber(b)
+    return N.fromNumber(res)
+  }
+
+  function sub(a: T, b: T): T {
+    const res = toNumber(a) - toNumber(b)
+    return N.fromNumber(res)
+  }
+
+  function div(n: T, d: NonZero<T>): T {
+    const _n = toNumber(n)
+    const _d = toNumber(d)
+    return _n < 0 ? N.fromNumber(Math.ceil(_n / _d)) : N.fromNumber(Math.floor(_n / _d))
+  }
+
+  function mod(n: T, d: NonZero<T>): T {
+    const _n = toNumber(n)
+    const _d = Math.abs(toNumber(d))
+    return N.fromNumber(((_n % _d) + _d) % _d)
+  }
+
+  /**
+   * Typeclasses
+   */
+  const ordGUInt = ord.contramap((b: T) => toNumber(b))(ord.ordNumber)
+
+  const boundedGUInt: Bounded<T> = {
+    ...ordGUInt,
+    bottom: N.bottom,
+    top: N.top,
+  }
+
+  const enumGUInt = instanceEnum<T>({
+    ...ordGUInt,
+    next: (a) => (ord.geq(ordGUInt)(a, boundedGUInt.top) ? option.none : option.some(add(a, one))),
+    prev: (a) =>
+      ord.leq(ordGUInt)(a, boundedGUInt.bottom) ? option.none : option.some(sub(a, one)),
+  })
+
+  const realGUInt: Real<T> = instanceReal<T>({
+    ...ordGUInt,
+    toRational: (a) => Ratio.of(Int)(integralGUInt.toInteger(a), Int.of(1)),
+  })
+
+  const integralGUInt = instanceIntegral<T>({
+    ...realGUInt,
+    quot(a: T, b: NonZero<T>): T {
+      const q = toNumber(a) / toNumber(b)
+      return q < 0
+        ? N.fromNumber(Math.ceil(q))
+        : q > 0
+        ? N.fromNumber(Math.floor(q))
+        : N.fromNumber(q)
+    },
+    rem(a: T, b: NonZero<T>): T {
+      return N.fromNumber(toNumber(a) % toNumber(b))
+    },
+    toInteger(a: T): Int {
+      return Int.unsafeFromNumber(toNumber(a))
+    },
+  })
+
+  const numericGInt: Numeric<T> = instanceNumeric({
+    ...integralGUInt,
+    ...ordGUInt,
+    abs: (a) => N.fromNumber(Math.abs(toNumber(a))),
+    add,
+    div,
+    fromInt: (int) => pipe(Int.toNumber(int), option.map(N.fromNumber)),
+    fromNumber,
+    mod,
+    mul,
+    negate: (n) => n,
+    one,
+    pow: (n, exp) => N.fromNumber(Math.pow(toNumber(n), toNumber(exp))),
+    signum: () => one,
+    sub,
+    toInt: (a) => Int.unsafeFromNumber(toNumber(a)),
+    toNumber,
+    zero,
+  })
+
+  const showGUInt: Show<T> = {
+    show: (a) => JSON.stringify(toNumber(a)),
+  }
+
+  return {
+    ...boundedGUInt,
+    ...enumGUInt,
+    ...integralGUInt,
+    ...numericGInt,
+    ...ordGUInt,
+    ...realGUInt,
+    ...showGUInt,
+  }
+}

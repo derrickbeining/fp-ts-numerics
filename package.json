@@ -1,0 +1,65 @@
+{
+  "author": "Derrick Beining",
+  "dependencies": {
+    "big-integer": "^1.6.48"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "coveralls": "^3.0.11",
+    "eslint-plugin-simple-import-sort": "^5.0.2",
+    "fast-check": "^1.24.1",
+    "fp-ts": "^2.0.5",
+    "fp-ts-laws": "^0.2.1",
+    "husky": "^4.2.5",
+    "rimraf": "^3.0.2",
+    "semantic-release": "^17.0.4",
+    "travis-deploy-once": "^5.0.11",
+    "ts-node": "^8.8.2",
+    "tsdx": "^0.13.1",
+    "tslib": "^1.11.1",
+    "typedoc": "^0.17.4",
+    "typescript": "^3.8.3"
+  },
+  "engines": {
+    "node": ">=10"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/fp-ts-numerics.esm.js",
+  "name": "fp-ts-numerics",
+  "peerDependencies": {
+    "fast-check": ">= 1.24.1 < 2",
+    "fp-ts": "2.x"
+  },
+  "prettier": {
+    "arrowParens": "always",
+    "printWidth": 100,
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "scripts": {
+    "build": "tsdx build",
+    "build:docs": "rimraf docs && typedoc --options typedoc.js src",
+    "lint": "tsdx lint",
+    "prepare": "tsdx build",
+    "start": "tsdx watch",
+    "test": "tsdx test",
+    "semantic-release": "semantic-release",
+    "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
+    "travis-deploy-once": "travis-deploy-once",
+    "coverage": "jest --coverage",
+    "report-coverage": "cat ./coverage/lcov.info | coveralls"
+  },
+  "typings": "dist/index.d.ts",
+  "version": "0.0.0-development"
+}

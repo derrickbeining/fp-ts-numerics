@@ -1,0 +1,525 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>EuclideanRing | fp-ts-numerics</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">fp-ts-numerics</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../globals.html">Globals</a>
+				</li>
+				<li>
+					<a href="../modules/_euclideanring_.html">&quot;EuclideanRing&quot;</a>
+				</li>
+				<li>
+					<a href="_euclideanring_.euclideanring.html">EuclideanRing</a>
+				</li>
+			</ul>
+			<h1>Interface EuclideanRing&lt;A&gt;</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Instances must satisfy the following laws in addition to the <code>Ring</code>
+						laws:</p>
+					</div>
+					<ul>
+						<li>Integral domain: <code>one /= zero</code>, and if <code>a</code> and <code>b</code> are both nonzero then
+						so is their product <code>a * b</code></li>
+						<li>Euclidean function <code>degree</code>:<ul>
+								<li>Nonnegativity: For all nonzero <code>a</code>, <code>degree a &gt;= 0</code></li>
+								<li>Quotient/remainder: For all <code>a</code> and <code>b</code>, where <code>b</code> is nonzero,
+									let <code>q = a / b</code> and <code>r = a `mod` b</code>; then <code>a = q*b + r</code>, and also
+								either <code>r = zero</code> or <code>degree r &lt; degree b</code></li>
+							</ul>
+						</li>
+						<li>Submultiplicative euclidean function:<ul>
+								<li>For all nonzero <code>a</code> and <code>b</code>, <code>degree a &lt;= degree (a * b)</code></li>
+							</ul>
+						</li>
+					</ul>
+					<p>The behaviour of division by <code>zero</code> is unconstrained by these laws,
+						meaning that individual instances are free to choose how to behave in this
+						case. Similarly, there are no restrictions on what the result of
+						<code>degree zero</code> is; it doesn&#39;t make sense to ask for <code>degree zero</code> in the
+						same way that it doesn&#39;t make sense to divide by <code>zero</code>, so again,
+					individual instances may choose how to handle this case.</p>
+					<p>For any <code>EuclideanRing</code> which is also a <code>Field</code>, one valid choice
+						for <code>degree</code> is simply <code>const 1</code>. In fact, unless there&#39;s a specific
+						reason not to, <code>Field</code> types should normally use this definition of
+					<code>degree</code>.</p>
+					<p>The <code>EuclideanRing&lt;Int&gt;</code> instance is one of the most commonly used
+						<code>EuclideanRing</code> instances and deserves a little more discussion. In
+						particular, there are a few different sensible law-abiding implementations
+						to choose from, with slightly different behaviour in the presence of
+						negative dividends or divisors. The most common definitions are &quot;truncating&quot;
+						division, where the result of <code>a / b</code> is rounded towards 0, and &quot;Knuthian&quot;
+						or &quot;flooring&quot; division, where the result of <code>a / b</code> is rounded towards
+						negative infinity. A slightly less common, but arguably more useful, option
+						is &quot;Euclidean&quot; division, which is defined so as to ensure that <code>a `mod` b</code>
+						is always nonnegative. With Euclidean division, <code>a / b</code> rounds towards
+						negative infinity if the divisor is positive, and towards positive infinity
+						if the divisor is negative. Note that all three definitions are identical if
+					we restrict our attention to nonnegative dividends and divisors.</p>
+					<p>The EuclideanRing<Int> instance uses Euclidean division.</p>
+					<p>Additional functions <code>quot</code> and <code>rem</code> are often supplied for data types
+						if truncating division is desired or if a lawful instance is not possible
+					for a given type (like non-arbitrary precision number types).</p>
+					<dl class="tsd-comment-tags">
+						<dt>since</dt>
+						<dd><p>1.0.0</p>
+						</dd>
+					</dl>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>A</h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<a href="_commutativering_.commutativering.html" class="tsd-signature-type">CommutativeRing</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">EuclideanRing</span>
+								<ul class="tsd-hierarchy">
+									<li>
+										<a href="_field_.field.html" class="tsd-signature-type">Field</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section tsd-is-inherited">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_euclideanring_.euclideanring.html#one" class="tsd-kind-icon">one</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_euclideanring_.euclideanring.html#sub" class="tsd-kind-icon">sub</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_euclideanring_.euclideanring.html#zero" class="tsd-kind-icon">zero</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="_euclideanring_.euclideanring.html#add" class="tsd-kind-icon">add</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_euclideanring_.euclideanring.html#degree" class="tsd-kind-icon">degree</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_euclideanring_.euclideanring.html#div" class="tsd-kind-icon">div</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_euclideanring_.euclideanring.html#mod" class="tsd-kind-icon">mod</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="_euclideanring_.euclideanring.html#mul" class="tsd-kind-icon">mul</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="one" class="tsd-anchor"></a>
+					<h3>one</h3>
+					<div class="tsd-signature tsd-kind-icon">one<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">A</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="_semiring_.semiring.html">Semiring</a>.<a href="_semiring_.semiring.html#one">one</a></p>
+						<ul>
+							<li>Defined in Dev/fp-ts-numerics/src/Semiring.ts:38</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="sub" class="tsd-anchor"></a>
+					<h3>sub</h3>
+					<div class="tsd-signature tsd-kind-icon">sub<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">A</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="_ring_.ring.html">Ring</a>.<a href="_ring_.ring.html#sub">sub</a></p>
+						<ul>
+							<li>Defined in Dev/fp-ts-numerics/src/Ring.ts:35</li>
+						</ul>
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>x: <span class="tsd-signature-type">A</span></h5>
+											</li>
+											<li>
+												<h5>y: <span class="tsd-signature-type">A</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">A</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="zero" class="tsd-anchor"></a>
+					<h3>zero</h3>
+					<div class="tsd-signature tsd-kind-icon">zero<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">A</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="_semiring_.semiring.html">Semiring</a>.<a href="_semiring_.semiring.html#zero">zero</a></p>
+						<ul>
+							<li>Defined in Dev/fp-ts-numerics/src/Semiring.ts:39</li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+					<a name="add" class="tsd-anchor"></a>
+					<h3>add</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">add<span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="_semiring_.semiring.html">Semiring</a>.<a href="_semiring_.semiring.html#add">add</a></p>
+								<ul>
+									<li>Defined in Dev/fp-ts-numerics/src/Semiring.ts:36</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>x: <span class="tsd-signature-type">A</span></h5>
+								</li>
+								<li>
+									<h5>y: <span class="tsd-signature-type">A</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">A</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="degree" class="tsd-anchor"></a>
+					<h3>degree</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">degree<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/_natural_.html#natural" class="tsd-signature-type">Natural</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in Dev/fp-ts-numerics/src/EuclideanRing.ts:88</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Euclidean function <code>degree</code> is required to obey the following laws:</p>
+									<ul>
+										<li>Nonnegativity:<ul>
+												<li>For all nonzero <code>a</code>, <code>degree a &gt;= 0</code></li>
+											</ul>
+										</li>
+										<li>Quotient/remainder:<ul>
+												<li>For all <code>a</code> and <code>b</code>, where <code>b</code> is nonzero, let <code>q = div(a,b)</code> and
+													<code>r = mod(a,b)</code>; then <code>a = q*b + r</code>, and also either <code>r = zero</code> or
+												<code>degree(r) &lt; degree(b)</code></li>
+											</ul>
+										</li>
+										<li>Submultiplicative euclidean function:<ul>
+												<li>For all nonzero <code>a</code> and <code>b</code>, `degree(a) &lt;= degree(a * b)</li>
+											</ul>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>a: <span class="tsd-signature-type">A</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../modules/_natural_.html#natural" class="tsd-signature-type">Natural</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="div" class="tsd-anchor"></a>
+					<h3>div</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">div<span class="tsd-signature-symbol">(</span>dividend<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span>, divisor<span class="tsd-signature-symbol">: </span><a href="../modules/_nonzero_.html#nonzero" class="tsd-signature-type">NonZero</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in Dev/fp-ts-numerics/src/EuclideanRing.ts:95</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Euclidean division.</p>
+								</div>
+								<p>Given <code>div(a,b)</code>, if <code>b &gt; 0</code>, result is rounded towards negative infinity. If
+								<code>b &lt; 0</code>, result is rounded towards positive infinity.</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>dividend: <span class="tsd-signature-type">A</span></h5>
+								</li>
+								<li>
+									<h5>divisor: <a href="../modules/_nonzero_.html#nonzero" class="tsd-signature-type">NonZero</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">A</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="mod" class="tsd-anchor"></a>
+					<h3>mod</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">mod<span class="tsd-signature-symbol">(</span>dividend<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span>, divisor<span class="tsd-signature-symbol">: </span><a href="../modules/_nonzero_.html#nonzero" class="tsd-signature-type">NonZero</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in Dev/fp-ts-numerics/src/EuclideanRing.ts:101</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Remainder of Euclidean division.</p>
+								</div>
+								<p><code>mod(a,b)</code> should always be &gt;= 0</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>dividend: <span class="tsd-signature-type">A</span></h5>
+								</li>
+								<li>
+									<h5>divisor: <a href="../modules/_nonzero_.html#nonzero" class="tsd-signature-type">NonZero</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">A</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+					<a name="mul" class="tsd-anchor"></a>
+					<h3>mul</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">mul<span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="_semiring_.semiring.html">Semiring</a>.<a href="_semiring_.semiring.html#mul">mul</a></p>
+								<ul>
+									<li>Defined in Dev/fp-ts-numerics/src/Semiring.ts:37</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>x: <span class="tsd-signature-type">A</span></h5>
+								</li>
+								<li>
+									<h5>y: <span class="tsd-signature-type">A</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">A</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="../globals.html"><em>Globals</em></a>
+					</li>
+					<li class="current tsd-kind-module">
+						<a href="../modules/_euclideanring_.html">&quot;<wbr>Euclidean<wbr>Ring&quot;</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="_euclideanring_.euclideanring.html" class="tsd-kind-icon">Euclidean<wbr>Ring</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="_euclideanring_.euclideanring.html#one" class="tsd-kind-icon">one</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="_euclideanring_.euclideanring.html#sub" class="tsd-kind-icon">sub</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="_euclideanring_.euclideanring.html#zero" class="tsd-kind-icon">zero</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+								<a href="_euclideanring_.euclideanring.html#add" class="tsd-kind-icon">add</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="_euclideanring_.euclideanring.html#degree" class="tsd-kind-icon">degree</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="_euclideanring_.euclideanring.html#div" class="tsd-kind-icon">div</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="_euclideanring_.euclideanring.html#mod" class="tsd-kind-icon">mod</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+								<a href="_euclideanring_.euclideanring.html#mul" class="tsd-kind-icon">mul</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_euclideanring_.html#gcd" class="tsd-kind-icon">gcd</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_euclideanring_.html#instanceeuclideanring" class="tsd-kind-icon">instance<wbr>Euclidean<wbr>Ring</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/_euclideanring_.html#lcm" class="tsd-kind-icon">lcm</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer>
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>
