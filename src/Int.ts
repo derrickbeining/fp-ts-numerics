@@ -13,7 +13,6 @@ import * as Enum from './Enum.Internal'
 import { EuclideanRing } from './EuclideanRing'
 import { instanceEuclideanRing } from './EuclideanRing'
 import { instanceIntegral, Integral } from './Integral'
-import { Natural } from './Natural'
 import { NonZero } from './NonZero'
 import { Ratio } from './Ratio'
 import { instanceReal } from './Real'
@@ -109,7 +108,7 @@ export const euclideanRingInt = instanceEuclideanRing({
   ...commutativeRingInt,
 
   degree: (i) => {
-    return pipe(Natural.fromInt(abs(Int)(i)), option.toNullable)!
+    return unsafeCoerce(abs(Int)(i))
   },
   div: (n: Int, d: NonZero<Int>): Int => {
     if (ordInt.equals(d, semiringInt.zero)) return semiringInt.zero
