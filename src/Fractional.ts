@@ -41,9 +41,6 @@ export function instanceFractional<A>(e: FractionalMembers<A>): Fractional<A> {
 }
 
 /** A helper function for general conversion between Fractional values. */
-export function fromFractional<A, B>(
-  fa: Fractional<A>,
-  fb: Fractional<B>
-): (a: A) => B {
+export function fromFractional<A, B>(fa: Fractional<A>, fb: Fractional<B>): (a: A) => B {
   return (a) => fb.fromRational(fa.toRational(a))
 }

@@ -15,9 +15,7 @@ export const getSemiringLaws = <A>(
     [S.add(a, S.zero), S.add(S.zero, a)].every((x) => S.equals(a, x))
   ),
 
-  commutativity: fc.property(fc.tuple(arb, arb), ([a, b]) =>
-    S.equals(S.add(a, b), S.add(b, a))
-  ),
+  commutativity: fc.property(fc.tuple(arb, arb), ([a, b]) => S.equals(S.add(a, b), S.add(b, a))),
 
   mulAssociativity: fc.property(fc.tuple(arb, arb, arb), ([a, b, c]) =>
     S.equals(S.mul(S.mul(a, b), c), S.mul(a, S.mul(b, c)))

@@ -9,8 +9,7 @@ export const getCommutativeRingLaws = <A>(
   arb: fc.Arbitrary<A>
 ): Record<string, fc.IProperty<unknown>> => ({
   ...getRingLaws(CR, arb),
-  'Commutative multiplication: `a * b = b * a`': fc.property(
-    fc.tuple(arb, arb),
-    ([a, b]) => CR.equals(CR.mul(a, b), CR.mul(b, a))
+  'Commutative multiplication: `a * b = b * a`': fc.property(fc.tuple(arb, arb), ([a, b]) =>
+    CR.equals(CR.mul(a, b), CR.mul(b, a))
   ),
 })

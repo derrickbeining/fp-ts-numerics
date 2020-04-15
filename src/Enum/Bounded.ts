@@ -46,9 +46,7 @@ export interface BoundedEnum<A> extends Bounded<A>, Enum<A> {
  *
  * Runs in `O(n)` where `n` is `fromEnum(top)`
  */
-export const defaultCardinality = <A>(
-  be: Bounded<A> & Enum<A>
-): Cardinality<A> => {
+export const defaultCardinality = <A>(be: Bounded<A> & Enum<A>): Cardinality<A> => {
   return Cardinality.fromInt32(go(Int32.of(1), be.bottom))
   // where
   function go(i: Int32, x: A): Int32 {
@@ -91,9 +89,7 @@ export const defaultFromEnum = <A>(e: Enum<A>) => (a: A): Int32 => {
  *
  * Runs in `O(n)` where `n` is `fromEnum(a)`.
  */
-export const defaultToEnum = <A>(be: Bounded<A> & Enum<A>) => (
-  i: Int32
-): Option<A> => {
+export const defaultToEnum = <A>(be: Bounded<A> & Enum<A>) => (i: Int32): Option<A> => {
   return ord.lt(Int32)(i, Int32.zero) ? option.none : go(i, be.bottom)
 
   // where
@@ -131,9 +127,7 @@ export const fromThenTo = <F extends URIS, A>(
   )
   // where
   function go(step: Int32, to: Int32, e: Int32): Option<[Int32, Int32]> {
-    return ord.leq(Int32)(e, to)
-      ? option.some(tuple(e, Int32.add(e, step)))
-      : option.none
+    return ord.leq(Int32)(e, to) ? option.some(tuple(e, Int32.add(e, step))) : option.none
   }
 }
 
@@ -183,11 +177,7 @@ export const fromThenTo = <F extends URIS, A>(
  * toEnumWithDefaults(boundedEnumBool)(false, true, 2)    -- true
  * ```
  */
-export const toEnumWithDefaults = <A>(be: BoundedEnum<A>) => (
-  low: A,
-  high: A,
-  n: Int32
-): A => {
+export const toEnumWithDefaults = <A>(be: BoundedEnum<A>) => (low: A, high: A, n: Int32): A => {
   return pipe(
     be.toEnum(n),
     option.fold(
