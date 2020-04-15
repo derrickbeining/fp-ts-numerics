@@ -1,6 +1,6 @@
 # fp-ts-numerics
 
-===
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 This library is an early-stage work-in-progress. The idea is to provide some better numeric primitives that TypeScript (because JS) has lacked for too long; like integer types (everything from `UInt8` to arbitrary precision `Int`) and perhaps something like arbitrary precision `Decimal`. Along with
 numeric data types, this lib will attempt to provide a numeric typeclass hierarchy, largely adapted from PureScript's typeclasses, but with some
