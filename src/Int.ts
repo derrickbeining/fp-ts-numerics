@@ -111,11 +111,9 @@ export const euclideanRingInt = instanceEuclideanRing({
     return unsafeCoerce(abs(Int)(i))
   },
   div: (n: Int, d: NonZero<Int>): Int => {
-    if (ordInt.equals(d, semiringInt.zero)) return semiringInt.zero
     return fromBigInt(toBigInt(ringInt.sub(n, euclideanRingInt.mod(n, d))).divide(toBigInt(d)))
   },
   mod: (n, d) => {
-    if (ordInt.equals(d, semiringInt.zero)) return semiringInt.zero
     const a = toBigInt(n)
     const b = toBigInt(abs(Int)(d))
 
