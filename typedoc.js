@@ -13,6 +13,7 @@ module.exports = {
   mode: 'modules',
   name: 'fp-ts-numerics',
   out: './docs',
+  plugins: ['typedoc-plugin-markdown'],
   stripInternal: true,
-  theme: 'default',
+  theme: 'docusaurus',
 }

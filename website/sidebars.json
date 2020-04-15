@@ -1,0 +1,93 @@
+{
+  "docs": {
+    "Docusaurus": [
+      "doc1"
+    ],
+    "First Category": [
+      "doc2"
+    ],
+    "Second Category": [
+      "doc3"
+    ]
+  },
+  "docs-other": {
+    "First Category": [
+      "doc4",
+      "doc5"
+    ]
+  },
+  "fp-ts-numerics": {
+    "Introduction": [
+      "index",
+      "globals"
+    ],
+    "Modules": [
+      "modules/_arithmeticoverflowerror_",
+      "classes/_arithmeticoverflowerror_.arithmeticoverflowerror",
+      "modules/_commutativering_",
+      "interfaces/_commutativering_.commutativering",
+      "modules/_commutativering_laws_",
+      "modules/_divisionring_",
+      "interfaces/_divisionring_.divisionring",
+      "modules/_divisionring_laws_",
+      "modules/_enum_",
+      "modules/_enum_bounded_",
+      "interfaces/_enum_bounded_.boundedenum",
+      "modules/_enum_bounded_cardinality_",
+      "modules/_enum_laws_",
+      "modules/_euclideanring_",
+      "interfaces/_euclideanring_.euclideanring",
+      "modules/_euclideanring_laws_",
+      "modules/_field_",
+      "interfaces/_field_.field",
+      "modules/_field_laws_",
+      "modules/_fractional_",
+      "interfaces/_fractional_.fractional",
+      "modules/_int_",
+      "interfaces/_int_.int",
+      "modules/_int16_",
+      "modules/_int32_",
+      "modules/_int32_bits_",
+      "modules/_int8_",
+      "modules/_integral_",
+      "interfaces/_integral_.integral",
+      "modules/_natural_",
+      "modules/_nonzero_",
+      "modules/_numeric_",
+      "interfaces/_numeric_.numeric",
+      "modules/_ratio_",
+      "interfaces/_ratio_.ratio",
+      "modules/_rational_",
+      "modules/_real_",
+      "interfaces/_real_.real",
+      "modules/_ring_",
+      "interfaces/_ring_.ring",
+      "modules/_ring_laws_",
+      "modules/_semiring_",
+      "interfaces/_semiring_.semiring",
+      "modules/_semiring_laws_",
+      "modules/_uint16_",
+      "modules/_uint32_",
+      "modules/_uint8_",
+      "modules/_index_"
+    ],
+    "Classes": [
+      "classes/_arithmeticoverflowerror_.arithmeticoverflowerror"
+    ],
+    "Interfaces": [
+      "interfaces/_commutativering_.commutativering",
+      "interfaces/_divisionring_.divisionring",
+      "interfaces/_enum_bounded_.boundedenum",
+      "interfaces/_euclideanring_.euclideanring",
+      "interfaces/_field_.field",
+      "interfaces/_fractional_.fractional",
+      "interfaces/_int_.int",
+      "interfaces/_integral_.integral",
+      "interfaces/_numeric_.numeric",
+      "interfaces/_ratio_.ratio",
+      "interfaces/_real_.real",
+      "interfaces/_ring_.ring",
+      "interfaces/_semiring_.semiring"
+    ]
+  }
+}
