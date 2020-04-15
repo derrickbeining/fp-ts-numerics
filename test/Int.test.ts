@@ -117,8 +117,10 @@ describe('Int', () => {
 
     describe(Int.unsafeToNumber.name, () => {
       it('throws when unable to convert to number without truncating', () => {
-        expect(() => Int.unsafeToNumber(Int.unsafeFromNumber(Number.MAX_VALUE))).toThrow()
-        expect(() => Int.unsafeToNumber(Int.unsafeFromNumber(Number.MIN_VALUE))).toThrow()
+        const tooBig = Int.of(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        const tooSmall = Int.of(-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        expect(() => Int.unsafeToNumber(tooBig)).toThrow()
+        expect(() => Int.unsafeToNumber(tooSmall)).toThrow()
       })
 
       it('converts the Int to number when safe to do so', () => {
