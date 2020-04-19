@@ -56,13 +56,6 @@
     "fast-check": ">= 1.24.1 < 2",
     "fp-ts": "2.x"
   },
-  "prettier": {
-    "arrowParens": "always",
-    "printWidth": 100,
-    "semi": false,
-    "singleQuote": true,
-    "trailingComma": "es5"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/derrickbeining/fp-ts-numerics.git"
