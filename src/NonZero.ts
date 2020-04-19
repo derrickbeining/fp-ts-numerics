@@ -1,13 +1,12 @@
 import * as fc from 'fast-check'
 import { option } from 'fp-ts'
 import { Eq } from 'fp-ts/lib/Eq'
-import { unsafeCoerce } from 'fp-ts/lib/function'
 import { Option } from 'fp-ts/lib/Option'
 
 import { Numeric } from './Numeric'
 import { Semiring } from './Semiring'
 
-const NON_ZERO: unique symbol = unsafeCoerce('fp-ts-numerics/NON_ZERO')
+declare const NON_ZERO: unique symbol
 
 export type NonZero<A> = A & { readonly [NON_ZERO]: A }
 
