@@ -1,5 +1,5 @@
 /**
- * Provides the {@link Enum} typeclass interface and functions which operate
+ * Provides the [[Enum]] typeclass interface and functions which operate
  * on `Enum`s
  *
  * @packageDocumentation

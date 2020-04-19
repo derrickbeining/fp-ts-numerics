@@ -1,3 +1,27 @@
+/**
+ * This module provides a way to construct and work with signed, 16-bit
+ * integers. They are just JavaScript`number`s under the hood, so they should
+ * be comparable in performance.
+ *
+ * Since they are limited to 16 bits, `Int16`s are subject to overflowing if
+ * the result of any operation should exceed the range of -2^15 and 2^15 - 1.
+ *
+ * To avoid integer overflow, see [[Int]] for arbitrary precision integers.
+ *
+ * Like the rest of `fp-ts-numerics`, this module exposes the `Int16` type
+ * and namespace as a single declaration. It is intended to be consumed like so:
+ *
+ * ```ts
+ * import { Int16 } from 'fp-ts-numerics'
+ *
+ * function isEven(n: Int16): boolean {
+ *   return Int16.equals(Int16.zero, Int16.mod(n, Int16.of(2)))
+ * }
+ * ```
+ *
+ * @packageDocumentation
+ * @since 1.0.0
+ */
 import { option, ord } from 'fp-ts'
 import { Bounded } from 'fp-ts/lib/Bounded'
 import { Eq } from 'fp-ts/lib/Eq'
@@ -19,7 +43,34 @@ import { instanceReal, Real } from './Real'
 
 declare const int_16: unique symbol
 
+/**
+ * The `Int16` namespace. Its declaration is merged with the `Int16` type so
+ * you only have to import one thing. All functions on `Int16`s are available
+ * here.
+ *
+ * ```ts
+ * import { Int16 } from 'fp-ts-numerics'
+ * //         type
+ * // ----------     namespace
+ * //          |-------
+ * //          |      |
+ * //          v      v
+ * const sum: Int = Int16.add(Int16.of(1), Int16.of(2))
+ * ```
+ *
+ * @since 1.0.0
+ */
 export namespace Int16 {
+  /**
+   * The type of signed, 16-bit integers. Subject to integer overflow.
+   *
+   * ```ts
+   * const myInt: Int = Int.of(1,0,0)
+   * ```
+   *
+   * @category Data Type
+   * @since 1.0.0
+   */
   export interface Int16 extends Readonly<Int32 & { readonly [int_16]: unique symbol }> {}
 
   type Digit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
@@ -39,14 +90,17 @@ export namespace Int16 {
     | [-3, 2, 7, 6, 8]
 
   /**
-   * Constructs a 16-bit, signed, two's complement integer.
+   * Constructs a signed 16-bit integer.
    *
    *   - Min value: -2^15
    *   - Max value: 2^15 - 1
    *
    * @example
+   * ```ts
    * Int16.of(3,2,7,6,7)
    * // > 32767
+   * ```
+   * @category Constructor
    */
   export function of(zero: 0): Int16
   export function of(...digits: Digits): NonZero<Int16>
@@ -189,43 +243,54 @@ export namespace Int16 {
   }
 
   /**
-   * Typeclasses
+   * @category fp-ts Typeclass Instance
    */
-
   const eqInt16: Eq<Int16> = {
     equals,
   }
-
-  const ordInt16: Ord<Int16> = {
+  /**
+   * @category fp-ts Typeclass Instance
+   */
+  export const ordInt16: Ord<Int16> = {
     ...eqInt16,
     compare,
   }
-
-  const boundedInt16: Bounded<Int16> = {
+  /**
+   * @category fp-ts Typeclass Instance
+   */
+  export const boundedInt16: Bounded<Int16> = {
     ...ordInt16,
     bottom,
     top,
   }
-
-  const enumInt16 = instanceEnum<Int16>({
+  /**
+   * @category fp-ts Typeclass Instance
+   */
+  export const enumInt16 = instanceEnum<Int16>({
     ...ordInt16,
     next,
     prev,
   })
-
-  const realInt16: Real<Int16> = instanceReal<Int16>({
+  /**
+   * @category fp-ts Typeclass Instance
+   */
+  export const realInt16: Real<Int16> = instanceReal<Int16>({
     ...ordInt16,
     toRational,
   })
-
-  const integralInt16 = instanceIntegral<Int16>({
+  /**
+   * @category fp-ts Typeclass Instance
+   */
+  export const integralInt16 = instanceIntegral<Int16>({
     ...realInt16,
     quot,
     rem,
     toInteger,
   })
-
-  const numericInt16: Numeric<Int16> = instanceNumeric({
+  /**
+   * @category fp-ts Typeclass Instance
+   */
+  export const numericInt16: Numeric<Int16> = instanceNumeric({
     ...integralInt16,
     ...ordInt16,
     abs,
@@ -244,11 +309,16 @@ export namespace Int16 {
     toNumber,
     zero,
   })
-
-  const showInt16: Show<Int16> = {
+  /**
+   * @category fp-ts Typeclass Instance
+   */
+  export const showInt16: Show<Int16> = {
     show: (a) => JSON.stringify(toNumber(a)),
   }
 
+  /**
+   * @internal
+   */
   export const typeclasses: Bounded<Int16> &
     Enum<Int16> &
     Integral<Int16> &

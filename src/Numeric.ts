@@ -64,7 +64,7 @@ export interface Numeric<A> extends Ord<A> {
    */
   readonly mod: (a: A, b: NonZero<A>) => A
   /**
-   * Multiplication, conventionally expected to satisfy the {@link SemiringLaws}
+   * Multiplication, conventionally expected to satisfy the [[Semiring]]
    * as far as possible.
    */
   readonly mul: (a: A, b: A) => A

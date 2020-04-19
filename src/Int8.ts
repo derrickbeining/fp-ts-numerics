@@ -1,3 +1,27 @@
+/**
+ * This module provides a way to construct and work with signed, 8-bit
+ * integers. They are just JavaScript`number`s under the hood, so they should
+ * be comparable in performance.
+ *
+ * Since they are limited to 8 bits, `Int8`s are subject to overflowing if
+ * the result of any operation should exceed the range of -2^7 and 2^7 -1.
+ *
+ * To avoid integer overflow, see [[Int]] for arbitrary precision integers.
+ *
+ * Like the rest of `fp-ts-numerics`, this module exposes the `Int8` type
+ * and namespace as a single declaration. It is intended to be consumed like so:
+ *
+ * ```ts
+ * import { Int8 } from 'fp-ts-numerics'
+ *
+ * function isEven(n: Int8): boolean {
+ *   return Int8.equals(Int8.zero, Int8.mod(n, Int8.of(2)))
+ * }
+ * ```
+ *
+ * @packageDocumentation
+ * @since 1.0.0
+ */
 import { option, ord } from 'fp-ts'
 import { Bounded } from 'fp-ts/lib/Bounded'
 import { Eq } from 'fp-ts/lib/Eq'

@@ -33,7 +33,7 @@ export const getEuclideanRingLaws = <A>(
    *    and also either r = zero
    *        or degree r < degree b
    */
-  QuotientAndRemainder: fc.property(fc.tuple(arb, getArbitraryNonZero(T)(arb)), ([a, b]) => {
+  'Quotient and Remainder': fc.property(fc.tuple(arb, getArbitraryNonZero(T)(arb)), ([a, b]) => {
     const q = T.div(a, b)
     const r = T.mod(a, b)
     return (

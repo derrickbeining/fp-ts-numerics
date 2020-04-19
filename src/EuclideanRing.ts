@@ -1,11 +1,65 @@
 /**
- * The `EuclideanRing` class is for commutative rings that support division.
- * The mathematical structure this class is based on is sometimes also called
- * a *Euclidean domain*.
- *
- * See {@link EuclideanRing} for laws and more info
  *
  * Adapted from https://github.com/purescript/purescript-prelude/blob/v4.1.1/src/Data/EuclideanRing.purs
+ *
+ * The `EuclideanRing` typeclass is for [[CommutativeRing]]s that support division.
+ * The mathematical structure this typeclass is based on is sometimes also called
+ * a *Euclidean domain*.
+ *
+ * ## Laws
+ * Instances must satisfy the following laws in addition to the
+ * [[CommutativeRing]] laws:
+ *
+ * - **Integral domain**
+ *   - `!equals(one, zero)`, and if `a` and `b` are both non-zero then so is
+ *     their product `a * b`
+ *
+ * - **Euclidean function `degree`**:
+ *   - *Nonnegativity*:
+ *     - For all non-zero `a`, `degree(a) >= 0`
+ *   - *Quotient and remainder*:
+ *       - For all `a` and `b`, where `b` is non-zero,
+ *       - if `q === a / b` and `r === mod(a, b)`
+ *       - then `a === q * b + r`,
+ *       - and either `r === zero` or `degree(r) < degree(b)`
+ *
+ * - **Submultiplicative euclidean function**:
+ *   - For all non-zero `a` and `b`, `degree(a) <= degree(a * b)`
+ *
+ * ## Implementing `degree`
+ *
+ * For any `EuclideanRing` which is also a [[Field]], one valid choice
+ * for `degree` is simply `() => 1`. In fact, unless there's a specific
+ * reason not to, [[Field]] types should normally use this definition of
+ * `degree`.
+ *
+ * ## Types of division and lawfulness
+ * There are a few different sensible law-abiding implementations
+ * to choose from, with slightly different behavior in the presence of
+ * negative dividends or divisors. The most common definitions are
+ *
+ * - Truncating division
+ *   - `a / b` is rounded towards 0.
+ * - Flooring division
+ *   - `a / b` is rounded towards negative infinity.
+ * - Euclidean division:
+ *   - `a / b` rounds towards negative infinity if the divisor is positive, and
+ *     towards positive infinity if the divisor is negative.
+ *   - The benefit this provides is that `mod(a, b)` is always non-negative.
+ *
+ * Note that all three definitions are identical if we restrict our attention
+ * to non-negative dividends and divisors.
+ *
+ * The `EuclideanRing` instances provided by `fp-ts-numerics` use
+ * Euclidean division. The `div`/`mod` functions that exist for numbers which
+ * do not have a `EuclideanRing` instance also use Euclidean division. It would
+ * be good follow this pattern as a convention.
+ *
+ *
+ * If truncating division is desired, `fp-ts-numerics` also provides `quot` and
+ * `rem` functions for that purpose. These can be found on instances of
+ * [[Integral]] as well.
+ *
  *
  * @packageDocumentation
  * @since 1.0.0
@@ -21,51 +75,11 @@ import { isNonZero, NonZero } from './NonZero'
 const EUCLIDEAN_RING: unique symbol = unsafeCoerce('fp-ts-numerics/EUCLIDEAN_RING')
 
 /**
+ * The `EuclideanRing` typeclass is for [[CommutativeRing]]s that support division.
+ * The mathematical structure this typeclass is based on is sometimes also called
+ * a *Euclidean domain*.
  *
- * Instances must satisfy the following laws in addition to the `Ring`
- * laws:
- *
- * - Integral domain: `one /= zero`, and if `a` and `b` are both nonzero then
- *   so is their product `a * b`
- * - Euclidean function `degree`:
- *   - Nonnegativity: For all nonzero `a`, `degree a >= 0`
- *   - Quotient/remainder: For all `a` and `b`, where `b` is nonzero,
- *     let `q = a / b` and ``r = a `mod` b``; then `a = q*b + r`, and also
- *     either `r = zero` or `degree r < degree b`
- * - Submultiplicative euclidean function:
- *   - For all nonzero `a` and `b`, `degree a <= degree (a * b)`
- *
- * The behaviour of division by `zero` is unconstrained by these laws,
- * meaning that individual instances are free to choose how to behave in this
- * case. Similarly, there are no restrictions on what the result of
- * `degree zero` is; it doesn't make sense to ask for `degree zero` in the
- * same way that it doesn't make sense to divide by `zero`, so again,
- * individual instances may choose how to handle this case.
- *
- * For any `EuclideanRing` which is also a `Field`, one valid choice
- * for `degree` is simply `const 1`. In fact, unless there's a specific
- * reason not to, `Field` types should normally use this definition of
- * `degree`.
- *
- * The `EuclideanRing<Int>` instance is one of the most commonly used
- * `EuclideanRing` instances and deserves a little more discussion. In
- * particular, there are a few different sensible law-abiding implementations
- * to choose from, with slightly different behaviour in the presence of
- * negative dividends or divisors. The most common definitions are "truncating"
- * division, where the result of `a / b` is rounded towards 0, and "Knuthian"
- * or "flooring" division, where the result of `a / b` is rounded towards
- * negative infinity. A slightly less common, but arguably more useful, option
- * is "Euclidean" division, which is defined so as to ensure that ``a `mod` b``
- * is always nonnegative. With Euclidean division, `a / b` rounds towards
- * negative infinity if the divisor is positive, and towards positive infinity
- * if the divisor is negative. Note that all three definitions are identical if
- * we restrict our attention to nonnegative dividends and divisors.
- *
- * The EuclideanRing<Int> instance uses Euclidean division.
- *
- * Additional functions `quot` and `rem` are often supplied for data types
- * if truncating division is desired or if a lawful instance is not possible
- * for a given type (like non-arbitrary precision number types).
+ * See [["EuclideanRing"]] module docs for more info
  *
  * @since 1.0.0
  */
@@ -77,13 +91,13 @@ export interface EuclideanRing<A> extends CommutativeRing<A> {
   /**
    * Euclidean function `degree` is required to obey the following laws:
    *   - Nonnegativity:
-   *      - For all nonzero `a`, `degree a >= 0`
+   *      - For all non-zero `a`, `degree(a) >= 0`
    *   - Quotient/remainder:
-   *      - For all `a` and `b`, where `b` is nonzero, let `q = div(a,b)` and
+   *      - For all `a` and `b`, where `b` is non-zero, let `q = div(a,b)` and
    *        `r = mod(a,b)`; then `a = q*b + r`, and also either `r = zero` or
    *        `degree(r) < degree(b)`
    *   - Submultiplicative euclidean function:
-   *      - For all nonzero `a` and `b`, `degree(a) <= degree(a * b)
+   *      - For all non-zero `a` and `b`, `degree(a) <= degree(a * b)
    */
   degree(a: A): Natural
   /**
@@ -106,12 +120,10 @@ interface EuclideanRingMembers<A> extends Omit<EuclideanRing<A>, typeof EUCLIDEA
 /**
  * EuclideanRing instance constructor
  *
- * @example
- * export const MyType: EuclideanRing<MyType> = {
- *   ...EuclideanRing.instance({
- *     ...
- *   })
- * }
+ * ```ts
+const euclideanRingMyType: EuclideanRing<MyType> =
+ *   instanceEuclideanRing({...})
+ * ```
  *
  * @since 1.0.0
  */
@@ -139,8 +151,7 @@ export function gcd<A>(T: Eq<A> & EuclideanRing<A>): (a: A, b: NonZero<A>) => No
 
 /**
  * Calculates the *least common multiple* of two values. It's implemented using
- * {@link gcd} internally. Note that `lcm(0,0)` is `zero` to avoid
- * division-by-zero errors.
+ * {@link gcd} internally.
  *
  * @since 1.0.0
  */
