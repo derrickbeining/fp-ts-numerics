@@ -1,7 +1,9 @@
+const pkg = require('./package.json')
+
 module.exports = {
-  categorizeByGroup: true,
+  // categorizeByGroup: false,
   categoryOrder: ['Data Type', 'Constructor', 'Namespace', 'Typeclass Instance', '*'],
-  defaultCategory: '',
+  defaultCategory: 'Other',
   disableSources: true,
   exclude: '**/*Internal.ts',
   excludeExternals: true,
@@ -13,9 +15,10 @@ module.exports = {
   includeDeclarations: true,
   listInvalidSymbolLinks: true,
   mode: 'modules',
-  name: 'fp-ts-numerics',
+  name: pkg.name,
   out: './docs',
   plugins: ['typedoc-plugin-markdown'],
   stripInternal: true,
   theme: 'docusaurus',
+  tsconfig: 'tsconfig.typedoc.json',
 }
