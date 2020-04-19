@@ -71,6 +71,7 @@
     "docs:dev": "find src | entr -c npm run docs:build",
     "docs:serve": "echo 'cd website && npm start' | bash",
     "lint": "tsdx lint",
+    "lint:fix": "npm run lint -- --fix",
     "postbuild": "eslint --fix \"lib/**/*.{js,ts}\" \"esm/**/*.{js,ts}\"",
     "prebuild": "npm run clean",
     "prepare": "npm run build",
