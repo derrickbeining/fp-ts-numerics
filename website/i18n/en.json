@@ -210,9 +210,6 @@
       "API": "API"
     },
     "categories": {
-      "Docusaurus": "Docusaurus",
-      "First Category": "First Category",
-      "Second Category": "Second Category",
       "Introduction": "Introduction",
       "Modules": "Modules",
       "Classes": "Classes",

@@ -6,3 +6,4 @@ lib
 esm
 .vscode
 docs
+build-docs-temp
