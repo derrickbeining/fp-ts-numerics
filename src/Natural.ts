@@ -21,35 +21,50 @@ declare const NATURAL: unique symbol
 /**
  * Arbitrary-precision non-negative integers
  */
-export type Natural = Int & { readonly [NATURAL]: unique symbol }
+export interface Natural {
+  /**
+   * @internal
+   */
+  readonly [NATURAL]: unique symbol
+}
 
-export type Digit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-export type LeadingDigit = -1 | -2 | -3 | -4 | -5 | -6 | -7 | -8 | -9 | Exclude<Digit, 0>
+type Digit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+type LeadingDigit = Exclude<Digit, 0>
+
 export type Digits = [LeadingDigit | Digit] | [LeadingDigit, ...Array<Digit>]
 
-// function fromDigits(s: 0 | Natural.LeadingDigit): Natural
-// function fromDigits(s: Natural.LeadingDigit, ...i: Array<Natural.Digit>): Natural
-// function fromDigits(s: 0 | Natural.LeadingDigit, ...i: Array<Natural.Digit>): Natural {
-export function fromDigits(zero: 0): Natural
-export function fromDigits(...digits: Digits): NonZero<Natural>
-export function fromDigits(...digits: Digits): Natural | NonZero<Natural> {
+export function of(zero: 0): Natural
+export function of(...digits: Digits): NonZero<Natural>
+export function of(...digits: Digits): Natural | NonZero<Natural> {
   return fromBigInt(Big(digits.map((j) => j.toString()).join('')))
 }
 
-const ordNatural = ord.fromCompare<Natural>((a, b) => {
+/**
+ * @category Typeclass Instance
+ * @since 1.0.0
+ */
+export const ordNatural = ord.fromCompare<Natural>((a, b) => {
   const _a = toBigInt(a)
   const _b = toBigInt(b)
   return _a.greater(_b) ? 1 : _a.lesser(_b) ? -1 : 0
 })
 
-const realNatural: Real<Natural> = instanceReal({
+/**
+ * @category Typeclass Instance
+ * @since 1.0.0
+ */
+export const realNatural: Real<Natural> = instanceReal({
   ...ordNatural,
   toRational: (a) => Ratio.of(Int)(integralNatural.toInteger(a), Int.of(1)),
 })
 
-const integralNatural: Integral<Natural> = instanceIntegral({
+/**
+ * @category Typeclass Instance
+ * @since 1.0.0
+ */
+export const integralNatural: Integral<Natural> = instanceIntegral({
   ...realNatural,
-  toInteger: (a) => a,
+  toInteger: unsafeCoerce,
   /**
    * truncating integer division (rounds toward zero)
    */
@@ -64,23 +79,39 @@ const integralNatural: Integral<Natural> = instanceIntegral({
   },
 })
 
-const semiringNatural = instanceSemiring({
+/**
+ * @category Typeclass Instance
+ * @since 1.0.0
+ */
+export const semiringNatural = instanceSemiring({
   add: (a, b) => fromBigInt(toBigInt(a).add(toBigInt(b))),
   mul: (a, b) => fromBigInt(toBigInt(a).multiply(toBigInt(b))),
-  one: fromDigits(1),
-  zero: fromDigits(0),
+  one: of(1),
+  zero: of(0),
 })
 
-const ringNatural = instanceRing<Natural>({
+/**
+ * @category Typeclass Instance
+ * @since 1.0.0
+ */
+export const ringNatural = instanceRing<Natural>({
   ...semiringNatural,
   sub: (a, b) => fromBigInt(toBigInt(a).subtract(toBigInt(b))),
 })
 
-const commutativeRingNatural = instanceCommutativeRing({
+/**
+ * @category Typeclass Instance
+ * @since 1.0.0
+ */
+export const commutativeRingNatural = instanceCommutativeRing({
   ...ringNatural,
 })
 
-const euclideanRingNatural = instanceEuclideanRing({
+/**
+ * @category Typeclass Instance
+ * @since 1.0.0
+ */
+export const euclideanRingNatural = instanceEuclideanRing({
   ...commutativeRingNatural,
 
   degree: (i) => i,
@@ -91,7 +122,7 @@ const euclideanRingNatural = instanceEuclideanRing({
     )
   },
   mod: (n, d) => {
-    if (ordNatural.equals(d, fromDigits(0))) return fromDigits(0)
+    if (ordNatural.equals(d, of(0))) return of(0)
     const a = toBigInt(n)
     const b = toBigInt(abs(Natural)(d))
 
@@ -104,24 +135,19 @@ const euclideanRingNatural = instanceEuclideanRing({
   },
 })
 
-const enumInt = Enum.instanceEnum({
+/**
+ * @category Typeclass Instance
+ * @since 1.0.0
+ */
+export const enumInt = Enum.instanceEnum({
   // Ord
   ...ordNatural,
-  next: (prev) => option.some(add(prev, one)),
-  prev: (next) => (ordNatural.equals(next, zero) ? option.none : option.some(sub(next, one))),
+  next: (prev) => option.some(Natural.add(prev, Natural.one)),
+  prev: (next) =>
+    ordNatural.equals(next, Natural.zero)
+      ? option.none
+      : option.some(Natural.sub(next, Natural.one)),
 })
-
-const classes: Enum.Enum<Natural> &
-  CommutativeRing<Natural> &
-  EuclideanRing<Natural> &
-  Integral<Natural> = {
-  ...enumInt,
-  ...euclideanRingNatural,
-  ...integralNatural,
-  ...realNatural,
-}
-
-const { add, one, sub, zero } = classes
 
 // ## Functions
 
@@ -184,10 +210,8 @@ function toNumber(i: Natural): Option<number> {
 //   return pipe(toInt(i), option.chain(UInt32.fromInt))
 // }
 
-const utils = {
-  of: fromDigits,
+const exported = {
   fromBigInt,
-  fromDigits,
   fromInt,
   // fromInt,
   fromNumber,
@@ -195,6 +219,7 @@ const utils = {
   // fromInt32,
   // fromUInt32,
   isTypeOf,
+  of,
   toBigInt,
   // toInt,
   // toInt32,
@@ -203,7 +228,14 @@ const utils = {
   // toUInt32,
 }
 
-export const Natural: typeof classes & typeof utils = {
-  ...classes,
-  ...utils,
+export const Natural: Enum.Enum<Natural> &
+  CommutativeRing<Natural> &
+  EuclideanRing<Natural> &
+  Integral<Natural> &
+  typeof exported = {
+  ...enumInt,
+  ...euclideanRingNatural,
+  ...integralNatural,
+  ...realNatural,
+  ...exported,
 }

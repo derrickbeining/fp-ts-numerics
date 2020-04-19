@@ -29,9 +29,12 @@
  * ## Implementing `degree`
  *
  * For any `EuclideanRing` which is also a [[Field]], one valid choice
- * for `degree` is simply `() => 1`. In fact, unless there's a specific
+ * for `degree` is simply `() => one`. In fact, unless there's a specific
  * reason not to, [[Field]] types should normally use this definition of
  * `degree`.
+ *
+ * `(n) => abs(n)` is also a fine implementation when [[Field]] behavior
+ * is not desired.
  *
  * ## Types of division and lawfulness
  * There are a few different sensible law-abiding implementations
@@ -71,6 +74,7 @@ import { unsafeCoerce } from 'fp-ts/lib/function'
 import { CommutativeRing } from './CommutativeRing'
 import { Natural } from './Natural'
 import { isNonZero, NonZero } from './NonZero'
+import { Fn } from './UtilityType'
 
 const EUCLIDEAN_RING: unique symbol = unsafeCoerce('fp-ts-numerics/EUCLIDEAN_RING')
 
@@ -139,10 +143,10 @@ export function instanceEuclideanRing<A>(e: EuclideanRingMembers<A>): EuclideanR
  * algorithm.
  *
  * @complexity O(n^2)
- *
+
  * @since 1.0.0
  */
-export function gcd<A>(T: Eq<A> & EuclideanRing<A>): (a: A, b: NonZero<A>) => NonZero<A> {
+export function gcd<A>(T: Eq<A> & EuclideanRing<A>): Fn<[A, NonZero<A>], NonZero<A>> {
   return (a, b) => {
     const m = T.mod(a, b)
     return isNonZero(T)(m) ? gcd(T)(b, m) : b
@@ -156,7 +160,7 @@ export function gcd<A>(T: Eq<A> & EuclideanRing<A>): (a: A, b: NonZero<A>) => No
  * @since 1.0.0
  */
 
-export function lcm<A>(T: Eq<A> & EuclideanRing<A>): (a: NonZero<A>, b: NonZero<A>) => NonZero<A> {
+export function lcm<A>(T: Eq<A> & EuclideanRing<A>): Fn<[NonZero<A>, NonZero<A>], NonZero<A>> {
   const { div, mul } = T
   return (a, b) => unsafeCoerce(div(mul(a, b), gcd(T)(a, b)))
 }

@@ -28,13 +28,18 @@
       "interfaces/_fractional_.fractional",
       "modules/_int_",
       "interfaces/_int_.int",
+      "modules/_int_arbitrary_",
       "modules/_int16_",
+      "interfaces/_int16_.int16",
       "modules/_int32_",
+      "interfaces/_int32_.int32",
       "modules/_int32_bits_",
       "modules/_int8_",
+      "interfaces/_int8_.int8",
       "modules/_integral_",
       "interfaces/_integral_.integral",
       "modules/_natural_",
+      "interfaces/_natural_.natural",
       "modules/_nonzero_",
       "modules/_numeric_",
       "interfaces/_numeric_.numeric",
@@ -50,8 +55,12 @@
       "interfaces/_semiring_.semiring",
       "modules/_semiring_laws_",
       "modules/_uint16_",
+      "interfaces/_uint16_.uint16",
       "modules/_uint32_",
+      "interfaces/_uint32_.uint32",
       "modules/_uint8_",
+      "interfaces/_uint8_.uint8",
+      "modules/_utilitytype_",
       "modules/_index_"
     ],
     "Classes": [
@@ -65,12 +74,19 @@
       "interfaces/_field_.field",
       "interfaces/_fractional_.fractional",
       "interfaces/_int_.int",
+      "interfaces/_int16_.int16",
+      "interfaces/_int32_.int32",
+      "interfaces/_int8_.int8",
       "interfaces/_integral_.integral",
+      "interfaces/_natural_.natural",
       "interfaces/_numeric_.numeric",
       "interfaces/_ratio_.ratio",
       "interfaces/_real_.real",
       "interfaces/_ring_.ring",
-      "interfaces/_semiring_.semiring"
+      "interfaces/_semiring_.semiring",
+      "interfaces/_uint16_.uint16",
+      "interfaces/_uint32_.uint32",
+      "interfaces/_uint8_.uint8"
     ]
   }
 }

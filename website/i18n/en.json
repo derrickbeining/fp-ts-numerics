@@ -45,6 +45,18 @@
         "title": "Int",
         "sidebar_label": "Int"
       },
+      "interfaces/_int16_.int16": {
+        "title": "Int16",
+        "sidebar_label": "Int16"
+      },
+      "interfaces/_int32_.int32": {
+        "title": "Int32",
+        "sidebar_label": "Int32"
+      },
+      "interfaces/_int8_.int8": {
+        "title": "Int8",
+        "sidebar_label": "Int8"
+      },
       "interfaces/_integral_.integral": {
         "title": "Integral",
         "sidebar_label": "Integral"
@@ -68,6 +80,18 @@
       "interfaces/_semiring_.semiring": {
         "title": "Semiring",
         "sidebar_label": "Semiring"
+      },
+      "interfaces/_uint16_.uint16": {
+        "title": "UInt16",
+        "sidebar_label": "UInt16"
+      },
+      "interfaces/_uint32_.uint32": {
+        "title": "UInt32",
+        "sidebar_label": "UInt32"
+      },
+      "interfaces/_uint8_.uint8": {
+        "title": "UInt8",
+        "sidebar_label": "UInt8"
       },
       "modules/_arithmeticoverflowerror_": {
         "title": "ArithmeticOverflowError",
@@ -132,6 +156,10 @@
       "modules/_int_": {
         "title": "Int",
         "sidebar_label": "Int"
+      },
+      "modules/_int_arbitrary_": {
+        "title": "Int/Arbitrary",
+        "sidebar_label": "Int/Arbitrary"
       },
       "modules/_int16_": {
         "title": "Int16",
@@ -204,6 +232,10 @@
       "modules/_uint8_": {
         "title": "UInt8",
         "sidebar_label": "UInt8"
+      },
+      "modules/_utilitytype_": {
+        "title": "UtilityType",
+        "sidebar_label": "UtilityType"
       }
     },
     "links": {

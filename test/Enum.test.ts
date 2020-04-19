@@ -5,7 +5,8 @@ import fc from 'fast-check'
 import { array as A, ord } from 'fp-ts'
 
 import { enumFromTo } from '../src/Enum'
-import { arbitraryInt, Int } from '../src/Int'
+import { Int } from '../src/Int'
+import { arbitraryInt } from '../src/Int/Arbitrary'
 
 const arbIntTuple = fc.tuple(arbitraryInt, arbitraryInt)
 const arbIntTupleEq = arbIntTuple.filter(([from, to]) => Int.equals(from, to))

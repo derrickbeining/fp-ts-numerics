@@ -22,11 +22,9 @@
 
 // don't remove this empty line ^^^  or module doc gets removed
 import Big, { BigInteger } from 'big-integer'
-import * as fc from 'fast-check'
 import { option, ord } from 'fp-ts'
 import { unsafeCoerce } from 'fp-ts/lib/function'
 import { Option } from 'fp-ts/lib/Option'
-import { pipe } from 'fp-ts/lib/pipeable'
 
 import { CommutativeRing, instanceCommutativeRing } from './CommutativeRing'
 import * as Enum from './Enum.Internal'
@@ -56,11 +54,22 @@ declare const INT: unique symbol
  * @category Data Type
  * @since 1.0.0
  */
-export interface Int extends Readonly<{ readonly [INT]: unique symbol }> {}
+export interface Int {
+  /**
+   * @internal
+   */
+  readonly [INT]: unique symbol
+}
 
 type Digit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 type LeadingDigit = -1 | -2 | -3 | -4 | -5 | -6 | -7 | -8 | -9 | Exclude<Digit, 0>
-type Digits = [LeadingDigit | Digit] | [LeadingDigit, ...Array<Digit>]
+
+/**
+ * A tuple representing the digits of an [[Int]]
+ *
+ * @since 1.0.0
+ */
+export type Digits = [LeadingDigit | Digit] | [LeadingDigit, ...Array<Digit>]
 
 /** @internal */
 function fromBigInt(n: BigInteger): Int {
@@ -238,13 +247,6 @@ export const integralInt = instanceIntegral<Int>({
   },
 })
 
-/**
- *  @category fast-check Arbitrary
- */
-export const arbitraryInt: fc.Arbitrary<Int> = fc
-  .maxSafeInteger()
-  .map((n) => pipe(Int.fromNumber(n), option.toNullable)!)
-
 // ## Transformations
 
 // function fromInt(i: Int): Integer {
@@ -386,9 +388,9 @@ const utils = {
  * import { ord } from 'fp-ts'
  * import { Int } from 'fp-ts-numerics'
  *
- * const is0LT10 = ord.lt(Int)(Int.zero, Int.of(1,0))
- * const twoDivThree = Int.div(Int.of(2), Int.of(3))
- * const zeroTo9000 = Enum.fromTo(Int)(Int.zero, Int.of(9,0,0,0))
+ * const is0LT10: boolean = ord.lt(Int)(Int.zero, Int.of(1,0))
+ * const twoDivThree: Int = Int.div(Int.of(2), Int.of(3))
+ * const zeroTo9000: Array<Int> = Enum.fromTo(Int)(Int.zero, Int.of(9,0,0,0))
  * ```
  * @category Namespace
  * @since 1.0.0
