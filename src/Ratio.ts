@@ -5,7 +5,7 @@ import { NonZero } from './NonZero'
 import { Real } from './Real'
 import { abs, signum } from './Ring'
 
-const RATIO: unique symbol = unsafeCoerce('fp-ts-numerics/RATIO')
+declare const RATIO: unique symbol
 
 /**
  * Rational numbers, with numerator and denominator of some Integral type.
@@ -14,12 +14,10 @@ export interface Ratio<A>
   extends Readonly<{ readonly [RATIO]: { numerator: A; denominator: A } }> {}
 
 const _fromRatio = <A>(r: Ratio<A>): { numerator: A; denominator: A } => {
-  return r[RATIO]
+  return unsafeCoerce(r)
 }
 
-const _toRatio = <A>(r: { numerator: A; denominator: A }): Ratio<A> => ({
-  [RATIO]: r,
-})
+const _toRatio = <A>(r: { numerator: A; denominator: A }): Ratio<A> => unsafeCoerce(r)
 
 export const Ratio = {
   of: <A>(i: Real<A> & EuclideanRing<A>) => (n: A, d: NonZero<A>): Ratio<A> => {
@@ -36,9 +34,8 @@ export const Ratio = {
     return (
       typeof y === 'object' &&
       y !== null &&
-      RATIO in y &&
-      innerGuard((y as any)[RATIO].numerator) &&
-      innerGuard((y as any)[RATIO].denominator)
+      innerGuard((y as any).numerator) &&
+      innerGuard((y as any).denominator)
     )
   },
 
