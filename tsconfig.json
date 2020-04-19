@@ -17,9 +17,7 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "outDir": "lib",
-    "paths": {
-      "*": ["src/*", "node_modules/*"]
-    },
+
     "resolveJsonModule": true,
     "sourceMap": true,
     "strict": true,
