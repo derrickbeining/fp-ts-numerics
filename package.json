@@ -81,6 +81,7 @@
     "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
     "start": "tsc -w",
     "test": "tsdx test",
+    "travis-deploy-once": "travis-deploy-once",
     "ts-node": "ts-node --compiler-options '{\"module\": \"commonjs\"}'"
   },
   "sideEffects": false,
