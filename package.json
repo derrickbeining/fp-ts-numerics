@@ -51,8 +51,8 @@
     }
   },
   "license": "MIT",
-  "main": "dist/index.js",
-  "module": "dist/fp-ts-numerics.esm.js",
+  "main": "lib/index.js",
+  "module": "esm/index.js",
   "name": "fp-ts-numerics",
   "peerDependencies": {
     "fast-check": ">= 1.24.1 < 2",
@@ -63,19 +63,22 @@
     "url": "https://github.com/derrickbeining/fp-ts-numerics.git"
   },
   "scripts": {
-    "build": "tsdx build",
-    "build:docs": "rimraf docs && typedoc --options typedoc.js src",
+    "build": "tsc -p ./tsconfig.build.json && tsc -p ./tsconfig.build-esm.json",
+    "clean": "rimraf lib esm",
     "coverage": "npm run test -- --coverage",
     "lint": "tsdx lint",
-    "prepare": "tsdx build",
+    "postbuild": "eslint --fix \"lib/**/*.{js,ts}\" \"esm/**/*.{js,ts}\"",
+    "prebuild": "npm run clean",
+    "prepare": "npm run build",
+    "prepublish": "npm run build",
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "semantic-release": "semantic-release",
     "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
-    "start": "tsdx watch",
+    "start": "tsc -w",
     "test": "tsdx test",
-    "travis-deploy-once": "travis-deploy-once"
+    "ts-node": "ts-node --compiler-options '{\"module\": \"commonjs\"}'"
   },
   "sideEffects": false,
-  "typings": "dist/index.d.ts",
+  "typings": "lib/index.d.ts",
   "version": "0.0.0-development"
 }
