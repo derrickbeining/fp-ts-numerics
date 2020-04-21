@@ -4,7 +4,7 @@
 import fc from 'fast-check'
 import { array as A, ord } from 'fp-ts'
 
-import { enumFromTo } from '../src/Enum'
+import { enumFromTo, enumUpFrom } from '../src/Enum'
 import { Int } from '../src/Int'
 import { arbitraryInt } from '../src/Int/Arbitrary'
 
@@ -64,5 +64,9 @@ describe('Enum', () => {
         )
       })
     })
+  })
+
+  describe(enumUpFrom.name, () => {
+    //
   })
 })

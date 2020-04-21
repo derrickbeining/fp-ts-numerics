@@ -43,16 +43,17 @@ interface SemiringMembers<A> extends Omit<Semiring<A>, typeof SEMIRING> {}
 
 /**
  * Semiring instance constructor
- * @example
- * export const MyType: Semiring<MyType> = {
- *   ...instanceSemiring({
- *     add: (x, y) => ...,
- *     zero: ...,
- *     mul: (x, y) => ...,
- *     one: ...,
- *   })
- * }
  *
+ * ```ts
+ * const semiringMyTupe: Semiring<MyType> =
+ *   instanceSemiring({
+ *       add: (x, y) => ...,
+ *       zero: ...,
+ *       mul: (x, y) => ...,
+ *       one: ...,
+ *   })
+ *```
+
  * @since 1.0.0
  */
 export function instanceSemiring<A>(semiring: SemiringMembers<A>): Semiring<A> {

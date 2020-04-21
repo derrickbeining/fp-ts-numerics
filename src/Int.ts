@@ -27,7 +27,7 @@ import { unsafeCoerce } from 'fp-ts/lib/function'
 import { Option } from 'fp-ts/lib/Option'
 
 import { CommutativeRing, instanceCommutativeRing } from './CommutativeRing'
-import * as Enum from './Enum.Internal'
+import { Enum, instanceEnum } from './Enum.Internal'
 import { EuclideanRing } from './EuclideanRing'
 import { instanceEuclideanRing } from './EuclideanRing'
 import { instanceIntegral, Integral } from './Integral'
@@ -196,12 +196,7 @@ export const euclideanRingInt = instanceEuclideanRing({
   mod: (n, d) => {
     const a = toBigInt(n)
     const b = toBigInt(abs(Int)(d))
-    return fromBigInt(
-      a
-        .mod(b)
-        .add(b)
-        .mod(b)
-    )
+    return fromBigInt(a.mod(b).add(b).mod(b))
   },
 })
 
@@ -209,7 +204,7 @@ export const euclideanRingInt = instanceEuclideanRing({
  * @category Typeclass Instance
  * @since 1.0.0
  */
-export const enumInt = Enum.instanceEnum({
+export const enumInt = instanceEnum({
   // Ord
   ...ordInt,
   next: (prev) => option.some(semiringInt.add(prev, semiringInt.one)),
@@ -395,7 +390,7 @@ const utils = {
  * @category Namespace
  * @since 1.0.0
  */
-export const Int: Enum.Enum<Int> &
+export const Int: Enum<Int> &
   CommutativeRing<Int> &
   EuclideanRing<Int> &
   Integral<Int> &

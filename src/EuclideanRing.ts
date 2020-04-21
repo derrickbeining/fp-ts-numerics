@@ -68,13 +68,15 @@
  * @since 1.0.0
  */
 
-import { Eq } from 'fp-ts/lib/Eq'
+import { ord } from 'fp-ts'
 import { unsafeCoerce } from 'fp-ts/lib/function'
+import { Ord } from 'fp-ts/lib/Ord'
+import { pipe } from 'fp-ts/lib/pipeable'
 
 import { CommutativeRing } from './CommutativeRing'
 import { Natural } from './Natural'
-import { isNonZero, NonZero } from './NonZero'
-import { Fn } from './UtilityType'
+import { NonNegative } from './NonNegative'
+import { NonZero } from './NonZero'
 
 const EUCLIDEAN_RING: unique symbol = unsafeCoerce('fp-ts-numerics/EUCLIDEAN_RING')
 
@@ -140,27 +142,68 @@ export function instanceEuclideanRing<A>(e: EuclideanRingMembers<A>): EuclideanR
 
 /**
  * Calculates the *greatest common divisor* of two values using the Euclidean
- * algorithm.
+ * algorithm. The result is always non-negative.
+ *
+ * This function is overloaded such that, when `a` or `b` is `NonZero<A>`, the
+ * result of `gcd(a, b)` is `NonNegative<NonZero<A>>`, otherwise it is just
+ * `NonZero<A>`.
  *
  * @complexity O(n^2)
-
  * @since 1.0.0
  */
-export function gcd<A>(T: Eq<A> & EuclideanRing<A>): Fn<[A, NonZero<A>], NonZero<A>> {
-  return (a, b) => {
-    const m = T.mod(a, b)
-    return isNonZero(T)(m) ? gcd(T)(b, m) : b
+export function gcd<A>(T: Ord<A> & EuclideanRing<A>) {
+  /**
+   * Calculates the *greatest common divisor*. Since `b` is known to be
+   * `NonZero`, the result is guaranteed to be `NonNegative<NonZero<A>>`.
+   */
+  function _gcd(a: A, b: NonZero<A>): NonNegative<NonZero<A>>
+  /**
+   * Calculates the *greatest common divisor*. Since `a` is known to be
+   * `NonZero`, the result is guaranteed to be `NonNegative<NonZero<A>>`.
+   */
+  function _gcd(a: NonZero<A>, b: A): NonNegative<NonZero<A>>
+  /**
+   * Calculates the *greatest common divisor*. The result is always
+   * non-negative.
+   */
+  function _gcd(a: A, b: A): NonNegative<A>
+  function _gcd(a: A, b: A): NonNegative<A> {
+    return NonZero.isTypeOf(T)(b) ? _gcd(b, T.mod(a, b)) : NonNegative.from(T)(a)
   }
+
+  return _gcd
 }
 
 /**
- * Calculates the *least common multiple* of two values. It's implemented using
- * {@link gcd} internally.
+ * Calculates the *least common multiple* of two values. The result is always
+ * non-negative. It's implemented using {@link gcd} internally.
  *
+ * This function is overloaded such that, when `a` or `b` is `NonZero<A>`, the
+ * result of `lcm(a, b)` is `NonNegative<NonZero<A>>`, otherwise it is just
+ * `NonZero<A>`.
+ *
+ * @complexity O(n^2)
  * @since 1.0.0
  */
+export function lcm<A>(T: Ord<A> & EuclideanRing<A>): (a: A, b: A) => NonNegative<A> {
+  const { div, mul, zero } = T
+  /**
+   * Calculates the *least common multiple*. Since `a` and `b` are known to be
+   * `NonZero`, the result is guaranteed to be `NonNegative<NonZero<A>>`.
+   */
+  function _lcm(a: NonZero<A>, b: NonZero<A>): NonNegative<NonZero<A>>
+  function _lcm(a: A, b: A): NonNegative<A>
+  function _lcm(a: A, b: A): NonNegative<A> {
+    if (!NonZero.isTypeOf(T)(a)) return NonNegative.from(T)(zero)
+    if (!NonZero.isTypeOf(T)(b)) return NonNegative.from(T)(zero)
+    const GCD = gcd(T)(a, b)
 
-export function lcm<A>(T: Eq<A> & EuclideanRing<A>): Fn<[NonZero<A>, NonZero<A>], NonZero<A>> {
-  const { div, mul } = T
-  return (a, b) => unsafeCoerce(div(mul(a, b), gcd(T)(a, b)))
+    return pipe(
+      // divide the larger by gcd before multiplying to avoid excessively large
+      // numbers that might occur in multiply a * b
+      ord.gt(T)(a, b) ? mul(div(a, GCD), b) : T.mul(div(b, GCD), a),
+      NonNegative.from(T)
+    )
+  }
+  return _lcm
 }

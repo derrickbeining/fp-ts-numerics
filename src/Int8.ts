@@ -40,13 +40,13 @@ import { Ratio } from './Ratio'
 import { Rational } from './Rational'
 import { instanceReal, Real } from './Real'
 
-declare const int_8: unique symbol
+declare const INT_8: unique symbol
 
 export interface Int8 {
   /**
    * @internal
    */
-  readonly [int_8]: unique symbol
+  readonly [INT_8]: unique symbol
 }
 
 // ## Functions

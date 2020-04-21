@@ -1,3 +1,27 @@
+/**
+ * This module provides a way to construct and work with signed, 32-bit
+ * integers. They are just JavaScript`number`s under the hood, so they should
+ * be comparable in performance.
+ *
+ * Since they are limited to 32 bits, `Int32`s are subject to overflowing if
+ * the result of any operation should exceed the range of -2^31 and 2^31 - 1.
+ *
+ * To avoid integer overflow, see [[Int]] for arbitrary precision integers.
+ *
+ * Like the rest of `fp-ts-numerics`, this module exposes the `Int32` type
+ * and namespace as a single declaration. It is intended to be consumed like so:
+ *
+ * ```ts
+ * import { Int32 } from 'fp-ts-numerics'
+ *
+ * function isEven(n: Int32): boolean {
+ *   return Int32.equals(Int32.zero, Int32.mod(n, Int32.of(2)))
+ * }
+ * ```
+ *
+ * @packageDocumentation
+ * @since 1.0.0
+ */
 import { option, ord } from 'fp-ts'
 import { Bounded } from 'fp-ts/lib/Bounded'
 import { Eq } from 'fp-ts/lib/Eq'
@@ -16,13 +40,13 @@ import { Ratio } from './Ratio'
 import { Rational } from './Rational'
 import { instanceReal, Real } from './Real'
 
-declare const int_32: unique symbol
+declare const INT_32: unique symbol
 
 export interface Int32 {
   /**
    * @internal
    */
-  readonly [int_32]: unique symbol
+  readonly [INT_32]: unique symbol
 }
 
 type Digit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9

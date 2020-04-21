@@ -4,7 +4,7 @@ import { unsafeCoerce } from 'fp-ts/lib/function'
 import { Option } from 'fp-ts/lib/Option'
 
 import { CommutativeRing, instanceCommutativeRing } from './CommutativeRing'
-import * as Enum from './Enum.Internal'
+import { Enum, instanceEnum } from './Enum.Internal'
 import { instanceEuclideanRing } from './EuclideanRing'
 import { EuclideanRing } from './EuclideanRing'
 import { Int } from './Int'
@@ -21,7 +21,7 @@ declare const NATURAL: unique symbol
 /**
  * Arbitrary-precision non-negative integers
  */
-export interface Natural {
+export interface Natural extends Int {
   /**
    * @internal
    */
@@ -36,8 +36,84 @@ export type Digits = [LeadingDigit | Digit] | [LeadingDigit, ...Array<Digit>]
 export function of(zero: 0): Natural
 export function of(...digits: Digits): NonZero<Natural>
 export function of(...digits: Digits): Natural | NonZero<Natural> {
-  return fromBigInt(Big(digits.map((j) => j.toString()).join('')))
+  return unsafeFromBigInt(Big(digits.map((j) => j.toString()).join('')))
 }
+
+/**
+ * Attempts to construct a [[Natural]] from a `number`, computing `nothing` if
+ * not a safe non-negative integer, otherwise `some(n)`.
+ *
+ * ```ts
+ * import { Natural } from 'fp-ts-numerics'
+ *
+ * Natural.fromNumber(100)
+ * // > option.some(Natural.of(1,0,0))
+ * Natural.fromNumber(Number.MAX_VALUE)
+ * // > option.nothing
+ * ```
+ *
+ * @category Constructor
+ * @since 1.0.0
+ */
+export function fromNumber(n: number): Option<Natural> {
+  return isNaturalNumber(n) ? option.some(unsafeFromBigInt(Big(n))) : option.none
+}
+
+/**
+ * Unsafely attempts to construct an [[Natural]] from a `number`, throwing an error
+ * if not a safe, non-negative integer.
+ *
+ * ```ts
+ * import { Natural } from 'fp-ts-numerics'
+ *
+ * Natural.unsafeFromNumber(100)
+ * // > Natural.of(1,0,0)
+ * Natural.unsafeFromNumber(Number.MAX_VALUE)
+ * // > uncaught error
+ * ```
+ *
+ * @category Constructor
+ * @since 1.0.0
+ */
+export function unsafeFromNumber(n: number): Natural {
+  if (!isNaturalNumber(n)) {
+    throw new Error(
+      `Cannot convert number ${n} to Natural because it is not an integer between 0 and Number.MAX_SAFE_INTEGER.`
+    )
+  }
+  return unsafeFromBigInt(Big(n))
+}
+
+function unsafeFromBigInt(n: BigInteger): Natural {
+  if (!isTypeOf(n)) {
+    throw new Error(`${n} cannot be converted to a Natural because it is not positive.`)
+  }
+  return unsafeCoerce(n)
+}
+
+function fromBigInt(n: BigInteger): Option<Natural> {
+  return isTypeOf(n) ? option.some(unsafeCoerce(Big(n))) : option.none
+}
+
+export function fromInt(i: Int): Option<Natural> {
+  return ord.lt(Int)(i, Int.zero) ? option.none : option.some(unsafeCoerce(i))
+}
+
+// function fromInt(i: Int): Natural {
+//   return fromBigInt(bigint(unsafeCoerce(i)))
+// }
+
+// function fromInt32(i: Int32): Natural {
+//   return fromBigInt(bigint(Int32.toNumber(i)))
+// }
+
+// function fromUInt16(i: UInt16): Natural {
+//   return fromBigInt(bigint(UInt16.toNumber(i)))
+// }
+
+// function fromUInt32(i: UInt32): Natural {
+//   return fromBigInt(bigint(UInt32.toNumber(i)))
+// }
 
 /**
  * @category Typeclass Instance
@@ -69,13 +145,13 @@ export const integralNatural: Integral<Natural> = instanceIntegral({
    * truncating integer division (rounds toward zero)
    */
   quot(a: Natural, b: Natural): Natural {
-    return fromBigInt(toBigInt(a).divide(toBigInt(b)))
+    return unsafeFromBigInt(toBigInt(a).divide(toBigInt(b)))
   },
   /**
    * Remainder of truncating integer division. Always takes the sign of the divisor.
    */
   rem(a: Natural, b: Natural): Natural {
-    return fromBigInt(toBigInt(a).remainder(toBigInt(b)))
+    return unsafeFromBigInt(toBigInt(a).remainder(toBigInt(b)))
   },
 })
 
@@ -84,8 +160,8 @@ export const integralNatural: Integral<Natural> = instanceIntegral({
  * @since 1.0.0
  */
 export const semiringNatural = instanceSemiring({
-  add: (a, b) => fromBigInt(toBigInt(a).add(toBigInt(b))),
-  mul: (a, b) => fromBigInt(toBigInt(a).multiply(toBigInt(b))),
+  add: (a, b) => unsafeFromBigInt(toBigInt(a).add(toBigInt(b))),
+  mul: (a, b) => unsafeFromBigInt(toBigInt(a).multiply(toBigInt(b))),
   one: of(1),
   zero: of(0),
 })
@@ -96,7 +172,10 @@ export const semiringNatural = instanceSemiring({
  */
 export const ringNatural = instanceRing<Natural>({
   ...semiringNatural,
-  sub: (a, b) => fromBigInt(toBigInt(a).subtract(toBigInt(b))),
+  /**
+   * TODO: Natural can't be a Ring
+   */
+  sub: (a, b) => unsafeFromBigInt(toBigInt(a).subtract(toBigInt(b))),
 })
 
 /**
@@ -117,7 +196,7 @@ export const euclideanRingNatural = instanceEuclideanRing({
   degree: (i) => i,
   div: (n: Natural, d: NonZero<Natural>): Natural => {
     if (ordNatural.equals(d, semiringNatural.zero)) return semiringNatural.zero
-    return fromBigInt(
+    return unsafeFromBigInt(
       toBigInt(ringNatural.sub(n, euclideanRingNatural.mod(n, d))).divide(toBigInt(d))
     )
   },
@@ -126,12 +205,7 @@ export const euclideanRingNatural = instanceEuclideanRing({
     const a = toBigInt(n)
     const b = toBigInt(abs(Natural)(d))
 
-    return fromBigInt(
-      a
-        .mod(b)
-        .add(b)
-        .mod(b)
-    )
+    return unsafeFromBigInt(a.mod(b).add(b).mod(b))
   },
 })
 
@@ -139,7 +213,7 @@ export const euclideanRingNatural = instanceEuclideanRing({
  * @category Typeclass Instance
  * @since 1.0.0
  */
-export const enumInt = Enum.instanceEnum({
+export const enumInt = instanceEnum({
   // Ord
   ...ordNatural,
   next: (prev) => option.some(Natural.add(prev, Natural.one)),
@@ -151,38 +225,6 @@ export const enumInt = Enum.instanceEnum({
 
 // ## Functions
 
-function fromBigInt(n: BigInteger): Natural {
-  return unsafeCoerce(n)
-}
-
-function fromNumber(n: number): Option<Natural> {
-  return isTypeOf(n) ? option.some(fromBigInt(Big(n))) : option.none
-}
-
-function fromInt(i: Int): Option<Natural> {
-  return ord.lt(Int)(i, Int.zero) ? option.none : option.some(unsafeCoerce(i))
-}
-
-// function fromInt(i: Int): Natural {
-//   return fromBigInt(bigint(unsafeCoerce(i)))
-// }
-
-// function fromInt32(i: Int32): Natural {
-//   return fromBigInt(bigint(Int32.toNumber(i)))
-// }
-
-// function fromUInt16(i: UInt16): Natural {
-//   return fromBigInt(bigint(UInt16.toNumber(i)))
-// }
-
-// function fromUInt32(i: UInt32): Natural {
-//   return fromBigInt(bigint(UInt32.toNumber(i)))
-// }
-
-function isTypeOf(n: unknown): n is Natural {
-  return typeof n === 'number' && Number.isInteger(n) && n >= 0
-}
-
 function toBigInt(i: Natural): BigInteger {
   return unsafeCoerce(i)
 }
@@ -192,6 +234,14 @@ function toNumber(i: Natural): Option<number> {
     toBigInt(i).lesser(Big(Number.MIN_SAFE_INTEGER))
     ? option.none
     : option.some(toBigInt(i).toJSNumber())
+}
+
+function isTypeOf(n: unknown): n is Natural {
+  return Big.isInstance(n) && n.greaterOrEquals(0)
+}
+
+function isNaturalNumber(n: number): boolean {
+  return Number.isInteger(n) && n >= 0 && n <= Number.MAX_SAFE_INTEGER
 }
 
 // function toInt(i: Natural): Option<Int> {
@@ -211,10 +261,11 @@ function toNumber(i: Natural): Option<number> {
 // }
 
 const exported = {
-  fromBigInt,
+  unsafeFromBigInt,
   fromInt,
   // fromInt,
   fromNumber,
+  unsafeFromNumber,
   // fromUInt16,
   // fromInt32,
   // fromUInt32,
@@ -228,7 +279,7 @@ const exported = {
   // toUInt32,
 }
 
-export const Natural: Enum.Enum<Natural> &
+export const Natural: Enum<Natural> &
   CommutativeRing<Natural> &
   EuclideanRing<Natural> &
   Integral<Natural> &

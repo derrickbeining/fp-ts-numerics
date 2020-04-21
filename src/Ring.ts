@@ -12,7 +12,13 @@ import { ord } from 'fp-ts'
 import { unsafeCoerce } from 'fp-ts/lib/function'
 import { Ord } from 'fp-ts/lib/Ord'
 
+import { NonNegative } from './NonNegative'
 import { getFunctionSemiring, instanceSemiring, Semiring } from './Semiring'
+
+/**
+ * @internal
+ */
+export * from './Semiring'
 
 const RING: unique symbol = unsafeCoerce('fp-ts-numerics/RING')
 
@@ -75,6 +81,7 @@ export function getFunctionRing<A, B>(R: Ring<B>): Ring<(a: A) => B> {
  * @example
  * import { getTupleRing } from 'fp-ts-numerics/Ring'
  * import { fieldNumber } from 'fp-ts-numerics/Field'
+import {NonNegative} from './NonNegative'
  *
  * const R = getTupleRing(fieldNumber, fieldNumber, fieldNumber)
  * assert.deepStrictEqual(R.add([1, 2, 3], [4, 5, 6]), [5, 7, 9])
@@ -106,16 +113,15 @@ export function getTupleRing<T extends ReadonlyArray<Ring<any>>>(
  */
 
 /**
- * @since 1.0.0
- *
  * `negate x` can be used as a shorthand for `zero - x`
+ *
+ * @since 1.0.0
  */
 export function negate<A>(R: Ring<A>): (a: A) => A {
   return (a) => R.sub(R.zero, a)
 }
 
 /**
- * @since 1.0.0
  *
  * The absolute value function, defined as
  *
@@ -124,16 +130,17 @@ export function negate<A>(R: Ring<A>): (a: A) => A {
  * else return x
  * ```
  *
+ * @since 1.0.0
  */
-export function abs<A>(OR: Ord<A> & Ring<A>): (a: A) => A {
-  return (a) => (ord.lt(OR)(a, OR.zero) ? negate(OR)(a) : a)
+export function abs<A>(OR: Ord<A> & Ring<A>): (a: A) => NonNegative<A> {
+  return (a) => NonNegative.from(OR)(a)
 }
 
 /**
- * @since 1.0.0
- *
  * The sign function; always evaluates to either `one` or `negate(one)`. For
  * any `x`, we should have `signum x * abs x == x`
+ *
+ * @since 1.0.0
  */
 export function signum<A>(OR: Ord<A> & Ring<A>): (a: A) => A {
   return (a) => (ord.lt(OR)(a, OR.zero) ? negate(OR)(OR.one) : OR.one)

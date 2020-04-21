@@ -9,13 +9,13 @@ import { getEnumLaws } from '../src/Enum/Laws'
 import { getEuclideanRingLaws } from '../src/EuclideanRing/Laws'
 import { Int } from '../src/Int'
 import { arbitraryInt } from '../src/Int/Arbitrary'
-import { getArbitraryNonZero } from '../src/NonZero'
+import { NonZero } from '../src/NonZero'
 import { Ratio } from '../src/Ratio'
 import { signum } from '../src/Ring'
 import { getRingLaws } from '../src/Ring/Laws'
 import { getSemiringLaws } from '../src/Semiring/Laws'
 
-const nonZeroInt = getArbitraryNonZero(Int)(arbitraryInt)
+const nonZeroInt = NonZero.getArbitrary(Int)(arbitraryInt)
 
 describe('Int', () => {
   describe('Constructors', () => {

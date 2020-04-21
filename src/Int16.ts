@@ -41,7 +41,7 @@ import { Ratio } from './Ratio'
 import { Rational } from './Rational'
 import { instanceReal, Real } from './Real'
 
-declare const int_16: unique symbol
+declare const INT_16: unique symbol
 
 /**
  * The type of signed, 16-bit integers. Subject to integer overflow.
@@ -57,7 +57,7 @@ export interface Int16 extends Int32 {
   /**
    * @internal
    */
-  readonly [int_16]: unique symbol
+  readonly [INT_16]: unique symbol
 }
 
 type Digit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9

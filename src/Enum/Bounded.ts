@@ -46,7 +46,7 @@ export interface BoundedEnum<A> extends Bounded<A>, Enum<A> {
  *
  * Runs in `O(n)` where `n` is `fromEnum(top)`
  */
-export const defaultCardinality = <A>(be: Bounded<A> & Enum<A>): Cardinality<A> => {
+export function defaultCardinality<A>(be: Bounded<A> & Enum<A>): Cardinality<A> {
   return Cardinality.fromInt32(go(Int32.of(1), be.bottom))
   // where
   function go(i: Int32, x: A): Int32 {
@@ -68,8 +68,8 @@ export const defaultCardinality = <A>(be: Bounded<A> & Enum<A>): Cardinality<A> 
  *
  * Runs in `O(n)` where `n` is `fromEnum(a)`.
  */
-export const defaultFromEnum = <A>(e: Enum<A>) => (a: A): Int32 => {
-  return go(Int32.zero, a)
+export function defaultFromEnum<A>(e: Enum<A>): (a: A) => Int32 {
+  return (a): Int32 => go(Int32.zero, a)
   // where
   function go(i: Int32, x: A): Int32 {
     return pipe(
@@ -89,8 +89,8 @@ export const defaultFromEnum = <A>(e: Enum<A>) => (a: A): Int32 => {
  *
  * Runs in `O(n)` where `n` is `fromEnum(a)`.
  */
-export const defaultToEnum = <A>(be: Bounded<A> & Enum<A>) => (i: Int32): Option<A> => {
-  return ord.lt(Int32)(i, Int32.zero) ? option.none : go(i, be.bottom)
+export function defaultToEnum<A>(be: Bounded<A> & Enum<A>): (i: Int32) => Option<A> {
+  return (i): Option<A> => (ord.lt(Int32)(i, Int32.zero) ? option.none : go(i, be.bottom))
 
   // where
   function go($i: Int32, prev: A): Option<A> {
@@ -106,32 +106,34 @@ export const defaultToEnum = <A>(be: Bounded<A> & Enum<A>) => (i: Int32): Option
   }
 }
 
-export const fromThenTo = <F extends URIS, A>(
+export function fromThenTo<F extends URIS, A>(
   f: Unfoldable1<F> & Functor1<F>,
   be: BoundedEnum<A>
-) => (from: A, then: A, to: A): Kind<F, A> => {
-  const _from = be.fromEnum(from)
-  const _then = be.fromEnum(then)
-  const _to = be.fromEnum(to)
-  return pipe(
-    f.unfold(_from, (e) => go(Int32.sub(_then, _from), _to, e)),
-    (x) =>
-      f.map(x, (int32) => {
-        const res = option.toNullable(be.toEnum(int32))
-        if (res === null) {
-          const err = `fromThenTo(${from}, ${then}, ${to}) crashed because the BoundedEnum instance breaks one of its laws`
-          throw new Error(err)
-        }
-        return res
-      })
-  )
+): (from: A, then: A, to: A) => Kind<F, A> {
+  return (from, then, to): Kind<F, A> => {
+    const _from = be.fromEnum(from)
+    const _then = be.fromEnum(then)
+    const _to = be.fromEnum(to)
+    return pipe(
+      f.unfold(_from, (e) => go(Int32.sub(_then, _from), _to, e)),
+      (x) =>
+        f.map(x, (int32) => {
+          const res = option.toNullable(be.toEnum(int32))
+          if (res === null) {
+            const err = `fromThenTo(${from}, ${then}, ${to}) crashed because the BoundedEnum instance breaks one of its laws`
+            throw new Error(err)
+          }
+          return res
+        })
+    )
+  }
   // where
   function go(step: Int32, to: Int32, e: Int32): Option<[Int32, Int32]> {
     return ord.leq(Int32)(e, to) ? option.some(tuple(e, Int32.add(e, step))) : option.none
   }
 }
 
-// export const rangeN = <A>(e: Enum<A>) => (
+// export function rangeN <A>(e: Enum<A>) => (
 //   n: Int32,
 //   start: A,
 //   step: Int32
@@ -177,20 +179,13 @@ export const fromThenTo = <F extends URIS, A>(
  * toEnumWithDefaults(boundedEnumBool)(false, true, 2)    -- true
  * ```
  */
-export const toEnumWithDefaults = <A>(be: BoundedEnum<A>) => (low: A, high: A, n: Int32): A => {
-  return pipe(
-    be.toEnum(n),
-    option.fold(
-      () => (ord.lt(Int32)(n, be.fromEnum(be.bottom)) ? low : high),
-      ($enum) => $enum
+export function toEnumWithDefaults<A>(be: BoundedEnum<A>): (low: A, high: A, n: Int32) => A {
+  return (low, high, n): A =>
+    pipe(
+      be.toEnum(n),
+      option.fold(
+        () => (ord.lt(Int32)(n, be.fromEnum(be.bottom)) ? low : high),
+        ($enum) => $enum
+      )
     )
-  )
-}
-export const BoundedEnum = {
-  defaultCardinality,
-  defaultFromEnum,
-  defaultToEnum,
-  fromThenTo,
-  // rangeN,
-  toEnumWithDefaults,
 }

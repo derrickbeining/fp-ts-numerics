@@ -16,7 +16,7 @@ import { Ratio } from './Ratio'
 import { Rational } from './Rational'
 import { instanceReal, Real } from './Real'
 
-declare const u_int_32: unique symbol
+declare const U_INT_32: unique symbol
 
 /**
  * @category Data Type
@@ -26,7 +26,7 @@ export interface UInt32 {
   /**
    * @internal
    */
-  readonly [u_int_32]: unique symbol
+  readonly [U_INT_32]: unique symbol
 }
 type Digit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 type LeadingDigit = Exclude<Digit, 0>

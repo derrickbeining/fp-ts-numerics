@@ -4,7 +4,7 @@ import { Ord } from 'fp-ts/lib/Ord'
 
 import { EuclideanRing } from '../EuclideanRing'
 import { Natural } from '../Natural'
-import { getArbitraryNonZero } from '../NonZero'
+import { NonZero } from '../NonZero'
 import { getRingLaws } from '../Ring/Laws'
 
 export const getEuclideanRingLaws = <A>(
@@ -33,7 +33,7 @@ export const getEuclideanRingLaws = <A>(
    *    and also either r = zero
    *        or degree r < degree b
    */
-  'Quotient and Remainder': fc.property(fc.tuple(arb, getArbitraryNonZero(T)(arb)), ([a, b]) => {
+  'Quotient with Remainder': fc.property(fc.tuple(arb, NonZero.getArbitrary(T)(arb)), ([a, b]) => {
     const q = T.div(a, b)
     const r = T.mod(a, b)
     return (
