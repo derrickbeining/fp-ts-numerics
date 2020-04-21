@@ -1,7 +1,7 @@
 const pkg = require('./package.json')
 
 module.exports = {
-  // categorizeByGroup: false,
+  categorizeByGroup: false,
   categoryOrder: ['Data Type', 'Constructor', 'Namespace', 'Typeclass Instance', '*'],
   defaultCategory: 'Other',
   disableSources: true,
@@ -13,12 +13,12 @@ module.exports = {
   hideGenerator: true,
   ignoreCompilerErrors: true,
   includeDeclarations: true,
+  includeVersion: true,
   listInvalidSymbolLinks: true,
   mode: 'modules',
   name: pkg.name,
   out: './docs',
-  plugins: ['typedoc-plugin-markdown'],
   stripInternal: true,
-  theme: 'docusaurus',
+  theme: 'default',
   tsconfig: 'tsconfig.typedoc.json',
 }
