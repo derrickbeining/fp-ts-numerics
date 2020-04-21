@@ -10,18 +10,22 @@ declare const NON_ZERO: unique symbol
 
 export type NonZero<A> = A & { readonly [NON_ZERO]: A }
 
-export function isNonZero<A>(T: Eq<A> & (Numeric<A> | Semiring<A>)): (a: A) => a is NonZero<A> {
-  return (a): a is NonZero<A> => !T.equals(T.zero, a)
-}
-
-export function toNonZero<A>(T: Eq<A> & (Numeric<A> | Semiring<A>)) {
-  return (a: A): Option<A & NonZero<A>> => {
-    return isNonZero(T)(a) ? option.some(a) : option.none
+export namespace NonZero {
+  export function isTypeOf<A>(
+    T: Eq<A> & (Numeric<A> | Semiring<A>)
+  ): <B>(a: A & B) => a is NonZero<A & B> {
+    return <B>(a: A): a is NonZero<A & B> => !T.equals(T.zero, a)
   }
-}
 
-export function getArbitraryNonZero<A>(
-  T: Eq<A> & (Numeric<A> | Semiring<A>)
-): (arb: fc.Arbitrary<A>) => fc.Arbitrary<NonZero<A>> {
-  return (arb) => arb.filter(isNonZero(T))
+  export function from<A>(T: Eq<A> & (Numeric<A> | Semiring<A>)) {
+    return <B>(a: A & B): Option<A & B & NonZero<A & B>> => {
+      return isTypeOf(T)(a) ? option.some(a) : option.none
+    }
+  }
+
+  export function getArbitrary<A>(
+    T: Eq<A> & (Numeric<A> | Semiring<A>)
+  ): (arb: fc.Arbitrary<A>) => fc.Arbitrary<NonZero<A>> {
+    return (arb) => arb.filter(isTypeOf(T))
+  }
 }
