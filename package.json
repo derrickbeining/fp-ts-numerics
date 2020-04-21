@@ -78,8 +78,8 @@
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "semantic-release": "semantic-release",
     "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
-    "start": "tsc -w",
-    "test": "tsdx test",
+    "test": "tsdx test && npm run test:tsc-legacy",
+    "test:tsc-legacy": "npx typescript@3.5.1 -p tsconfig.json --noEmit",
     "travis-deploy-once": "travis-deploy-once",
     "ts-node": "ts-node --compiler-options '{\"module\": \"commonjs\"}'"
   },
