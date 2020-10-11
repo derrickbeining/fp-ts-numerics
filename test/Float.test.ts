@@ -1,7 +1,8 @@
 import * as fc from 'fast-check'
-import { getSemiringLaws } from 'src/Class/Semiring.Laws'
-import { Float } from 'src/Data/Float'
-import { arbitraryFloat } from 'src/Data/Float.Arbitrary'
+
+import { Float } from '../src/Float'
+import { arbitraryFloat } from '../src/Float.Arbitrary'
+import { getSemiringLaws } from '../src/Semiring.Laws'
 
 describe.skip('Float', () => {
   describe('Typeclasses', () => {

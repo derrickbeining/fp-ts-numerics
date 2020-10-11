@@ -3,8 +3,9 @@
  */
 import fc, { Arbitrary } from 'fast-check'
 import { array as A, ord } from 'fp-ts'
-import { Enum, enumFromTo, enumUpFrom } from 'src/Class/Enum'
-import { Semiring } from 'src/Class/Semiring'
+
+import { Enum, enumFromTo, enumUpFrom } from '../src/Enum'
+import { Semiring } from '../src/Semiring'
 
 export function runEnumTestsFor<T>(E: Semiring<T> & Enum<T>, arb: Arbitrary<T>): void {
   const arbTuple = fc.tuple(arb, arb)

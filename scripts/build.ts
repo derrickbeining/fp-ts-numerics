@@ -11,7 +11,7 @@ import { run } from './run'
 
 interface Build<A> extends RTE.ReaderTaskEither<FileSystem, Error, A> {}
 
-const OUTPUT_FOLDER = tsconfig.compilerOptions.outDir
+const OUTPUT_FOLDER = 'dist'
 const PKG = 'package.json'
 
 export const copyPackageJson: Build<void> = (C) =>
@@ -67,7 +67,7 @@ function makePkgJson(module: string): TE.TaskEither<Error, string> {
       {
         main: `../lib/${module}.js`,
         module: `../es6/${module}.js`,
-        typings: module === 'HKT' ? `../HKT.d.ts` : `../lib/${module}.d.ts`,
+        typings: `../lib/${module}.d.ts`,
         sideEffects: false,
       },
       null,
@@ -77,38 +77,10 @@ function makePkgJson(module: string): TE.TaskEither<Error, string> {
   )
 }
 
-const fixHKT = (folder: string): Build<void> =>
-  pipe(
-    (C: FileSystem) => C.mkdir(path.join(OUTPUT_FOLDER, folder, 'HKT')),
-    RTE.chain(() => (C) =>
-      C.writeFile(
-        path.join(OUTPUT_FOLDER, folder, 'HKT', 'package.json'),
-        JSON.stringify(
-          {
-            typings: '../../HKT.d.ts',
-          },
-          null,
-          2
-        )
-      )
-    ),
-    RTE.chain(() => (C) =>
-      C.moveFile(
-        path.join(OUTPUT_FOLDER, folder, 'HKT.js'),
-        path.join(OUTPUT_FOLDER, folder, 'HKT', 'index.js')
-      )
-    ),
-    RTE.chain(() => (C) =>
-      C.moveFile(path.join(OUTPUT_FOLDER, folder, 'HKT.d.ts'), path.join(OUTPUT_FOLDER, 'HKT.d.ts'))
-    )
-  )
-
 const main: Build<void> = pipe(
   copyPackageJson,
   RTE.chain(() => copyFiles),
-  RTE.chain(() => makeModules),
-  RTE.chain(() => fixHKT('es6')),
-  RTE.chain(() => fixHKT('lib'))
+  RTE.chain(() => makeModules)
 )
 
 run(

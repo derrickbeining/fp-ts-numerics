@@ -1,12 +1,13 @@
 import * as fc from 'fast-check'
 import { record } from 'fp-ts'
 import * as fptsLaws from 'fp-ts-laws'
-import { getCommutativeRingLaws } from 'src/Class/CommutativeRing.Laws'
-import { getRingLaws } from 'src/Class/Ring.Laws'
-import { getSemiringLaws } from 'src/Class/Semiring.Laws'
-import { NonZero } from 'src/Data/NonZero'
-import { number } from 'src/Data/number'
-import { UInt8 } from 'src/Data/UInt8'
+
+import { getCommutativeRingLaws } from '../src/CommutativeRing.Laws'
+import { NonZero } from '../src/NonZero'
+import { number } from '../src/number'
+import { getRingLaws } from '../src/Ring.Laws'
+import { getSemiringLaws } from '../src/Semiring.Laws'
+import { UInt8 } from '../src/UInt8'
 
 describe('number', () => {
   describe('Typeclasses', () => {

@@ -1,5 +1,6 @@
 {
   "author": "Derrick Beining <derrick.beining@gmail.com>",
+  "browser": "dist/lib/index.js",
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
@@ -51,7 +52,7 @@
   "homepage": "",
   "license": "MIT",
   "main": "dist/lib/index.js",
-  "module": "dist/esm/index.js",
+  "module": "dist/es6/index.js",
   "name": "fp-ts-numerics",
   "peerDependencies": {
     "fast-check": ">= 1.24.1 < 2",
@@ -62,27 +63,31 @@
     "url": "https://github.com/derrickbeining/fp-ts-numerics.git"
   },
   "scripts": {
-    "build": "tsc -p ./tsconfig.build.json && tsc -p ./tsconfig.build-esm.json",
-    "clean": "rimraf lib esm",
+    "build": "tsc -p ./tsconfig.build.json && tsc -p ./tsconfig.build-es6.json && ts-node scripts/build",
+    "clean": "rimraf dist",
     "coverage": "npm run test -- --coverage",
-    "docs:build": "npm run ts-node tools/build-docs",
     "docs:build:serve": "npm run docs:build && npm run docs:serve",
+    "docs:build": "npm run ts-node tools/build-docs",
     "docs:dev": "find src | entr -c npm run docs:build",
     "docs:serve": "echo 'cd website && npm start' | bash",
-    "lint": "eslint \"src/**/*.ts\"",
+    "doctoc": "doctoc README.md docs/introduction/code-conventions.md --title \"**Table of contents**\"",
     "lint:fix": "npm run lint -- --fix",
-    "postbuild": "eslint --fix \"lib/**/*.{js,ts}\" \"esm/**/*.{js,ts}\"",
+    "lint": "eslint \"src/**/*.ts\"",
+    "postbuild": "eslint --fix \"./dist/**/*.ts\"",
     "prebuild": "npm run clean",
     "prepare": "npm run build",
     "prepublish": "npm run build",
+    "prepublishOnly": "ts-node scripts/pre-publish",
+    "prerelease": "npm run build",
+    "release": "ts-node scripts/release",
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
-    "semantic-release": "semantic-release",
     "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
+    "semantic-release": "semantic-release",
     "start": "npm run clean && tsc -w -p tsconfig.build.json",
-    "test": "jest",
-    "test:watch": "jest",
-    "test:watch:coverage": "jest --watch --coverage",
     "test:tsc-legacy": "npx typescript@3.5.1 -p tsconfig.json --noEmit",
+    "test:watch:coverage": "jest --watch --coverage",
+    "test:watch": "jest",
+    "test": "jest",
     "travis-deploy-once": "travis-deploy-once",
     "ts-node": "ts-node --compiler-options '{\"module\": \"commonjs\"}'"
   },

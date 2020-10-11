@@ -1,113 +1,113 @@
 /**
  * @since 1.0.0
  */
-import * as CommutativeRing from 'src/Class/CommutativeRing'
-import * as CommutativeRingLaws from 'src/Class/CommutativeRing.Laws'
-import * as DivisionRing from 'src/Class/DivisionRing'
-import * as DivisionRingExtra from 'src/Class/DivisionRing.Extra'
-import * as DivisionRingLaws from 'src/Class/DivisionRing.Laws'
-import * as Enum from 'src/Class/Enum'
-import * as EuclideanRing from 'src/Class/EuclideanRing'
-import * as EuclideanRingExtra from 'src/Class/EuclideanRing.Extra'
-import * as EuclideanRingLaws from 'src/Class/EuclideanRing.Laws'
-import * as Field from 'src/Class/Field'
-import * as FieldLaws from 'src/Class/Field.Laws'
-import * as Fractional from 'src/Class/Fractional'
-import * as HasFromInt from 'src/Class/HasFromInt'
-import * as HasFromRational from 'src/Class/HasFromRational'
-import * as HasToInt from 'src/Class/HasToInt'
-import * as HasToRational from 'src/Class/HasToRational'
-import * as Integral from 'src/Class/Integral'
-import * as Numeric from 'src/Class/Numeric'
-import * as Rational from 'src/Class/Rational'
-import * as Ring from 'src/Class/Ring'
-import * as RingExtra from 'src/Class/Ring.Extra'
-import * as RingLaws from 'src/Class/Ring.Laws'
-import * as Semiring from 'src/Class/Semiring'
-import * as SemiringExtra from 'src/Class/Semiring.Extra'
-import * as Int32Bits from 'src/Data/Int32.Bits'
-import * as NonNegative from 'src/Data/NonNegative'
-import * as NonZero from 'src/Data/NonZero'
-import * as Ratio from 'src/Data/Ratio'
+import * as CommutativeRing from './CommutativeRing'
+import * as CommutativeRingLaws from './CommutativeRing.Laws'
+import * as DivisionRing from './DivisionRing'
+import * as DivisionRingExtra from './DivisionRing.Extra'
+import * as DivisionRingLaws from './DivisionRing.Laws'
+import * as Enum from './Enum'
+import * as EuclideanRing from './EuclideanRing'
+import * as EuclideanRingExtra from './EuclideanRing.Extra'
+import * as EuclideanRingLaws from './EuclideanRing.Laws'
+import * as Field from './Field'
+import * as FieldLaws from './Field.Laws'
+import * as Fractional from './Fractional'
+import * as HasFromInt from './HasFromInt'
+import * as HasFromRational from './HasFromRational'
+import * as HasToInt from './HasToInt'
+import * as HasToRational from './HasToRational'
+import * as Int32Bits from './Int32.Bits'
+import * as Integral from './Integral'
+import * as NonNegative from './NonNegative'
+import * as NonZero from './NonZero'
+import * as Numeric from './Numeric'
+import * as Ratio from './Ratio'
+import * as Rational from './Rational'
+import * as Ring from './Ring'
+import * as RingExtra from './Ring.Extra'
+import * as RingLaws from './Ring.Laws'
+import * as Semiring from './Semiring'
+import * as SemiringExtra from './Semiring.Extra'
 
 export {
   /**
    * @since 1.0.0
    */
   arbitraryFloat,
-} from 'src/Data/Float.Arbitrary'
+} from './Float.Arbitrary'
 export {
   /**
    * @since 1.0.0
    */
   arbitraryInt,
-} from 'src/Data/Int.Arbitrary'
+} from './Int.Arbitrary'
 export {
   /**
    * @since 1.0.0
    */
   arbitraryNatural,
-} from 'src/Data/Natural.Arbitrary'
+} from './Natural.Arbitrary'
 export {
   /**
    * @since 1.0.0
    */
   Float,
-} from 'src/Data/Float'
+} from './Float'
 export {
   /**
    * @since 1.0.0
    */
   Int,
-} from 'src/Data/Int'
+} from './Int'
 export {
   /**
    * @since 1.0.0
    */
   Int16,
-} from 'src/Data/Int16'
+} from './Int16'
 export {
   /**
    * @since 1.0.0
    */
   Int32,
-} from 'src/Data/Int32'
+} from './Int32'
 export {
   /**
    * @since 1.0.0
    */
   Int8,
-} from 'src/Data/Int8'
+} from './Int8'
 export {
   /**
    * @since 1.0.0
    */
   Natural,
-} from 'src/Data/Natural'
+} from './Natural'
 export {
   /**
    * @since 1.0.0
    */
   number,
-} from 'src/Data/number'
+} from './number'
 export {
   /**
    * @since 1.0.0
    */
   UInt16,
-} from 'src/Data/UInt16'
+} from './UInt16'
 export {
   /**
    * @since 1.0.0
    */
   UInt32,
-} from 'src/Data/UInt32'
+} from './UInt32'
 export {
   /**
    * @since 1.0.0
    */
   UInt8,
-} from 'src/Data/UInt8'
+} from './UInt8'
 export {
   /**
    * @since 1.0.0

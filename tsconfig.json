@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
     "alwaysStrict": true,
-    "baseUrl": "./",
     "declaration": true,
     "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
     "jsx": "react",
-    "lib": ["es6"],
+    "lib": ["ES6"],
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmit": true,
@@ -18,11 +18,12 @@
     "noUnusedParameters": false,
     "outDir": "dist/lib",
     "resolveJsonModule": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "strict": true,
     "strictFunctionTypes": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
+    "stripInternal": true,
     "target": "ES5"
   },
   "include": ["./src", "./test", "./tools", "./scripts"]

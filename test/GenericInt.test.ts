@@ -1,10 +1,9 @@
-import { Int8 } from 'src/Data/Int8'
-import { Int16 } from 'src/Data/Int16'
-import { Int32 } from 'src/Data/Int32'
-import { UInt8 } from 'src/Data/UInt8'
-import { UInt16 } from 'src/Data/UInt16'
-import { UInt32 } from 'src/Data/UInt32'
-
+import { Int8 } from '../src/Int8'
+import { Int16 } from '../src/Int16'
+import { Int32 } from '../src/Int32'
+import { UInt8 } from '../src/UInt8'
+import { UInt16 } from '../src/UInt16'
+import { UInt32 } from '../src/UInt32'
 import * as GIntTest from './GenericIntTest'
 
 GIntTest.runTests('UInt8', UInt8)
