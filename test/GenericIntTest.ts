@@ -4,15 +4,34 @@ import * as fptsLaws from 'fp-ts-laws'
 import * as A from 'fp-ts/lib/Array'
 import { Bounded } from 'fp-ts/lib/Bounded'
 import { Ord } from 'fp-ts/lib/Ord'
+import { Show } from 'fp-ts/lib/Show'
+import { CommutativeRing } from 'src/Class/CommutativeRing'
+import { getCommutativeRingLaws } from 'src/Class/CommutativeRing.Laws'
+import * as Enum from 'src/Class/Enum'
+import { getEnumLaws } from 'src/Class/Enum.Laws'
+import { EuclideanRing } from 'src/Class/EuclideanRing'
+import { getEuclideanRingLaws } from 'src/Class/EuclideanRing.Laws'
+import { Integral } from 'src/Class/Integral'
+import { Numeric } from 'src/Class/Numeric'
+import { Ring } from 'src/Class/Ring'
+import { getRingLaws } from 'src/Class/Ring.Laws'
+import { Semiring } from 'src/Class/Semiring'
+import { getSemiringLaws } from 'src/Class/Semiring.Laws'
 
-import * as Enum from '../src/Enum'
-import { getEnumLaws } from '../src/Enum/Laws'
-import { Integral } from '../src/Integral'
-import { Numeric } from '../src/Numeric'
+import { runEnumTestsFor } from './Enum'
 
 export function runTests<A>(
   name: string,
-  GInt: Ord<A> & Bounded<A> & Enum.Enum<A> & Integral<A> & Numeric<A>
+  GInt: Ord<A> &
+    Bounded<A> &
+    Enum.Enum<A> &
+    Integral<A> &
+    Numeric<A> &
+    Semiring<A> &
+    Ring<A> &
+    CommutativeRing<A> &
+    Show<A> &
+    EuclideanRing<A>
 ) {
   const arbGInt = fc
     .maxSafeInteger()
@@ -49,12 +68,60 @@ export function runTests<A>(
       })
     })
 
+    describe(`Semiring<${name}>`, () => {
+      const laws = getSemiringLaws(GInt, arbGInt)
+      record.keys(laws).forEach((law) => {
+        test(law, () => fc.assert(laws[law]))
+      })
+    })
+
+    describe(`Ring<${name}>`, () => {
+      const laws = getRingLaws(GInt, arbGInt)
+      record.keys(laws).forEach((law) => {
+        test(law, () => fc.assert(laws[law]))
+      })
+    })
+
+    describe(`CommutativeRing<${name}>`, () => {
+      const laws = getCommutativeRingLaws(GInt, arbGInt)
+      record.keys(laws).forEach((law) => {
+        test(law, () => fc.assert(laws[law]))
+      })
+    })
+
+    describe(`EuclideanRing<${name}>`, () => {
+      /**
+       * Machine integers violiate some EuclideanRing laws due to
+       * certain cases of overflow. For an integer type with N bits,
+       * you’ll find that the integral domain law will be violated
+       * with any pair of powers of 2 whose exponents add up to at
+       * least N. For example 16 * 16 = 2^4 * 2^4 = 0 with Int8.
+       *
+       * Aside from those cases, the laws hold.
+       */
+      const arbs = fc.tuple(arbGInt, arbGInt).filter(([a, b]) => {
+        const prod = GInt.toNumber(a) * GInt.toNumber(b)
+        return prod <= GInt.toNumber(GInt.top) && prod >= GInt.toNumber(GInt.bottom)
+      })
+
+      const laws = getEuclideanRingLaws(GInt, arbs)
+      record.keys(laws).forEach((law) => {
+        test(law, () => fc.assert(laws[law]))
+      })
+    })
+
+    describe(`Show<${name}>`, () => {
+      fc.assert(fc.property(arbGInt, (a) => typeof GInt.show(a) === 'string'))
+    })
+
     describe(`Enum<${name}>`, () => {
       describe('Laws', () => {
         const laws = getEnumLaws(GInt, arbGInt)
         record.keys(laws).forEach((law) => {
           test(law, () => fc.assert(laws[law]))
         })
+
+        runEnumTestsFor(GInt, arbGInt)
       })
 
       describe(Enum.enumFromTo.name, () => {
