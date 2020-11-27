@@ -1,6 +1,6 @@
 ---
 title: Int32.ts
-nav_order: 32
+nav_order: 34
 parent: Modules
 ---
 
@@ -33,20 +33,20 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [Typeclass Instance](#typeclass-instance)
-  - [boundedInt32](#boundedint32)
-  - [commutativeRingInt32](#commutativeringint32)
-  - [enumInt32](#enumint32)
-  - [eqInt32](#eqint32)
-  - [euclideanRingInt32](#euclideanringint32)
-  - [hasPowInt32](#haspowint32)
-  - [hasToIntInt32](#hastointint32)
-  - [hasToRationalInt32](#hastorationalint32)
-  - [integralInt32](#integralint32)
-  - [numericInt32](#numericint32)
-  - [ordInt32](#ordint32)
-  - [ringInt32](#ringint32)
-  - [semiringInt32](#semiringint32)
-  - [showInt32](#showint32)
+  - [Bounded](#bounded)
+  - [CommutativeRing](#commutativering)
+  - [Enum](#enum)
+  - [Eq](#eq)
+  - [EuclideanRing](#euclideanring)
+  - [HasPow](#haspow)
+  - [HasToInt](#hastoint)
+  - [HasToRational](#hastorational)
+  - [Integral](#integral)
+  - [Numeric](#numeric)
+  - [Ord](#ord)
+  - [Ring](#ring)
+  - [Semiring](#semiring)
+  - [Show](#show)
 - [utils](#utils)
   - [Digits (type alias)](#digits-type-alias)
   - [Int32](#int32)
@@ -73,7 +73,6 @@ Added in v1.0.0
   - [rem](#rem)
   - [sub](#sub)
   - [toInt](#toint)
-  - [toInteger](#tointeger)
   - [toNumber](#tonumber)
   - [toRational](#torational)
   - [top](#top)
@@ -84,142 +83,142 @@ Added in v1.0.0
 
 # Typeclass Instance
 
-## boundedInt32
+## Bounded
 
 **Signature**
 
 ```ts
-export declare const boundedInt32: Bounded<Int32>
+export declare const Bounded: Bounded<Int32>
 ```
 
 Added in v1.0.0
 
-## commutativeRingInt32
+## CommutativeRing
 
 **Signature**
 
 ```ts
-export declare const commutativeRingInt32: CommutativeRing<Int32>
+export declare const CommutativeRing: CommutativeRing<Int32>
 ```
 
 Added in v1.0.0
 
-## enumInt32
+## Enum
 
 **Signature**
 
 ```ts
-export declare const enumInt32: Enum<Int32>
+export declare const Enum: Enum<Int32>
 ```
 
 Added in v1.0.0
 
-## eqInt32
+## Eq
 
 **Signature**
 
 ```ts
-export declare const eqInt32: Eq<Int32>
+export declare const Eq: Eq<Int32>
 ```
 
 Added in v1.0.0
 
-## euclideanRingInt32
+## EuclideanRing
 
 **Signature**
 
 ```ts
-export declare const euclideanRingInt32: EuclideanRing<Int32>
+export declare const EuclideanRing: EuclideanRing<Int32>
 ```
 
 Added in v1.0.0
 
-## hasPowInt32
+## HasPow
 
 **Signature**
 
 ```ts
-export declare const hasPowInt32: HasPow<Int32>
+export declare const HasPow: HasPow<Int32>
 ```
 
 Added in v1.0.0
 
-## hasToIntInt32
+## HasToInt
 
 **Signature**
 
 ```ts
-export declare const hasToIntInt32: HasToInt<Int32>
+export declare const HasToInt: HasToInt<Int32>
 ```
 
 Added in v1.0.0
 
-## hasToRationalInt32
+## HasToRational
 
 **Signature**
 
 ```ts
-export declare const hasToRationalInt32: HasToRational<Int32>
+export declare const HasToRational: HasToRational<Int32>
 ```
 
 Added in v1.0.0
 
-## integralInt32
+## Integral
 
 **Signature**
 
 ```ts
-export declare const integralInt32: Integral<Int32>
+export declare const Integral: Integral<Int32>
 ```
 
 Added in v1.0.0
 
-## numericInt32
+## Numeric
 
 **Signature**
 
 ```ts
-export declare const numericInt32: Numeric<Int32>
+export declare const Numeric: Numeric<Int32>
 ```
 
 Added in v1.0.0
 
-## ordInt32
+## Ord
 
 **Signature**
 
 ```ts
-export declare const ordInt32: ord.Ord<Int32>
+export declare const Ord: Ord<Int32>
 ```
 
 Added in v1.0.0
 
-## ringInt32
+## Ring
 
 **Signature**
 
 ```ts
-export declare const ringInt32: Ring<Int32>
+export declare const Ring: Ring<Int32>
 ```
 
 Added in v1.0.0
 
-## semiringInt32
+## Semiring
 
 **Signature**
 
 ```ts
-export declare const semiringInt32: Semiring<Int32>
+export declare const Semiring: Semiring<Int32>
 ```
 
 Added in v1.0.0
 
-## showInt32
+## Show
 
 **Signature**
 
 ```ts
-export declare const showInt32: Show<Int32>
+export declare const Show: Show<Int32>
 ```
 
 Added in v1.0.0
@@ -229,7 +228,7 @@ Added in v1.0.0
 ## Digits (type alias)
 
 A tuple of literal integers representing every valid sequence of digits for
-[[Int32]]
+`Int32`
 
 **Signature**
 
@@ -275,29 +274,43 @@ export declare const Int32: Bounded<Int32> &
   HasToRational<Int32> &
   Integral<Int32> &
   Numeric<Int32> &
-  ord.Ord<Int32> &
+  Ord<Int32> &
   Ring<Int32> &
   Semiring<Int32> &
   Show<Int32> & {
     add: typeof add
     bottom: Int32
-    compare: typeof compare
+    Bounded: Bounded<Int32>
+    CommutativeRing: CommutativeRing<Int32>
+    compare: (x: Int32, y: Int32) => Ordering
     div: typeof div
+    Enum: Enum<Int32>
+    Eq: Eq<Int32>
     equals: typeof equals
+    EuclideanRing: EuclideanRing<Int32>
     fromInt: typeof fromInt
     fromNumber: typeof fromNumber
     fromNumberLossy: typeof fromNumberLossy
+    HasPow: HasPow<Int32>
+    HasToInt: HasToInt<Int32>
+    HasToRational: HasToRational<Int32>
+    Integral: Integral<Int32>
     isTypeOf: typeof isTypeOf
     mod: typeof mod
     mul: typeof mul
     negate: typeof negate
     next: typeof next
+    Numeric: Numeric<Int32>
     of: typeof of
     one: Int32
+    Ord: Ord<Int32>
     pow: typeof pow
     prev: typeof prev
     quot: typeof quot
     rem: typeof rem
+    Ring: Ring<Int32>
+    Semiring: Semiring<Int32>
+    Show: Show<Int32>
     sub: typeof sub
     toInt: typeof toInt
     toNumber: typeof toNumber
@@ -315,12 +328,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export interface Int32 {
-  /**
-   * @internal
-   */
-  readonly [INT_32]: unique symbol
-}
+export interface Int32 extends Newtype<typeof INT_32, number> {}
 ```
 
 Added in v1.0.0
@@ -350,7 +358,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function compare(a: Int32, b: Int32): -1 | 0 | 1
+export declare const compare: (x: Int32, y: Int32) => Ordering
 ```
 
 Added in v1.0.0
@@ -556,16 +564,6 @@ Added in v1.0.0
 
 ```ts
 export declare function toInt(a: Int32): Int
-```
-
-Added in v1.0.0
-
-## toInteger
-
-**Signature**
-
-```ts
-export declare function toInteger(a: Int32): Int
 ```
 
 Added in v1.0.0

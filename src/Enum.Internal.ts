@@ -1,11 +1,8 @@
 /**
  * @since 1.0.0
  */
-import { unsafeCoerce } from 'fp-ts/lib/function'
 import { Option } from 'fp-ts/lib/Option'
 import { Ord } from 'fp-ts/lib/Ord'
-
-const ENUM: unique symbol = unsafeCoerce('fp-ts-numerics/ENUM')
 
 /**
  * Typeclass for types which can be enumerated
@@ -36,24 +33,6 @@ const ENUM: unique symbol = unsafeCoerce('fp-ts-numerics/ENUM')
  *
  */
 export interface Enum<A> extends Ord<A> {
-  /**
-   * @internal
-   */
-  readonly [ENUM]: typeof ENUM
   readonly next: (a: A) => Option<A>
   readonly prev: (a: A) => Option<A>
-}
-
-interface EnumMethods<A> extends Omit<Enum<A>, typeof ENUM> {}
-
-/**
- * Enum instance constructor
- *
- * @since 1.0.0
- */
-export function instanceEnum<A>(e: EnumMethods<A>): Enum<A> {
-  return {
-    [ENUM]: ENUM,
-    ...e,
-  }
 }

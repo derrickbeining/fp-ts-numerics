@@ -1,6 +1,6 @@
 ---
 title: Ratio.ts
-nav_order: 41
+nav_order: 46
 parent: Modules
 ---
 

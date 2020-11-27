@@ -1,6 +1,6 @@
 ---
 title: UInt32.ts
-nav_order: 50
+nav_order: 55
 parent: Modules
 ---
 
@@ -20,12 +20,12 @@ Added in v1.0.0
 - [Data Type](#data-type)
   - [UInt32 (interface)](#uint32-interface)
 - [Typeclass Instance](#typeclass-instance)
-  - [commutativeRingUInt32](#commutativeringuint32)
-  - [euclideanRingUInt32](#euclideanringuint32)
-  - [hasPowUint32](#haspowuint32)
-  - [hasToIntUInt32](#hastointuint32)
-  - [ringUInt32](#ringuint32)
-  - [semiringUInt32](#semiringuint32)
+  - [CommutativeRing](#commutativering)
+  - [EuclideanRing](#euclideanring)
+  - [HasPow](#haspow)
+  - [HasToInt](#hastoint)
+  - [Ring](#ring)
+  - [Semiring](#semiring)
 - [utils](#utils)
   - [Digits (type alias)](#digits-type-alias)
   - [UInt32](#uint32)
@@ -117,74 +117,69 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export interface UInt32 extends NonNegative<{}> {
-  /**
-   * @internal
-   */
-  readonly [U_INT_32]: unique symbol
-}
+export interface UInt32 extends Newtype<typeof U_INT_32, NonNegative<number>> {}
 ```
 
 Added in v1.0.0
 
 # Typeclass Instance
 
-## commutativeRingUInt32
+## CommutativeRing
 
 **Signature**
 
 ```ts
-export declare const commutativeRingUInt32: CommutativeRing<UInt32>
+export declare const CommutativeRing: CommutativeRing<UInt32>
 ```
 
 Added in v1.0.0
 
-## euclideanRingUInt32
+## EuclideanRing
 
 **Signature**
 
 ```ts
-export declare const euclideanRingUInt32: EuclideanRing<UInt32>
+export declare const EuclideanRing: EuclideanRing<UInt32>
 ```
 
 Added in v1.0.0
 
-## hasPowUint32
+## HasPow
 
 **Signature**
 
 ```ts
-export declare const hasPowUint32: HasPow<UInt32>
+export declare const HasPow: HasPow<UInt32>
 ```
 
 Added in v1.0.0
 
-## hasToIntUInt32
+## HasToInt
 
 **Signature**
 
 ```ts
-export declare const hasToIntUInt32: HasToInt<UInt32>
+export declare const HasToInt: { toInt: typeof toInt }
 ```
 
 Added in v1.0.0
 
-## ringUInt32
+## Ring
 
 **Signature**
 
 ```ts
-export declare const ringUInt32: Ring<UInt32>
+export declare const Ring: Ring<UInt32>
 ```
 
 Added in v1.0.0
 
-## semiringUInt32
+## Semiring
 
 **Signature**
 
 ```ts
-export declare const semiringUInt32: Semiring<UInt32>
+export declare const Semiring: Semiring<UInt32>
 ```
 
 Added in v1.0.0
@@ -239,41 +234,41 @@ export declare const UInt32: Bounded<UInt32> &
   HasToRational<UInt32> &
   Integral<UInt32> &
   Numeric<UInt32> &
-  ord.Ord<UInt32> &
+  Ord<UInt32> &
   Ring<UInt32> &
   Semiring<UInt32> &
   Show<UInt32> & {
     add: typeof add
     bottom: UInt32
-    boundedUInt32: Bounded<UInt32>
-    compare: typeof compare
+    Bounded: Bounded<UInt32>
+    compare: (x: UInt32, y: UInt32) => Ordering
     div: typeof div
-    enumUInt32: Enum<UInt32>
-    eqUInt32: Eq<UInt32>
+    Enum: Enum<UInt32>
+    Eq: Eq<UInt32>
     equals: typeof equals
     fromInt: typeof fromInt
     fromNumber: typeof fromNumber
     fromNumberLossy: typeof fromNumberLossy
-    integralUInt32: Integral<UInt32>
+    Integral: Integral<UInt32>
     isTypeOf: typeof isTypeOf
     mod: typeof mod
     mul: typeof mul
     negate: typeof negate
     next: typeof next
-    numericUInt32: Numeric<UInt32>
+    Numeric: Numeric<UInt32>
     of: typeof of
     one: UInt32
-    ordUInt32: ord.Ord<UInt32>
+    Ord: Ord<UInt32>
     pow: typeof pow
     prev: typeof prev
     quot: typeof quot
-    hasToRationalUInt32: HasToRational<UInt32>
+    HasToRational: HasToRational<UInt32>
     rem: typeof rem
-    showUInt32: Show<UInt32>
+    Show: Show<UInt32>
     sub: typeof sub
     toInt: typeof toInt
     toInteger: typeof toInteger
-    toNumber: typeof toNumber
+    toNonNegativeNumber: typeof toNumber
     top: UInt32
     toRational: typeof toRational
     unsafeFromNumber: typeof unsafeFromNumber
@@ -308,7 +303,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function compare(a: UInt32, b: UInt32): -1 | 0 | 1
+export declare const compare: (x: UInt32, y: UInt32) => Ordering
 ```
 
 Added in v1.0.0
@@ -488,7 +483,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function toNumber(i: UInt32): number
+export declare function toNumber(i: UInt32): NonNegative<number>
 ```
 
 Added in v1.0.0

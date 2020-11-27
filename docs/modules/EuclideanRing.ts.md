@@ -1,6 +1,6 @@
 ---
 title: EuclideanRing.ts
-nav_order: 14
+nav_order: 13
 parent: Modules
 ---
 
@@ -8,14 +8,14 @@ parent: Modules
 
 Adapted from https://github.com/purescript/purescript-prelude/blob/v4.1./EuclideanRing.purs
 
-The `EuclideanRing` typeclass is for [[CommutativeRing]]s that support division.
+The `EuclideanRing` typeclass is for `CommutativeRing`s that support division.
 The mathematical structure this typeclass is based on is sometimes also called
 a _Euclidean domain_.
 
 ## Laws
 
 Instances must satisfy the following laws in addition to the
-[[CommutativeRing]] laws:
+`CommutativeRing` laws:
 
 - **Integral domain**
 
@@ -68,7 +68,7 @@ _(Int, Int32, UInt32, etc.) all use Euclidean division._
 
 If truncating division is desired, `fp-ts-numerics` also provides `quot` and
 `rem` functions for that purpose. These can be found on instances of
-[[Integral]] as well.
+`Integral` as well.
 
 ## Caveats for Non-Arbitrary Precision numbers
 
@@ -88,7 +88,6 @@ Added in v1.0.0
 
 - [utils](#utils)
   - [EuclideanRing (interface)](#euclideanring-interface)
-  - [instanceEuclideanRing](#instanceeuclideanring)
 
 ---
 
@@ -96,7 +95,7 @@ Added in v1.0.0
 
 ## EuclideanRing (interface)
 
-The `EuclideanRing` typeclass is for [[CommutativeRing]]s that support division.
+The `EuclideanRing` typeclass is for `CommutativeRing`s that support division.
 The mathematical structure this typeclass is based on is sometimes also called
 a _Euclidean domain_.
 
@@ -106,10 +105,6 @@ See [["EuclideanRing"]] module docs for more info
 
 ```ts
 export interface EuclideanRing<A> extends CommutativeRing<A> {
-  /**
-   * @internal
-   */
-  readonly [EUCLIDEAN_RING]: typeof EUCLIDEAN_RING
   /**
    * Euclidean function `degree` is required to obey the following laws:
    *   - Nonnegativity:
@@ -138,23 +133,6 @@ export interface EuclideanRing<A> extends CommutativeRing<A> {
    */
   mod(dividend: A, divisor: NonZero<A>): A
 }
-```
-
-Added in v1.0.0
-
-## instanceEuclideanRing
-
-EuclideanRing instance constructor
-
-```ts
-const euclideanRingMyType: EuclideanRing<MyType> =
-  instanceEuclideanRing({...})
-```
-
-**Signature**
-
-```ts
-export declare function instanceEuclideanRing<A>(e: Methods<A>): EuclideanRing<A>
 ```
 
 Added in v1.0.0

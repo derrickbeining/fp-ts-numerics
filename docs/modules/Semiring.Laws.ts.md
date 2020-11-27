@@ -1,6 +1,6 @@
 ---
 title: Semiring.Laws.ts
-nav_order: 47
+nav_order: 52
 parent: Modules
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: Ring.ts
-nav_order: 45
+nav_order: 50
 parent: Modules
 ---
 
@@ -21,7 +21,7 @@ Added in v1.0.0
   - [Ring (interface)](#ring-interface)
   - [getFunctionRing](#getfunctionring)
   - [getTupleRing](#gettuplering)
-  - [instanceRing](#instancering)
+  - [negate](#negate)
 
 ---
 
@@ -40,13 +40,7 @@ laws:
 **Signature**
 
 ```ts
-export interface Ring<A> extends Semiring<A> {
-  /**
-   * @internal
-   */
-  readonly [RING]: typeof RING
-  sub: (x: A, y: A) => A
-}
+export interface Ring<A> extends Semiring<A>, HasSub<A> {}
 ```
 
 Added in v1.0.0
@@ -77,9 +71,9 @@ export declare function getTupleRing<T extends ReadonlyArray<Ring<any>>>(
 
 ```ts
 import { getTupleRing } from 'fp-ts-numerics/Ring'
-import { fieldNumber } from 'fp-ts-numerics/number'
+import { Float64 } from 'fp-ts-numerics/Float64'
 
-const R = getTupleRing(fieldNumber, fieldNumber, fieldNumber)
+const R = getTupleRing(Float64.Field, Float64.Field, Float64.Field)
 assert.deepStrictEqual(R.add([1, 2, 3], [4, 5, 6]), [5, 7, 9])
 assert.deepStrictEqual(R.mul([1, 2, 3], [4, 5, 6]), [4, 10, 18])
 assert.deepStrictEqual(R.one, [1, 1, 1])
@@ -89,21 +83,12 @@ assert.deepStrictEqual(R.zero, [0, 0, 0])
 
 Added in v1.0.0
 
-## instanceRing
-
-Ring instance constructor
-
-```ts
-export const ringMyType = instanceRing<MyType>({
-  ...semiringMyType,
-  sub: (a, b) => ...
-})
-```
+## negate
 
 **Signature**
 
 ```ts
-export declare function instanceRing<A>(ring: RingMethods<A>): Ring<A>
+export declare function negate<A>(R: Ring<A>): (n: A) => A
 ```
 
 Added in v1.0.0

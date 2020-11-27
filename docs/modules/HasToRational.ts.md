@@ -1,6 +1,6 @@
 ---
 title: HasToRational.ts
-nav_order: 26
+nav_order: 29
 parent: Modules
 ---
 
@@ -14,7 +14,6 @@ Added in v1.0.0
 
 - [utils](#utils)
   - [HasToRational (interface)](#hastorational-interface)
-  - [instanceHasToRational](#instancehastorational)
 
 ---
 
@@ -33,26 +32,10 @@ acknowledge that these types actually represent rationals rather than
 ```ts
 export interface HasToRational<A> {
   /**
-   * @internal
-   */
-  readonly [HAS_TO_RATIONAL]: typeof HAS_TO_RATIONAL
-  /**
    * The rational equivalent of its real argument with full precision
    */
   toRational(a: A): Rational
 }
-```
-
-Added in v1.0.0
-
-## instanceHasToRational
-
-Instance constructor for the HasToRational typeclass
-
-**Signature**
-
-```ts
-export declare function instanceHasToRational<A>(e: Methods<A>): HasToRational<A>
 ```
 
 Added in v1.0.0

@@ -1,6 +1,6 @@
 ---
 title: NonZero.ts
-nav_order: 38
+nav_order: 43
 parent: Modules
 ---
 
@@ -16,13 +16,14 @@ Added in v1.0.0
   - [NonZero (type alias)](#nonzero-type-alias)
   - [arbitraryNonZero](#arbitrarynonzero)
   - [isNonZero](#isnonzero)
-  - [nonZero](#nonzero)
 
 ---
 
 # utils
 
 ## NonZero (type alias)
+
+The type of values not equal to `zero`
 
 **Signature**
 
@@ -37,7 +38,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function arbitraryNonZero<A>(T: Eq<A> & Semiring<A>): (arb: fc.Arbitrary<A>) => fc.Arbitrary<NonZero<A>>
+export declare function arbitraryNonZero<A>(T: Eq<A> & HasZero<A>): (arb: fc.Arbitrary<A>) => fc.Arbitrary<NonZero<A>>
 ```
 
 Added in v1.0.0
@@ -47,17 +48,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function isNonZero<A>(T: Eq<A> & Semiring<A>): <B>(a: A & B) => a is NonZero<A & B>
-```
-
-Added in v1.0.0
-
-## nonZero
-
-**Signature**
-
-```ts
-export declare function nonZero<A>(T: Eq<A> & Semiring<A>)
+export declare function isNonZero<A>(T: Eq<A> & HasZero<A>): (a: A) => a is NonZero<A>
 ```
 
 Added in v1.0.0

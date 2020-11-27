@@ -5,13 +5,12 @@ import * as fc from 'fast-check'
 import { option as O, ord } from 'fp-ts'
 import { sequenceT } from 'fp-ts/lib/Apply'
 import { tuple } from 'fp-ts/lib/function'
-import { option } from 'fp-ts/lib/Option'
 import { Ord } from 'fp-ts/lib/Ord'
 import { pipe } from 'fp-ts/lib/pipeable'
 
 import { EuclideanRing } from './EuclideanRing'
 import { Natural } from './Natural'
-import { nonZero } from './NonZero'
+import { isNonZero } from './NonZero'
 
 /**
  * @since 1.0.0
@@ -46,7 +45,8 @@ export const getEuclideanRingLaws = <A>(
     arbs
       .map(([a, b]) =>
         pipe(
-          nonZero(T)(b),
+          b,
+          O.fromPredicate(isNonZero(T)),
           O.map((nzb) => tuple(a, nzb))
         )
       )
@@ -64,7 +64,12 @@ export const getEuclideanRingLaws = <A>(
 
   'Submultiplicative: For all nonzero a and b, degree a <= degree (a * b)': fc.property(
     arbs
-      .map(([a, b]) => sequenceT(option)(nonZero(T)(a), nonZero(T)(b)))
+      .map(([a, b]) =>
+        sequenceT(O.option)(
+          pipe(a, O.fromPredicate(isNonZero(T))),
+          pipe(b, O.fromPredicate(isNonZero(T)))
+        )
+      )
       .filter(O.isSome)
       .map((x) => x.value),
     ([a, b]) => {

@@ -22,43 +22,50 @@
  * @packageDocumentation
  * @since 1.0.0
  */
-import { option, ord } from 'fp-ts'
-import { Bounded } from 'fp-ts/lib/Bounded'
-import { Eq } from 'fp-ts/lib/Eq'
+import { bounded, eq, option, ord, show } from 'fp-ts'
 import { unsafeCoerce } from 'fp-ts/lib/function'
 import { Option } from 'fp-ts/lib/Option'
-import { Ord, ordNumber } from 'fp-ts/lib/Ord'
 import { pipe } from 'fp-ts/lib/pipeable'
-import { Show } from 'fp-ts/lib/Show'
 
-import { CommutativeRing, instanceCommutativeRing } from './CommutativeRing'
-import { Enum, instanceEnum } from './Enum'
-import { EuclideanRing, instanceEuclideanRing } from './EuclideanRing'
-import { HasPow, instanceHasPow } from './HasPow'
-import { HasToInt, instanceHasToInt } from './HasToInt'
-import { HasToRational, instanceHasToRational } from './HasToRational'
+import * as commutativeRing from './CommutativeRing'
+import * as enum_ from './Enum'
+import * as euclideanRing from './EuclideanRing'
+import * as hasPow from './HasPow'
+import * as hasToInt from './HasToInt'
+import * as hasToRational from './HasToRational'
 import { Int } from './Int'
-import { instanceIntegral, Integral } from './Integral'
+import { Int16 } from './Int16'
+import * as integral from './Integral'
+import { Branded } from './Internal/Branded'
 import { Natural } from './Natural'
 import { NonZero } from './NonZero'
-import { instanceNumeric, Numeric } from './Numeric'
+import * as numeric from './Numeric'
 import { Ratio } from './Ratio'
 import { Rational } from './Rational'
-import { instanceRing, Ring } from './Ring'
-import { abs } from './Ring.Extra'
-import { instanceSemiring, Semiring } from './Semiring'
+import * as ring from './Ring'
+import * as semiring from './Semiring'
+
+type Bounded<T> = bounded.Bounded<T>
+type CommutativeRing<T> = commutativeRing.CommutativeRing<T>
+type Enum<T> = enum_.Enum<T>
+type Eq<T> = eq.Eq<T>
+type EuclideanRing<T> = euclideanRing.EuclideanRing<T>
+type HasPow<T> = hasPow.HasPow<T>
+type HasToInt<T> = hasToInt.HasToInt<T>
+type HasToRational<T> = hasToRational.HasToRational<T>
+type Integral<T> = integral.Integral<T>
+type Numeric<T> = numeric.Numeric<T>
+type Ord<T> = ord.Ord<T>
+type Ring<T> = ring.Ring<T>
+type Semiring<T> = semiring.Semiring<T>
+type Show<T> = show.Show<T>
 
 declare const INT_8: unique symbol
 
 /**
  * @since 1.0.0
  */
-export interface Int8 {
-  /**
-   * @internal
-   */
-  readonly [INT_8]: unique symbol
-}
+export interface Int8 extends Branded<Int16, typeof INT_8> {}
 
 // ## Functions
 
@@ -110,8 +117,8 @@ export function isTypeOf(x: unknown): x is Int8 {
   return (
     typeof x === 'number' &&
     Number.isInteger(x) &&
-    x <= toNumber(boundedInt8.top) &&
-    x >= toNumber(boundedInt8.bottom)
+    x <= toNumber(Bounded.top) &&
+    x >= toNumber(Bounded.bottom)
   )
 }
 
@@ -121,7 +128,7 @@ export function isTypeOf(x: unknown): x is Int8 {
 export function unsafeFromNumber(n: number): Int8 {
   if (!isTypeOf(n)) {
     throw new Error(
-      `${n} cannot be coerced to Int8 since it is not an integer within the bounds of ${boundedInt8.bottom} and ${boundedInt8.top}`
+      `${n} cannot be coerced to Int8 since it is not an integer within the bounds of ${Bounded.bottom} and ${Bounded.top}`
     )
   }
   return fromNumberLossy(n)
@@ -228,29 +235,32 @@ export function equals(a: Int8, b: Int8): boolean {
 /**
  * @since 1.0.0
  */
-export function compare(a: Int8, b: Int8): -1 | 0 | 1 {
-  return ordNumber.compare(toNumber(a), toNumber(b))
-}
+export const compare = ord.contramap(toNumber)(ord.ordNumber).compare
 
 /**
  * @since 1.0.0
  */
 export function next(a: Int8): Option<Int8> {
-  return ord.geq(ordInt8)(a, boundedInt8.top) ? option.none : option.some(add(a, one))
+  return ord.geq(Ord)(a, Bounded.top) ? option.none : option.some(add(a, one))
 }
 
 /**
  * @since 1.0.0
  */
 export function prev(a: Int8): Option<Int8> {
-  return ord.leq(ordInt8)(a, boundedInt8.bottom) ? option.none : option.some(sub(a, one))
+  return ord.leq(Ord)(a, Bounded.bottom) ? option.none : option.some(sub(a, one))
 }
 
 /**
  * @since 1.0.0
  */
 export function toRational(a: Int8): Rational {
-  return Ratio.of(Int)(integralInt8.toInt(a), Int(1))
+  const intMethods = {
+    ...Int.HasToRational,
+    ...Int.Ord,
+    ...Int.EuclideanRing,
+  }
+  return Ratio.of(intMethods)(Integral.toInt(a), Int.of(1))
 }
 
 /**
@@ -297,14 +307,14 @@ export function pow(n: Int8, exp: Int8): Int8 {
  * @since 1.0.0
  */
 export function toInt(a: Int8): Int {
-  return Int.unsafeFromNumber(toNumber(a))
+  return Int.of(a)
 }
 
 /**
  * @category Typeclass Instance
  * @since 1.0.0
  */
-export const eqInt8: Eq<Int8> = {
+export const Eq: Eq<Int8> = {
   equals,
 }
 
@@ -312,8 +322,8 @@ export const eqInt8: Eq<Int8> = {
  * @category Typeclass Instance
  * @since 1.0.0
  */
-export const ordInt8: Ord<Int8> = {
-  ...eqInt8,
+export const Ord: Ord<Int8> = {
+  equals,
   compare,
 }
 
@@ -321,8 +331,9 @@ export const ordInt8: Ord<Int8> = {
  * @category Typeclass Instance
  * @since 1.0.0
  */
-export const boundedInt8: Bounded<Int8> = {
-  ...ordInt8,
+export const Bounded: Bounded<Int8> = {
+  equals,
+  compare,
   bottom,
   top,
 }
@@ -331,94 +342,98 @@ export const boundedInt8: Bounded<Int8> = {
  * @category Typeclass Instance
  * @since 1.0.0
  */
-export const enumInt8 = instanceEnum<Int8>({
-  ...ordInt8,
+export const Enum: Enum<Int8> = {
+  equals,
+  compare,
   next,
   prev,
-})
+}
 
 /**
  * @category Typeclass Instance
  * @since 1.0.0
  */
-export const hasToRationalInt8: HasToRational<Int8> = instanceHasToRational<Int8>({
-  ...ordInt8,
+export const HasToRational: HasToRational<Int8> = {
   toRational,
-})
+}
 
 /**
  * @category Typeclass Instance
  * @since 1.0.0
  */
-export const hasToIntInt8 = instanceHasToInt<Int8>({
+export const HasToInt: HasToInt<Int8> = {
   toInt,
-})
+}
 
 /**
  * @category Typeclass Instance
  * @since 1.0.0
  */
-export const integralInt8 = instanceIntegral<Int8>({
-  ...hasToIntInt8,
-  ...hasToRationalInt8,
+export const Integral: Integral<Int8> = {
+  toInt,
+  toRational,
   quot,
   rem,
-  toInt,
-})
+}
 
 /**
  * @category Typeclass Instance
  * @since 1.0.0
  */
-export const numericInt8: Numeric<Int8> = instanceNumeric({
+export const Numeric: Numeric<Int8> = {
   fromNumber,
   toNumber,
-})
+}
 
 /**
  * @category Typeclass Instance
  * @since 1.0.0
  */
-export const semiringInt8: Semiring<Int8> = instanceSemiring({
+export const Semiring: Semiring<Int8> = {
   add,
   mul,
   one,
   zero,
-})
+}
 
 /**
  * @category Typeclass Instance
  * @since 1.0.0
  */
-export const ringInt8: Ring<Int8> = instanceRing<Int8>({
-  ...semiringInt8,
+export const Ring: Ring<Int8> = {
+  add,
+  mul,
+  one,
+  zero,
   sub,
-})
+}
 
 /**
  * @category Typeclass Instance
  * @since 1.0.0
  */
-export const commutativeRingInt8 = instanceCommutativeRing({
-  ...ringInt8,
-})
+export const CommutativeRing: CommutativeRing<Int8> = Ring
 
 /**
  * @category Typeclass Instance
  * @since 1.0.0
  */
-export const euclideanRingInt8: EuclideanRing<Int8> = instanceEuclideanRing({
-  ...commutativeRingInt8,
+export const EuclideanRing: EuclideanRing<Int8> = {
+  add,
+  mul,
+  one,
+  zero,
+  sub,
   degree,
   div,
   mod,
-})
+}
 
 /**
  * @category Typeclass Instance
  * @since 1.0.0
  */
-export const showInt8: Show<Int8> = {
+export const Show: Show<Int8> = {
   show: (a) => JSON.stringify(toNumber(a)),
 }
 
@@ -426,37 +441,8 @@ export const showInt8: Show<Int8> = {
  * @category Typeclass Instance
  * @since 1.0.0
  */
-export const hasPowInt8 = instanceHasPow({
+export const HasPow: HasPow<Int8> = {
   pow,
-})
-
-const exported = {
-  add,
-  bottom,
-  compare,
-  div,
-  equals,
-  fromInt,
-  fromNumber,
-  fromNumberLossy,
-  isTypeOf,
-  mod,
-  mul,
-  negate,
-  next,
-  of,
-  one,
-  pow,
-  prev,
-  quot,
-  rem,
-  sub,
-  toInt,
-  toNumber,
-  top,
-  toRational,
-  unsafeFromNumber,
-  zero,
 }
 
 /**
@@ -475,19 +461,84 @@ export const Int8: Bounded<Int8> &
   Ord<Int8> &
   Ring<Int8> &
   Semiring<Int8> &
-  Show<Int8> &
-  typeof exported = {
-  ...boundedInt8,
-  ...commutativeRingInt8,
-  ...enumInt8,
-  ...euclideanRingInt8,
-  ...hasPowInt8,
-  ...integralInt8,
-  ...numericInt8,
-  ...ordInt8,
-  ...hasToRationalInt8,
-  ...ringInt8,
-  ...semiringInt8,
-  ...showInt8,
-  ...exported,
+  Show<Int8> & {
+    add: typeof add
+    bottom: typeof bottom
+    Bounded: typeof Bounded
+    CommutativeRing: typeof CommutativeRing
+    compare: typeof compare
+    div: typeof div
+    Enum: typeof Enum
+    equals: typeof equals
+    EuclideanRing: typeof EuclideanRing
+    fromInt: typeof fromInt
+    fromNumber: typeof fromNumber
+    fromNumberLossy: typeof fromNumberLossy
+    HasPow: typeof HasPow
+    HasToRational: typeof HasToRational
+    Integral: typeof Integral
+    isTypeOf: typeof isTypeOf
+    mod: typeof mod
+    mul: typeof mul
+    negate: typeof negate
+    next: typeof next
+    Numeric: typeof Numeric
+    of: typeof of
+    one: typeof one
+    Ord: typeof Ord
+    pow: typeof pow
+    prev: typeof prev
+    quot: typeof quot
+    rem: typeof rem
+    Ring: typeof Ring
+    Semiring: typeof Semiring
+    Show: typeof Show
+    sub: typeof sub
+    toInt: typeof toInt
+    toNumber: typeof toNumber
+    top: typeof top
+    toRational: typeof toRational
+    unsafeFromNumber: typeof unsafeFromNumber
+    zero: typeof zero
+  } = {
+  add,
+  bottom,
+  Bounded,
+  CommutativeRing,
+  compare,
+  degree,
+  div,
+  Enum,
+  equals,
+  EuclideanRing,
+  fromInt,
+  fromNumber,
+  fromNumberLossy,
+  HasPow,
+  HasToRational,
+  Integral,
+  isTypeOf,
+  mod,
+  mul,
+  negate,
+  next,
+  Numeric,
+  of,
+  one,
+  Ord,
+  pow,
+  prev,
+  quot,
+  rem,
+  Ring,
+  Semiring,
+  Show,
+  show: Show.show,
+  sub,
+  toInt,
+  toNumber,
+  top,
+  toRational,
+  unsafeFromNumber,
+  zero,
 }

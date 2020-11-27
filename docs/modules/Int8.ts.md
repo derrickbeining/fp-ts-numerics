@@ -1,6 +1,6 @@
 ---
 title: Int8.ts
-nav_order: 33
+nav_order: 35
 parent: Modules
 ---
 
@@ -33,20 +33,20 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [Typeclass Instance](#typeclass-instance)
-  - [boundedInt8](#boundedint8)
-  - [commutativeRingInt8](#commutativeringint8)
-  - [enumInt8](#enumint8)
-  - [eqInt8](#eqint8)
-  - [euclideanRingInt8](#euclideanringint8)
-  - [hasPowInt8](#haspowint8)
-  - [hasToIntInt8](#hastointint8)
-  - [hasToRationalInt8](#hastorationalint8)
-  - [integralInt8](#integralint8)
-  - [numericInt8](#numericint8)
-  - [ordInt8](#ordint8)
-  - [ringInt8](#ringint8)
-  - [semiringInt8](#semiringint8)
-  - [showInt8](#showint8)
+  - [Bounded](#bounded)
+  - [CommutativeRing](#commutativering)
+  - [Enum](#enum)
+  - [Eq](#eq)
+  - [EuclideanRing](#euclideanring)
+  - [HasPow](#haspow)
+  - [HasToInt](#hastoint)
+  - [HasToRational](#hastorational)
+  - [Integral](#integral)
+  - [Numeric](#numeric)
+  - [Ord](#ord)
+  - [Ring](#ring)
+  - [Semiring](#semiring)
+  - [Show](#show)
 - [utils](#utils)
   - [Digits (type alias)](#digits-type-alias)
   - [Int8](#int8)
@@ -83,142 +83,142 @@ Added in v1.0.0
 
 # Typeclass Instance
 
-## boundedInt8
+## Bounded
 
 **Signature**
 
 ```ts
-export declare const boundedInt8: Bounded<Int8>
+export declare const Bounded: Bounded<Int8>
 ```
 
 Added in v1.0.0
 
-## commutativeRingInt8
+## CommutativeRing
 
 **Signature**
 
 ```ts
-export declare const commutativeRingInt8: CommutativeRing<Int8>
+export declare const CommutativeRing: CommutativeRing<Int8>
 ```
 
 Added in v1.0.0
 
-## enumInt8
+## Enum
 
 **Signature**
 
 ```ts
-export declare const enumInt8: Enum<Int8>
+export declare const Enum: Enum<Int8>
 ```
 
 Added in v1.0.0
 
-## eqInt8
+## Eq
 
 **Signature**
 
 ```ts
-export declare const eqInt8: Eq<Int8>
+export declare const Eq: Eq<Int8>
 ```
 
 Added in v1.0.0
 
-## euclideanRingInt8
+## EuclideanRing
 
 **Signature**
 
 ```ts
-export declare const euclideanRingInt8: EuclideanRing<Int8>
+export declare const EuclideanRing: EuclideanRing<Int8>
 ```
 
 Added in v1.0.0
 
-## hasPowInt8
+## HasPow
 
 **Signature**
 
 ```ts
-export declare const hasPowInt8: HasPow<Int8>
+export declare const HasPow: HasPow<Int8>
 ```
 
 Added in v1.0.0
 
-## hasToIntInt8
+## HasToInt
 
 **Signature**
 
 ```ts
-export declare const hasToIntInt8: HasToInt<Int8>
+export declare const HasToInt: HasToInt<Int8>
 ```
 
 Added in v1.0.0
 
-## hasToRationalInt8
+## HasToRational
 
 **Signature**
 
 ```ts
-export declare const hasToRationalInt8: HasToRational<Int8>
+export declare const HasToRational: HasToRational<Int8>
 ```
 
 Added in v1.0.0
 
-## integralInt8
+## Integral
 
 **Signature**
 
 ```ts
-export declare const integralInt8: Integral<Int8>
+export declare const Integral: Integral<Int8>
 ```
 
 Added in v1.0.0
 
-## numericInt8
+## Numeric
 
 **Signature**
 
 ```ts
-export declare const numericInt8: Numeric<Int8>
+export declare const Numeric: Numeric<Int8>
 ```
 
 Added in v1.0.0
 
-## ordInt8
+## Ord
 
 **Signature**
 
 ```ts
-export declare const ordInt8: ord.Ord<Int8>
+export declare const Ord: Ord<Int8>
 ```
 
 Added in v1.0.0
 
-## ringInt8
+## Ring
 
 **Signature**
 
 ```ts
-export declare const ringInt8: Ring<Int8>
+export declare const Ring: Ring<Int8>
 ```
 
 Added in v1.0.0
 
-## semiringInt8
+## Semiring
 
 **Signature**
 
 ```ts
-export declare const semiringInt8: Semiring<Int8>
+export declare const Semiring: Semiring<Int8>
 ```
 
 Added in v1.0.0
 
-## showInt8
+## Show
 
 **Signature**
 
 ```ts
-export declare const showInt8: Show<Int8>
+export declare const Show: Show<Int8>
 ```
 
 Added in v1.0.0
@@ -258,29 +258,41 @@ export declare const Int8: Bounded<Int8> &
   HasToRational<Int8> &
   Integral<Int8> &
   Numeric<Int8> &
-  ord.Ord<Int8> &
+  Ord<Int8> &
   Ring<Int8> &
   Semiring<Int8> &
   Show<Int8> & {
     add: typeof add
     bottom: Int8
-    compare: typeof compare
+    Bounded: Bounded<Int8>
+    CommutativeRing: CommutativeRing<Int8>
+    compare: (x: Int8, y: Int8) => Ordering
     div: typeof div
+    Enum: Enum<Int8>
     equals: typeof equals
+    EuclideanRing: EuclideanRing<Int8>
     fromInt: typeof fromInt
     fromNumber: typeof fromNumber
     fromNumberLossy: typeof fromNumberLossy
+    HasPow: HasPow<Int8>
+    HasToRational: HasToRational<Int8>
+    Integral: Integral<Int8>
     isTypeOf: typeof isTypeOf
     mod: typeof mod
     mul: typeof mul
     negate: typeof negate
     next: typeof next
+    Numeric: Numeric<Int8>
     of: typeof of
     one: Int8
+    Ord: Ord<Int8>
     pow: typeof pow
     prev: typeof prev
     quot: typeof quot
     rem: typeof rem
+    Ring: Ring<Int8>
+    Semiring: Semiring<Int8>
+    Show: Show<Int8>
     sub: typeof sub
     toInt: typeof toInt
     toNumber: typeof toNumber
@@ -298,12 +310,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export interface Int8 {
-  /**
-   * @internal
-   */
-  readonly [INT_8]: unique symbol
-}
+export interface Int8 extends Branded<Int16, typeof INT_8> {}
 ```
 
 Added in v1.0.0
@@ -333,7 +340,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function compare(a: Int8, b: Int8): -1 | 0 | 1
+export declare const compare: (x: Int8, y: Int8) => Ordering
 ```
 
 Added in v1.0.0

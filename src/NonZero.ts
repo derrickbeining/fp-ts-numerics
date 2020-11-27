@@ -2,15 +2,14 @@
  * @since 1.0.0
  */
 import * as fc from 'fast-check'
-import { option } from 'fp-ts'
 import { Eq } from 'fp-ts/lib/Eq'
-import { Option } from 'fp-ts/lib/Option'
 
-import { Semiring } from './Semiring'
+import { HasZero } from './HasZero'
 
 declare const NON_ZERO: unique symbol
 
 /**
+ * The type of values not equal to `zero`
  * @since 1.0.0
  */
 export type NonZero<A> = A & { readonly [NON_ZERO]: typeof NON_ZERO }
@@ -18,24 +17,15 @@ export type NonZero<A> = A & { readonly [NON_ZERO]: typeof NON_ZERO }
 /**
  * @since 1.0.0
  */
-export function isNonZero<A>(T: Eq<A> & Semiring<A>): <B>(a: A & B) => a is NonZero<A & B> {
-  return <B>(a: A): a is NonZero<A & B> => !T.equals(T.zero, a)
-}
-
-/**
- * @since 1.0.0
- */
-export function nonZero<A>(T: Eq<A> & Semiring<A>) {
-  return <B>(a: A & B): Option<A & B & NonZero<A & B>> => {
-    return isNonZero(T)(a) ? option.some(a) : option.none
-  }
+export function isNonZero<A>(T: Eq<A> & HasZero<A>): (a: A) => a is NonZero<A> {
+  return (a: A): a is NonZero<A> => !T.equals(T.zero, a)
 }
 
 /**
  * @since 1.0.0
  */
 export function arbitraryNonZero<A>(
-  T: Eq<A> & Semiring<A>
+  T: Eq<A> & HasZero<A>
 ): (arb: fc.Arbitrary<A>) => fc.Arbitrary<NonZero<A>> {
   return (arb) => arb.filter(isNonZero(T))
 }

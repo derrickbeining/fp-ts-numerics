@@ -22,67 +22,24 @@
  * @since 1.0.0
  */
 
-import { unsafeCoerce } from 'fp-ts/lib/function'
+import { HasAdd } from '../src/HasAdd'
+import { HasMul } from './HasMul'
+import { HasOne } from './HasOne'
+import { HasZero } from './HasZero'
 
-const SEMIRING: unique symbol = unsafeCoerce('fp-ts-numerics/SEMIRING')
 /**
  * @since 1.0.0
  */
-export interface Semiring<A> {
-  /**
-   * @internal
-   */
-  readonly [SEMIRING]: typeof SEMIRING
-  /**
-   * @since 1.0.0
-   */
-  add(x: A, y: A): A
-  /**
-   * @since 1.0.0
-   */
-  mul(x: A, y: A): A
-  /**
-   * @since 1.0.0
-   */
-  readonly one: A
-  /**
-   * @since 1.0.0
-   */
-  readonly zero: A
-}
-
-interface Methods<A> extends Omit<Semiring<A>, typeof SEMIRING> {}
+export interface Semiring<A> extends HasZero<A>, HasOne<A>, HasAdd<A>, HasMul<A> {}
 
 /**
- * Semiring instance constructor
- *
- * ```ts
- * const semiringMyTupe: Semiring<MyType> =
- *   instanceSemiring({
- *       add: (x, y) => ...,
- *       zero: ...,
- *       mul: (x, y) => ...,
- *       one: ...,
- *   })
- *```
-
  * @since 1.0.0
  */
-export function instanceSemiring<A>(semiring: Methods<A>): Semiring<A> {
+export function getFunctionSemiring<A, B>(S: Semiring<B>): Semiring<(a: A) => B> {
   return {
-    [SEMIRING]: SEMIRING,
-    ...semiring,
-  }
-}
-
-/**
- * @since 1.0.0
- */
-export function getFunctionSemiring<A, B>(S: Methods<B>): Semiring<(a: A) => B> {
-  return instanceSemiring<(a: A) => B>({
     add: (f, g) => (x) => S.add(f(x), g(x)),
     zero: () => S.zero,
     mul: (f, g) => (x) => S.mul(f(x), g(x)),
     one: () => S.one,
-  })
+  }
 }

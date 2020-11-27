@@ -1,5 +1,6 @@
 import * as E from 'fp-ts/Either'
-import { pipe } from 'fp-ts/function'
+import { flow, pipe } from 'fp-ts/function'
+import { eqString } from 'fp-ts/lib/Eq'
 import * as RTE from 'fp-ts/ReaderTaskEither'
 import * as A from 'fp-ts/ReadonlyArray'
 import * as TE from 'fp-ts/TaskEither'
@@ -11,7 +12,8 @@ import { run } from './run'
 
 interface Build<A> extends RTE.ReaderTaskEither<FileSystem, Error, A> {}
 
-const OUTPUT_FOLDER = 'dist'
+const OUT_DIR = tsconfig.compilerOptions.outDir
+const OUT_DIR_PARENT = `${OUT_DIR}/..`
 const PKG = 'package.json'
 
 export const copyPackageJson: Build<void> = (C) =>
@@ -27,7 +29,7 @@ export const copyPackageJson: Build<void> = (C) =>
 
       return clone
     }),
-    TE.chain((json) => C.writeFile(path.join(OUTPUT_FOLDER, PKG), JSON.stringify(json, null, 2)))
+    TE.chain((json) => C.writeFile(path.join(OUT_DIR_PARENT, PKG), JSON.stringify(json, null, 2)))
   )
 
 export const FILES: ReadonlyArray<string> = ['CHANGELOG.md', 'LICENSE', 'README.md']
@@ -35,14 +37,14 @@ export const FILES: ReadonlyArray<string> = ['CHANGELOG.md', 'LICENSE', 'README.
 export const copyFiles: Build<ReadonlyArray<void>> = (C) =>
   pipe(
     FILES,
-    A.traverse(TE.taskEither)((from) => C.copyFile(from, path.resolve(OUTPUT_FOLDER, from)))
+    A.traverse(TE.taskEither)((from) => C.copyFile(from, path.resolve(OUT_DIR_PARENT, from)))
   )
 
 const traverse = A.traverse(TE.taskEither)
 
 export const makeModules: Build<void> = (C) =>
   pipe(
-    C.glob(`${OUTPUT_FOLDER}/lib/*.js`),
+    C.glob(`${OUT_DIR}/**/*.js`),
     TE.map(getModules),
     TE.chain(traverse(makeSingleModule(C))),
     TE.map(() => undefined)
@@ -55,9 +57,9 @@ function getModules(paths: ReadonlyArray<string>): ReadonlyArray<string> {
 function makeSingleModule(C: FileSystem): (module: string) => TE.TaskEither<Error, void> {
   return (m) =>
     pipe(
-      C.mkdir(path.join(OUTPUT_FOLDER, m)),
+      C.mkdir(path.join(OUT_DIR_PARENT, m)),
       TE.chain(() => makePkgJson(m)),
-      TE.chain((data) => C.writeFile(path.join(OUTPUT_FOLDER, m, 'package.json'), data))
+      TE.chain((data) => C.writeFile(path.join(OUT_DIR_PARENT, m, 'package.json'), data))
     )
 }
 

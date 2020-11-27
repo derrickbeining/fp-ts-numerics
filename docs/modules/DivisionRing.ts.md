@@ -1,6 +1,6 @@
 ---
 title: DivisionRing.ts
-nav_order: 6
+nav_order: 5
 parent: Modules
 ---
 
@@ -16,7 +16,8 @@ Added in v1.0.0
 
 - [utils](#utils)
   - [DivisionRing (interface)](#divisionring-interface)
-  - [instanceDivisionRing](#instancedivisionring)
+  - [divL](#divl)
+  - [divR](#divr)
 
 ---
 
@@ -45,36 +46,46 @@ it is a field and should have a `Field` instance.
 
 ```ts
 export interface DivisionRing<A> extends Ring<A> {
-  /**
-   * @internal
-   */
-  readonly [DIVISION_RING]: typeof DIVISION_RING
   readonly recip: (a: NonZero<A>) => A
 }
 ```
 
 Added in v1.0.0
 
-## instanceDivisionRing
+## divL
 
-DivisionRing instance constructor
+Left division, defined as `divL(a, b) = recip(b * a)`. Left and right
+division are distinct in this module because a `DivisionRing` is not
+necessarily commutative.
+
+If the type `a` is also a `EuclideanRing`, then this function is
+equivalent to `div` from the `EuclideanRing` class. When working
+abstractly, `div` should generally be preferred, unless you know that you
+need your code to work with noncommutative rings.
 
 **Signature**
 
 ```ts
-export declare function instanceDivisionRing<A>(dr: Methods<A>): DivisionRing<A>
+export declare function divL<A>(DR: DivisionRing<A>): (a1: A, a2: NonZero<A>) => A
 ```
 
-**Example**
+Added in v1.0.0
+
+## divR
+
+Right division, defined as `rightDiv a b = a * recip b`. Left and right
+division are distinct in this module because a `DivisionRing` is not
+necessarily commutative.
+
+If the type `a` is also a `EuclideanRing`, then this function is
+equivalent to `div` from the `EuclideanRing` class. When working
+abstractly, `div` should generally be preferred, unless you know that you
+need your code to work with noncommutative rings.
+
+**Signature**
 
 ```ts
-import { instanceDivisionRing } from 'fp-ts-numerics/DivisionRing'
-import { ringNumber } from 'fp-ts-numerics/number'
-
-const divisionRingMyType = instanceDivisionRing<number>({
-  ...ringNumber,
-  recip: (a) => 1 / a,
-})
+export declare function divR<A>(DR: DivisionRing<A>): (a1: A, a2: NonZero<A>) => A
 ```
 
 Added in v1.0.0

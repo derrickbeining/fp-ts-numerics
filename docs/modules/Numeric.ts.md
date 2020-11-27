@@ -1,6 +1,6 @@
 ---
 title: Numeric.ts
-nav_order: 40
+nav_order: 44
 parent: Modules
 ---
 
@@ -14,7 +14,6 @@ Added in v1.0.0
 
 - [utils](#utils)
   - [Numeric (interface)](#numeric-interface)
-  - [instanceNumeric](#instancenumeric)
 
 ---
 
@@ -28,23 +27,9 @@ The class of types which can be converted to and from JS `number`s
 
 ```ts
 export interface Numeric<A> {
-  /**
-   * @internal
-   */
-  readonly [NUMERIC]: typeof NUMERIC
   readonly fromNumber: (a: number) => Option<A>
   readonly toNumber: (a: A) => number
 }
-```
-
-Added in v1.0.0
-
-## instanceNumeric
-
-**Signature**
-
-```ts
-export declare function instanceNumeric<A>(numeric: NumericMethods<A>): Numeric<A>
 ```
 
 Added in v1.0.0

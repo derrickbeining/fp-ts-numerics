@@ -1,6 +1,6 @@
 ---
 title: Semiring.ts
-nav_order: 48
+nav_order: 53
 parent: Modules
 ---
 
@@ -35,7 +35,6 @@ Added in v1.0.0
 - [utils](#utils)
   - [Semiring (interface)](#semiring-interface)
   - [getFunctionSemiring](#getfunctionsemiring)
-  - [instanceSemiring](#instancesemiring)
 
 ---
 
@@ -46,28 +45,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export interface Semiring<A> {
-  /**
-   * @internal
-   */
-  readonly [SEMIRING]: typeof SEMIRING
-  /**
-   * @since 1.0.0
-   */
-  add(x: A, y: A): A
-  /**
-   * @since 1.0.0
-   */
-  mul(x: A, y: A): A
-  /**
-   * @since 1.0.0
-   */
-  readonly one: A
-  /**
-   * @since 1.0.0
-   */
-  readonly zero: A
-}
+export interface Semiring<A> extends HasZero<A>, HasOne<A>, HasAdd<A>, HasMul<A> {}
 ```
 
 Added in v1.0.0
@@ -77,29 +55,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function getFunctionSemiring<A, B>(S: Methods<B>): Semiring<(a: A) => B>
-```
-
-Added in v1.0.0
-
-## instanceSemiring
-
-Semiring instance constructor
-
-```ts
-const semiringMyTupe: Semiring<MyType> =
-  instanceSemiring({
-      add: (x, y) => ...,
-      zero: ...,
-      mul: (x, y) => ...,
-      one: ...,
-  })
-```
-
-**Signature**
-
-```ts
-export declare function instanceSemiring<A>(semiring: Methods<A>): Semiring<A>
+export declare function getFunctionSemiring<A, B>(S: Semiring<B>): Semiring<(a: A) => B>
 ```
 
 Added in v1.0.0

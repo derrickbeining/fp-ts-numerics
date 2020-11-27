@@ -1,13 +1,4 @@
 /**
- * @since 1.0.0
- */
-import { unsafeCoerce } from 'fp-ts/lib/function'
-
-import { DivisionRing } from './DivisionRing'
-import { EuclideanRing } from './EuclideanRing'
-
-const FIELD: unique symbol = unsafeCoerce('fp-ts-numerics/FIELD')
-/**
  * The `Field` class is for types that are (commutative) fields.
  *
  *  Mathematically, a field is a ring which is commutative and in which every
@@ -25,25 +16,14 @@ const FIELD: unique symbol = unsafeCoerce('fp-ts-numerics/FIELD')
  *  This class has no laws or members of its own; it exists as a convenience,
  *  so a single constraint can be used when field-like behaviour is expected.
  *
+ * @packageDocumentation
  * @since 1.0.0
  */
-export interface Field<A> extends EuclideanRing<A>, DivisionRing<A> {
-  /**
-   * @internal
-   */
-  readonly [FIELD]: typeof FIELD
-}
 
-interface FieldMethods<A> extends Omit<Field<A>, typeof FIELD> {}
+import { DivisionRing } from './DivisionRing'
+import { EuclideanRing } from './EuclideanRing'
 
 /**
- * Field instance constructor
- *
  * @since 1.0.0
  */
-export function instanceField<A>(e: FieldMethods<A>): Field<A> {
-  return {
-    [FIELD]: FIELD,
-    ...e,
-  }
-}
+export interface Field<A> extends EuclideanRing<A>, DivisionRing<A> {}

@@ -6,13 +6,9 @@
  *
  * @since 1.0.0
  */
-import { unsafeCoerce } from 'fp-ts/lib/function'
 
 import { NonZero } from './NonZero'
 import { Ring } from './Ring'
-
-declare const DIVISION_RING: unique symbol
-const brand = unsafeCoerce<{}, { readonly [DIVISION_RING]: typeof DIVISION_RING }>({})
 
 /**
  * The `DivisionRing` class is for non-zero rings in which every non-zero
@@ -35,35 +31,35 @@ const brand = unsafeCoerce<{}, { readonly [DIVISION_RING]: typeof DIVISION_RING 
  * @since 1.0.0
  */
 export interface DivisionRing<A> extends Ring<A> {
-  /**
-   * @internal
-   */
-  readonly [DIVISION_RING]: typeof DIVISION_RING
   readonly recip: (a: NonZero<A>) => A
 }
 
 /**
+ * Left division, defined as `divL(a, b) = recip(b * a)`. Left and right
+ * division are distinct in this module because a `DivisionRing` is not
+ * necessarily commutative.
+ *
+ * If the type `a` is also a `EuclideanRing`, then this function is
+ * equivalent to `div` from the `EuclideanRing` class. When working
+ * abstractly, `div` should generally be preferred, unless you know that you
+ * need your code to work with noncommutative rings.
  * @since 1.0.0
  */
-interface Methods<A> extends Omit<DivisionRing<A>, typeof DIVISION_RING> {}
+export function divL<A>(DR: DivisionRing<A>): (a1: A, a2: NonZero<A>) => A {
+  return (a1, a2) => DR.mul(DR.recip(a2), a1)
+}
 
 /**
- * DivisionRing instance constructor
+ * Right division, defined as `rightDiv a b = a * recip b`. Left and right
+ * division are distinct in this module because a `DivisionRing` is not
+ * necessarily commutative.
  *
- * @example
- * import { instanceDivisionRing } from 'fp-ts-numerics/DivisionRing'
- * import { ringNumber } from 'fp-ts-numerics/number'
- *
- * const divisionRingMyType = instanceDivisionRing<number>({
- *   ...ringNumber,
- *   recip: (a) => 1 / a
- * })
- *
+ * If the type `a` is also a `EuclideanRing`, then this function is
+ * equivalent to `div` from the `EuclideanRing` class. When working
+ * abstractly, `div` should generally be preferred, unless you know that you
+ * need your code to work with noncommutative rings.
  * @since 1.0.0
  */
-export function instanceDivisionRing<A>(dr: Methods<A>): DivisionRing<A> {
-  return {
-    ...brand,
-    ...dr,
-  }
+export function divR<A>(DR: DivisionRing<A>): (a1: A, a2: NonZero<A>) => A {
+  return (a1, a2) => DR.mul(a1, DR.recip(a2))
 }

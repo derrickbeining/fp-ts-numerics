@@ -1,6 +1,6 @@
 ---
 title: UInt16.ts
-nav_order: 49
+nav_order: 54
 parent: Modules
 ---
 
@@ -20,12 +20,15 @@ Added in v1.0.0
 - [Data Type](#data-type)
   - [UInt16 (interface)](#uint16-interface)
 - [Typeclass Instance](#typeclass-instance)
-  - [commutativeRingUInt16](#commutativeringuint16)
-  - [euclideanRingUInt16](#euclideanringuint16)
-  - [hasPowUInt16](#haspowuint16)
-  - [hasToIntUInt16](#hastointuint16)
-  - [ringUInt16](#ringuint16)
-  - [semiringUInt16](#semiringuint16)
+  - [CommutativeRing](#commutativering)
+  - [Enum](#enum)
+  - [EuclideanRing](#euclideanring)
+  - [HasPow](#haspow)
+  - [HasToInt](#hastoint)
+  - [HasToRational](#hastorational)
+  - [Numeric](#numeric)
+  - [Ring](#ring)
+  - [Semiring](#semiring)
 - [utils](#utils)
   - [Digits (type alias)](#digits-type-alias)
   - [UInt16](#uint16)
@@ -116,74 +119,104 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export interface UInt16 extends NonNegative<{}> {
-  /**
-   * @internal
-   */
-  readonly [U_INT_16]: unique symbol
-}
+export interface UInt16 extends Branded<UInt32, typeof U_INT_16> {}
 ```
 
 Added in v1.0.0
 
 # Typeclass Instance
 
-## commutativeRingUInt16
+## CommutativeRing
 
 **Signature**
 
 ```ts
-export declare const commutativeRingUInt16: CommutativeRing<UInt16>
+export declare const CommutativeRing: CommutativeRing<UInt16>
 ```
 
 Added in v1.0.0
 
-## euclideanRingUInt16
+## Enum
 
 **Signature**
 
 ```ts
-export declare const euclideanRingUInt16: EuclideanRing<UInt16>
+export declare const Enum: {
+  equals: typeof equals
+  compare: (x: UInt16, y: UInt16) => Ordering
+  next: typeof next
+  prev: typeof prev
+}
 ```
 
 Added in v1.0.0
 
-## hasPowUInt16
+## EuclideanRing
 
 **Signature**
 
 ```ts
-export declare const hasPowUInt16: HasPow<UInt16>
+export declare const EuclideanRing: EuclideanRing<UInt16>
 ```
 
 Added in v1.0.0
 
-## hasToIntUInt16
+## HasPow
 
 **Signature**
 
 ```ts
-export declare const hasToIntUInt16: HasToInt<UInt16>
+export declare const HasPow: HasPow<UInt16>
 ```
 
 Added in v1.0.0
 
-## ringUInt16
+## HasToInt
 
 **Signature**
 
 ```ts
-export declare const ringUInt16: Ring<UInt16>
+export declare const HasToInt: HasToInt<UInt16>
 ```
 
 Added in v1.0.0
 
-## semiringUInt16
+## HasToRational
 
 **Signature**
 
 ```ts
-export declare const semiringUInt16: Semiring<UInt16>
+export declare const HasToRational: HasToRational<UInt16>
+```
+
+Added in v1.0.0
+
+## Numeric
+
+**Signature**
+
+```ts
+export declare const Numeric: Numeric<UInt16>
+```
+
+Added in v1.0.0
+
+## Ring
+
+**Signature**
+
+```ts
+export declare const Ring: Ring<UInt16>
+```
+
+Added in v1.0.0
+
+## Semiring
+
+**Signature**
+
+```ts
+export declare const Semiring: Semiring<UInt16>
 ```
 
 Added in v1.0.0
@@ -228,13 +261,13 @@ export declare const UInt16: Bounded<UInt16> &
   HasToRational<UInt16> &
   Integral<UInt16> &
   Numeric<UInt16> &
-  ord.Ord<UInt16> &
+  Ord<UInt16> &
   Ring<UInt16> &
   Semiring<UInt16> &
   Show<UInt16> & {
     add: typeof add
     bottom: UInt16
-    compare: typeof compare
+    compare: (x: UInt16, y: UInt16) => Ordering
     div: typeof div
     equals: typeof equals
     fromInt: typeof fromInt
@@ -253,6 +286,7 @@ export declare const UInt16: Bounded<UInt16> &
     rem: typeof rem
     sub: typeof sub
     toInt: typeof toInt
+    toNonNegativeNumber: typeof toNumber
     toNumber: typeof toNumber
     top: UInt16
     toRational: typeof toRational
@@ -288,7 +322,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function compare(a: UInt16, b: UInt16): -1 | 0 | 1
+export declare const compare: (x: UInt16, y: UInt16) => Ordering
 ```
 
 Added in v1.0.0
@@ -448,7 +482,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function toInt(a: UInt16): Int
+export declare function toInt(n: UInt16): Int
 ```
 
 Added in v1.0.0
@@ -458,7 +492,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function toNumber(i: UInt16): number
+export declare function toNumber(i: UInt16): NonNegative<number>
 ```
 
 Added in v1.0.0

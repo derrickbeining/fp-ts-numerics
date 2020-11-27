@@ -2,13 +2,13 @@
  *
  * Adapted from https://github.com/purescript/purescript-prelude/blob/v4.1./EuclideanRing.purs
  *
- * The `EuclideanRing` typeclass is for [[CommutativeRing]]s that support division.
+ * The `EuclideanRing` typeclass is for `CommutativeRing`s that support division.
  * The mathematical structure this typeclass is based on is sometimes also called
  * a *Euclidean domain*.
  *
  * ## Laws
  * Instances must satisfy the following laws in addition to the
- * [[CommutativeRing]] laws:
+ * `CommutativeRing` laws:
  *
  * - **Integral domain**
  *   - `!equals(one, zero)`, and if `a` and `b` are both non-zero then so is
@@ -59,7 +59,7 @@
  *
  * If truncating division is desired, `fp-ts-numerics` also provides `quot` and
  * `rem` functions for that purpose. These can be found on instances of
- * [[Integral]] as well.
+ * `Integral` as well.
  *
  * ## Caveats for Non-Arbitrary Precision numbers
  *
@@ -75,16 +75,12 @@
  * @since 1.0.0
  */
 
-import { unsafeCoerce } from 'fp-ts/lib/function'
-
-import { CommutativeRing } from './CommutativeRing'
+import { CommutativeRing } from '../src/CommutativeRing'
 import { Natural } from './Natural'
 import { NonZero } from './NonZero'
 
-declare const EUCLIDEAN_RING: unique symbol
-const brand = unsafeCoerce<{}, { [EUCLIDEAN_RING]: typeof EUCLIDEAN_RING }>({})
 /**
- * The `EuclideanRing` typeclass is for [[CommutativeRing]]s that support division.
+ * The `EuclideanRing` typeclass is for `CommutativeRing`s that support division.
  * The mathematical structure this typeclass is based on is sometimes also called
  * a *Euclidean domain*.
  *
@@ -93,10 +89,6 @@ const brand = unsafeCoerce<{}, { [EUCLIDEAN_RING]: typeof EUCLIDEAN_RING }>({})
  * @since 1.0.0
  */
 export interface EuclideanRing<A> extends CommutativeRing<A> {
-  /**
-   * @internal
-   */
-  readonly [EUCLIDEAN_RING]: typeof EUCLIDEAN_RING
   /**
    * Euclidean function `degree` is required to obey the following laws:
    *   - Nonnegativity:
@@ -124,23 +116,4 @@ export interface EuclideanRing<A> extends CommutativeRing<A> {
    * TODO: return `NonNegative<A>` instead
    */
   mod(dividend: A, divisor: NonZero<A>): A
-}
-
-interface Methods<A> extends Omit<EuclideanRing<A>, typeof EUCLIDEAN_RING> {}
-
-/**
- * EuclideanRing instance constructor
- *
- * ```ts
-const euclideanRingMyType: EuclideanRing<MyType> =
- *   instanceEuclideanRing({...})
- * ```
- *
- * @since 1.0.0
- */
-export function instanceEuclideanRing<A>(e: Methods<A>): EuclideanRing<A> {
-  return {
-    ...brand,
-    ...e,
-  }
 }

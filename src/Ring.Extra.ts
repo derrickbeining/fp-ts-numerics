@@ -1,18 +1,21 @@
 /**
  * @since 1.0.0
  */
-import { ord } from 'fp-ts'
+import { option, ord } from 'fp-ts'
 import { Ord } from 'fp-ts/lib/Ord'
+import { pipe } from 'fp-ts/lib/pipeable'
 
-import { NonNegative, nonNegative } from './NonNegative'
-import { Ring } from './Ring'
+import { HasOne } from './HasOne'
+import { HasSub } from './HasSub'
+import { HasZero } from './HasZero'
+import { toNonNegative } from './NonNegative'
 
 /**
- * `negate x` can be used as a shorthand for `zero - x`
+ * `negate(x)` can be used as a shorthand for `sub(zero, x)`
  *
  * @since 1.0.0
  */
-export function negate<A>(R: Ring<A>): (a: A) => A {
+export function negate<A>(R: HasSub<A> & HasZero<A>): (a: A) => A {
   return (a) => R.sub(R.zero, a)
 }
 
@@ -27,8 +30,12 @@ export function negate<A>(R: Ring<A>): (a: A) => A {
  *
  * @since 1.0.0
  */
-export function abs<A>(OR: Ord<A> & Ring<A>): (a: A) => NonNegative<A> {
-  return (a) => nonNegative(OR)(a)
+export function abs<A>(OR: Ord<A> & HasSub<A> & HasZero<A>): (a: A) => A {
+  return (a) =>
+    pipe(
+      toNonNegative(OR)(a),
+      option.getOrElse(() => a)
+    )
 }
 
 /**
@@ -37,6 +44,6 @@ export function abs<A>(OR: Ord<A> & Ring<A>): (a: A) => NonNegative<A> {
  *
  * @since 1.0.0
  */
-export function signum<A>(T: Ord<A> & Ring<A>): (a: A) => A {
+export function signum<A>(T: Ord<A> & HasSub<A> & HasZero<A> & HasOne<A>): (a: A) => A {
   return (a) => (ord.lt(T)(a, T.zero) ? negate(T)(T.one) : T.one)
 }

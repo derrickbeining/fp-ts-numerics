@@ -9,9 +9,8 @@ import { getEnumLaws } from '../src/Enum.Laws'
 import { gcd, lcm } from '../src/EuclideanRing.Extra'
 import { getEuclideanRingLaws } from '../src/EuclideanRing.Laws'
 import { Int } from '../src/Int'
-import { arbitraryInt } from '../src/Int.Arbitrary'
 import { arbitraryNatural } from '../src/Natural.Arbitrary'
-import { nonNegative } from '../src/NonNegative'
+import { toNonNegative } from '../src/NonNegative'
 import { arbitraryNonZero, isNonZero, NonZero } from '../src/NonZero'
 import { Ratio } from '../src/Ratio'
 import { signum } from '../src/Ring.Extra'
@@ -19,19 +18,19 @@ import { getRingLaws } from '../src/Ring.Laws'
 import { getSemiringLaws } from '../src/Semiring.Laws'
 import { runEnumTestsFor } from './Enum'
 
-const nonZeroInt = arbitraryNonZero(Int)(arbitraryInt)
+const nonZeroInt = arbitraryNonZero(Int)(Int.Arbitrary)
 
 describe('Int', () => {
   describe('Constructors', () => {
-    describe(Int.name, () => {
+    describe(Int.of.name, () => {
       it('constructs an Int from digits', () => {
-        expect(Int.isTypeOf(Int(1, 2, 3))).toBe(true)
+        expect(Int.isTypeOf(Int.of(1, 2, 3))).toBe(true)
       })
     })
 
     describe(Int.fromNumber.name, () => {
       it('returns some(Int) when Number.isInteger(n)', () => {
-        expect(Int.fromNumber(1)).toStrictEqual(option.some(Int(1)))
+        expect(Int.fromNumber(1)).toStrictEqual(option.some(Int.of(1)))
       })
       it('returns nothing when !Number.isInteger(n)', () => {
         expect(Int.fromNumber(1.1)).toStrictEqual(option.none)
@@ -62,7 +61,7 @@ describe('Int', () => {
   describe('Type Guards', () => {
     describe(Int.isTypeOf.name, () => {
       it('evaluates to true on Ints', () => {
-        expect(Int.isTypeOf(Int(1))).toBe(true)
+        expect(Int.isTypeOf(Int.of(1))).toBe(true)
         expect(Int.isTypeOf(1)).toBe(false)
       })
     })
@@ -71,35 +70,35 @@ describe('Int', () => {
   describe('Typeclasses', () => {
     describe('Ord<Int>', () => {
       it('is lawful', () => {
-        fptsLaws.ord(Int, arbitraryInt)
+        fptsLaws.ord(Int, Int.Arbitrary)
       })
     })
 
     describe(`Enum<Int>`, () => {
-      const laws = getEnumLaws(Int, arbitraryInt)
+      const laws = getEnumLaws(Int, Int.Arbitrary)
       record.keys(laws).forEach((law) => {
         test(law, () => fc.assert(laws[law]))
       })
 
-      runEnumTestsFor(Int, arbitraryInt)
+      runEnumTestsFor(Int, Int.Arbitrary)
     })
 
     describe('Semiring<Int>', () => {
-      const laws = getSemiringLaws(Int, arbitraryInt)
+      const laws = getSemiringLaws(Int, Int.Arbitrary)
       record.keys(laws).forEach((law) => {
         test(law, () => fc.assert(laws[law]))
       })
     })
 
     describe('Ring<Int>', () => {
-      const laws = getRingLaws(Int, arbitraryInt)
+      const laws = getRingLaws(Int, Int.Arbitrary)
       record.keys(laws).forEach((law) => {
         test(law, () => fc.assert(laws[law]))
       })
     })
 
     describe('CommutativeRing<Int>', () => {
-      const laws = getCommutativeRingLaws(Int, arbitraryInt)
+      const laws = getCommutativeRingLaws(Int, Int.Arbitrary)
       record.keys(laws).forEach((law) => {
         test(law, () => fc.assert(laws[law]))
       })
@@ -107,7 +106,7 @@ describe('Int', () => {
 
     describe('EuclideanRing<Int>', () => {
       describe('Laws', () => {
-        const laws = getEuclideanRingLaws(Int, fc.tuple(arbitraryInt, arbitraryInt))
+        const laws = getEuclideanRingLaws(Int, fc.tuple(Int.Arbitrary, Int.Arbitrary))
         record.keys(laws).forEach((law) => {
           test(law, () => fc.assert(laws[law]))
         })
@@ -117,7 +116,7 @@ describe('Int', () => {
         test('If m is any integer, then gcd(a + m⋅b, b) = gcd(a, b)', () => {
           fc.assert(
             fc.property(
-              fc.tuple(arbitraryInt, arbitraryInt, arbitraryNonZero(Int)(arbitraryInt)),
+              fc.tuple(Int.Arbitrary, Int.Arbitrary, arbitraryNonZero(Int)(Int.Arbitrary)),
               ([m, a, b]) => {
                 const gcd1 = gcd(Int)(Int.add(a, Int.mul(m, b)), b)
                 const gcd2 = gcd(Int)(a, b)
@@ -129,7 +128,7 @@ describe('Int', () => {
 
         test('If m is a non-negative integer, then gcd(m⋅a, m⋅b) = m⋅gcd(a, b)', () => {
           fc.assert(
-            fc.property(fc.tuple(arbitraryNatural, arbitraryInt, arbitraryInt), ([m, a, b]) => {
+            fc.property(fc.tuple(arbitraryNatural, Int.Arbitrary, Int.Arbitrary), ([m, a, b]) => {
               const prod = Int.mul(m, b)
               if (!isNonZero(Int)(prod)) return true
               const d = gcd(Int)(Int.mul(m, a), prod)
@@ -140,15 +139,27 @@ describe('Int', () => {
 
         test('commutativity: gcd(a, b) = gcd(b, a)', () => {
           fc.assert(
-            fc.property(fc.tuple(arbitraryInt, arbitraryInt), ([a, b]) => {
-              return Int.equals(gcd(Int)(a, b), gcd(Int)(b, a))
+            fc.property(fc.tuple(Int.Arbitrary, Int.Arbitrary), ([a, b]) => {
+              const gcdAB = gcd(Int)(a, b)
+              const gcdBA = gcd(Int)(b, a)
+              const isEqual = Int.equals(gcdAB, gcdBA)
+              if (!isEqual) {
+                console.log({
+                  a,
+                  b,
+                  gcdAB,
+                  gcdBA: gcd(Int)(b, a),
+                })
+              }
+
+              return isEqual
             })
           )
         })
 
         test('associativity: gcd(a, gcd(b, c)) = gcd(gcd(a, b), c)', () => {
           fc.assert(
-            fc.property(fc.tuple(arbitraryInt, arbitraryInt, arbitraryInt), ([a, b, c]) => {
+            fc.property(fc.tuple(Int.Arbitrary, Int.Arbitrary, Int.Arbitrary), ([a, b, c]) => {
               const gcd1 = gcd(Int)(a, gcd(Int)(b, c))
               const gcd2 = gcd(Int)(gcd(Int)(a, b), c)
 
@@ -174,10 +185,10 @@ describe('Int', () => {
         })
         test('lcm(a,b) = abs(a * b / gcd(a,b))', () => {
           fc.assert(
-            fc.property(fc.tuple(arbitraryInt, arbitraryNonZero(Int)(arbitraryInt)), ([a, b]) => {
+            fc.property(fc.tuple(Int.Arbitrary, arbitraryNonZero(Int)(Int.Arbitrary)), ([a, b]) => {
               const LCM = lcm(Int)(a, b)
               const abOverGcdAB = Int.div(Int.mul(a, b), gcd(Int)(a, b))
-              return Int.equals(LCM, nonNegative(Int)(abOverGcdAB))
+              return Int.equals(LCM, Int.abs(abOverGcdAB))
             })
           )
         })
@@ -188,18 +199,18 @@ describe('Int', () => {
   describe('Transformations', () => {
     describe(Int.toNumber.name, () => {
       it('evaluates to some(N) when N is within range of -2^53 and 2^53 - 1', () => {
-        expect(Int.toNumber(Int(9, 0, 0, 7, 1, 9, 9, 2, 5, 4, 7, 4, 0, 9, 9, 1))).toStrictEqual(
+        expect(Int.toNumber(Int.of(9, 0, 0, 7, 1, 9, 9, 2, 5, 4, 7, 4, 0, 9, 9, 1))).toStrictEqual(
           option.some(Number.MAX_SAFE_INTEGER)
         )
-        expect(Int.toNumber(Int(-9, 0, 0, 7, 1, 9, 9, 2, 5, 4, 7, 4, 0, 9, 9, 1))).toStrictEqual(
+        expect(Int.toNumber(Int.of(-9, 0, 0, 7, 1, 9, 9, 2, 5, 4, 7, 4, 0, 9, 9, 1))).toStrictEqual(
           option.some(Number.MIN_SAFE_INTEGER)
         )
       })
       it('evaluates to none when N is outside the range of -2^53 and 2^53 -1', () => {
-        expect(Int.toNumber(Int(9, 0, 0, 7, 1, 9, 9, 2, 5, 4, 7, 4, 0, 9, 9, 2))).toStrictEqual(
+        expect(Int.toNumber(Int.of(9, 0, 0, 7, 1, 9, 9, 2, 5, 4, 7, 4, 0, 9, 9, 2))).toStrictEqual(
           option.none
         )
-        expect(Int.toNumber(Int(-9, 0, 0, 7, 1, 9, 9, 2, 5, 4, 7, 4, 0, 9, 9, 2))).toStrictEqual(
+        expect(Int.toNumber(Int.of(-9, 0, 0, 7, 1, 9, 9, 2, 5, 4, 7, 4, 0, 9, 9, 2))).toStrictEqual(
           option.none
         )
       })
@@ -207,14 +218,14 @@ describe('Int', () => {
 
     describe(Int.unsafeToNumber.name, () => {
       it('throws when unable to convert to number without truncating', () => {
-        const tooBig = Int(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-        const tooSmall = Int(-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        const tooBig = Int.of(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        const tooSmall = Int.of(-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         expect(() => Int.unsafeToNumber(tooBig)).toThrow()
         expect(() => Int.unsafeToNumber(tooSmall)).toThrow()
       })
 
       it('converts the Int to number when safe to do so', () => {
-        expect(Int.unsafeToNumber(Int(1))).toStrictEqual(1)
+        expect(Int.unsafeToNumber(Int.of(1))).toStrictEqual(1)
       })
     })
   })
@@ -224,7 +235,7 @@ describe('Int', () => {
       it('inverts the sign of negative Ints', () => {
         fc.assert(
           fc.property(
-            arbitraryInt.filter((n) => ord.lt(Int)(n, Int.zero)),
+            Int.Arbitrary.filter((n) => ord.lt(Int)(n, Int.zero)),
             (negInt) => Int.equals(Int.zero, Int.add(negInt, Int.abs(negInt)))
           )
         )
@@ -233,7 +244,7 @@ describe('Int', () => {
       it('returns zero and positive Ints as is', () => {
         fc.assert(
           fc.property(
-            arbitraryInt.filter((n) => ord.geq(Int)(n, Int.zero)),
+            Int.Arbitrary.filter((n) => ord.geq(Int)(n, Int.zero)),
             (nonNegInt) => Int.equals(nonNegInt, Int.abs(nonNegInt))
           )
         )
@@ -245,7 +256,7 @@ describe('Int', () => {
         fc.assert(
           fc.property(
             fc
-              .tuple(arbitraryInt, nonZeroInt)
+              .tuple(Int.Arbitrary, nonZeroInt)
               .filter(([n, d]) => !Int.equals(Int.zero, Int.rem(n, d))),
             ([dividend, divisor]) => {
               const remainder = Int.rem(dividend, divisor)
@@ -260,7 +271,7 @@ describe('Int', () => {
     describe(Int.quot.name, () => {
       it('performs truncating integer division, rounding toward zero', () => {
         const arbIntsThatCanBeConvertedToNumbersAndDontDivideEvently = fc
-          .tuple(arbitraryInt, nonZeroInt)
+          .tuple(Int.Arbitrary, nonZeroInt)
           .filter(([n, d]) =>
             pipe(sequenceT(option.option)(Int.toNumber(n), Int.toNumber(d)), option.isSome)
           )
@@ -279,13 +290,15 @@ describe('Int', () => {
 
     describe(Int.toInt.name, () => {
       it('is the identity function', () => {
-        fc.assert(fc.property(arbitraryInt, (a) => Int.equals(a, Int.toInt(a))))
+        fc.assert(fc.property(Int.Arbitrary, (a) => Int.equals(a, Int.toInt(a))))
       })
     })
 
     describe(Int.toRational.name, () => {
       it('makes in Int into a Ratio<Int>', () => {
-        fc.assert(fc.property(arbitraryInt, (a) => Ratio.isTypeOf(Int.isTypeOf)(Int.toRational(a))))
+        fc.assert(
+          fc.property(Int.Arbitrary, (a) => Ratio.isTypeOf(Int.isTypeOf)(Int.toRational(a)))
+        )
       })
     })
   })

@@ -1,6 +1,6 @@
 ---
 title: UInt8.ts
-nav_order: 51
+nav_order: 56
 parent: Modules
 ---
 
@@ -24,20 +24,20 @@ Added in v1.0.0
 - [Type Guard](#type-guard)
   - [isTypeOf](#istypeof)
 - [Typeclass Instance](#typeclass-instance)
-  - [boundedUInt8](#boundeduint8)
-  - [commutativeRingUInt8](#commutativeringuint8)
-  - [enumUInt8](#enumuint8)
-  - [eqUInt8](#equint8)
-  - [euclideanRingUInt8](#euclideanringuint8)
-  - [hasPowUInt8](#haspowuint8)
-  - [hasToIntUInt8](#hastointuint8)
-  - [hasToRationalUInt8](#hastorationaluint8)
-  - [integralUInt8](#integraluint8)
-  - [numericUInt8](#numericuint8)
-  - [ordUInt8](#orduint8)
-  - [ringUInt8](#ringuint8)
-  - [semiringUInt8](#semiringuint8)
-  - [showUInt8](#showuint8)
+  - [Bounded](#bounded)
+  - [CommutativeRing](#commutativering)
+  - [Enum](#enum)
+  - [Eq](#eq)
+  - [EuclideanRing](#euclideanring)
+  - [HasPow](#haspow)
+  - [HasToInt](#hastoint)
+  - [HasToRational](#hastorational)
+  - [Integral](#integral)
+  - [Numeric](#numeric)
+  - [Ord](#ord)
+  - [Ring](#ring)
+  - [Semiring](#semiring)
+  - [Show](#show)
 - [utils](#utils)
   - [Digits (type alias)](#digits-type-alias)
   - [UInt8](#uint8)
@@ -50,7 +50,6 @@ Added in v1.0.0
   - [fromInt](#fromint)
   - [mod](#mod)
   - [mul](#mul)
-  - [negate](#negate)
   - [next](#next)
   - [one](#one)
   - [pow](#pow)
@@ -59,7 +58,6 @@ Added in v1.0.0
   - [rem](#rem)
   - [sub](#sub)
   - [toInt](#toint)
-  - [toInteger](#tointeger)
   - [toRational](#torational)
   - [top](#top)
   - [zero](#zero)
@@ -127,12 +125,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export interface UInt8 extends NonNegative<{}> {
-  /**
-   * @internal
-   */
-  readonly [U_INT_8]: unique symbol
-}
+export interface UInt8 extends Branded<NonNegative<UInt16>, typeof U_INT_8> {}
 ```
 
 Added in v1.0.0
@@ -144,7 +137,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function toNumber(i: UInt8): number
+export declare function toNumber(n: UInt8): number
 ```
 
 Added in v1.0.0
@@ -163,142 +156,142 @@ Added in v1.0.0
 
 # Typeclass Instance
 
-## boundedUInt8
+## Bounded
 
 **Signature**
 
 ```ts
-export declare const boundedUInt8: Bounded<UInt8>
+export declare const Bounded: Bounded<UInt8>
 ```
 
 Added in v1.0.0
 
-## commutativeRingUInt8
+## CommutativeRing
 
 **Signature**
 
 ```ts
-export declare const commutativeRingUInt8: CommutativeRing<UInt8>
+export declare const CommutativeRing: CommutativeRing<UInt8>
 ```
 
 Added in v1.0.0
 
-## enumUInt8
+## Enum
 
 **Signature**
 
 ```ts
-export declare const enumUInt8: Enum<UInt8>
+export declare const Enum: Enum<UInt8>
 ```
 
 Added in v1.0.0
 
-## eqUInt8
+## Eq
 
 **Signature**
 
 ```ts
-export declare const eqUInt8: Eq<UInt8>
+export declare const Eq: Eq<UInt8>
 ```
 
 Added in v1.0.0
 
-## euclideanRingUInt8
+## EuclideanRing
 
 **Signature**
 
 ```ts
-export declare const euclideanRingUInt8: EuclideanRing<UInt8>
+export declare const EuclideanRing: EuclideanRing<UInt8>
 ```
 
 Added in v1.0.0
 
-## hasPowUInt8
+## HasPow
 
 **Signature**
 
 ```ts
-export declare const hasPowUInt8: HasPow<UInt8>
+export declare const HasPow: HasPow<UInt8>
 ```
 
 Added in v1.0.0
 
-## hasToIntUInt8
+## HasToInt
 
 **Signature**
 
 ```ts
-export declare const hasToIntUInt8: HasToInt<UInt8>
+export declare const HasToInt: HasToInt<UInt8>
 ```
 
 Added in v1.0.0
 
-## hasToRationalUInt8
+## HasToRational
 
 **Signature**
 
 ```ts
-export declare const hasToRationalUInt8: HasToRational<UInt8>
+export declare const HasToRational: HasToRational<UInt8>
 ```
 
 Added in v1.0.0
 
-## integralUInt8
+## Integral
 
 **Signature**
 
 ```ts
-export declare const integralUInt8: Integral<UInt8>
+export declare const Integral: Integral<UInt8>
 ```
 
 Added in v1.0.0
 
-## numericUInt8
+## Numeric
 
 **Signature**
 
 ```ts
-export declare const numericUInt8: Numeric<UInt8>
+export declare const Numeric: Numeric<UInt8>
 ```
 
 Added in v1.0.0
 
-## ordUInt8
+## Ord
 
 **Signature**
 
 ```ts
-export declare const ordUInt8: ord.Ord<UInt8>
+export declare const Ord: Ord<UInt8>
 ```
 
 Added in v1.0.0
 
-## ringUInt8
+## Ring
 
 **Signature**
 
 ```ts
-export declare const ringUInt8: Ring<UInt8>
+export declare const Ring: Ring<UInt8>
 ```
 
 Added in v1.0.0
 
-## semiringUInt8
+## Semiring
 
 **Signature**
 
 ```ts
-export declare const semiringUInt8: Semiring<UInt8>
+export declare const Semiring: Semiring<UInt8>
 ```
 
 Added in v1.0.0
 
-## showUInt8
+## Show
 
 **Signature**
 
 ```ts
-export declare const showUInt8: Show<UInt8>
+export declare const Show: Show<UInt8>
 ```
 
 Added in v1.0.0
@@ -339,13 +332,13 @@ export declare const UInt8: Bounded<UInt8> &
   HasToRational<UInt8> &
   Integral<UInt8> &
   Numeric<UInt8> &
-  ord.Ord<UInt8> &
+  Ord<UInt8> &
   Ring<UInt8> &
   Semiring<UInt8> &
   Show<UInt8> & {
     add: typeof add
     bottom: UInt8
-    compare: typeof compare
+    compare: (x: UInt8, y: UInt8) => Ordering
     div: typeof div
     equals: typeof equals
     fromInt: typeof fromInt
@@ -354,7 +347,6 @@ export declare const UInt8: Bounded<UInt8> &
     isTypeOf: typeof isTypeOf
     mod: typeof mod
     mul: typeof mul
-    negate: typeof negate
     next: typeof next
     of: typeof of
     one: UInt8
@@ -364,7 +356,7 @@ export declare const UInt8: Bounded<UInt8> &
     rem: typeof rem
     sub: typeof sub
     toInt: typeof toInt
-    toNumber: typeof toNumber
+    toNonNegativeNumber: typeof toNumber
     top: UInt8
     toRational: typeof toRational
     unsafeFromNumber: typeof unsafeFromNumber
@@ -399,7 +391,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function compare(a: UInt8, b: UInt8): -1 | 0 | 1
+export declare const compare: (x: UInt8, y: UInt8) => Ordering
 ```
 
 Added in v1.0.0
@@ -460,16 +452,6 @@ Added in v1.0.0
 
 ```ts
 export declare function mul(a: UInt8, b: UInt8): UInt8
-```
-
-Added in v1.0.0
-
-## negate
-
-**Signature**
-
-```ts
-export declare function negate(a: UInt8): UInt8
 ```
 
 Added in v1.0.0
@@ -549,17 +531,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function toInt(a: UInt8): Int
-```
-
-Added in v1.0.0
-
-## toInteger
-
-**Signature**
-
-```ts
-export declare function toInteger(a: UInt8): Int
+export declare function toInt(n: UInt8): Int
 ```
 
 Added in v1.0.0

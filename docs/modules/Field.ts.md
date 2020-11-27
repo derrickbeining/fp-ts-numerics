@@ -1,26 +1,10 @@
 ---
 title: Field.ts
-nav_order: 16
+nav_order: 15
 parent: Modules
 ---
 
 ## Field overview
-
-Added in v1.0.0
-
----
-
-<h2 class="text-delta">Table of contents</h2>
-
-- [utils](#utils)
-  - [Field (interface)](#field-interface)
-  - [instanceField](#instancefield)
-
----
-
-# utils
-
-## Field (interface)
 
 The `Field` class is for types that are (commutative) fields.
 
@@ -39,27 +23,25 @@ order to ensure that a `Field` constraint on a function permits you to use
 This class has no laws or members of its own; it exists as a convenience,
 so a single constraint can be used when field-like behaviour is expected.
 
-**Signature**
-
-```ts
-export interface Field<A> extends EuclideanRing<A>, DivisionRing<A> {
-  /**
-   * @internal
-   */
-  readonly [FIELD]: typeof FIELD
-}
-```
-
 Added in v1.0.0
 
-## instanceField
+---
 
-Field instance constructor
+<h2 class="text-delta">Table of contents</h2>
+
+- [utils](#utils)
+  - [Field (interface)](#field-interface)
+
+---
+
+# utils
+
+## Field (interface)
 
 **Signature**
 
 ```ts
-export declare function instanceField<A>(e: FieldMethods<A>): Field<A>
+export interface Field<A> extends EuclideanRing<A>, DivisionRing<A> {}
 ```
 
 Added in v1.0.0

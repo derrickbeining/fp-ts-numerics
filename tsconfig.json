@@ -2,6 +2,7 @@
   "compilerOptions": {
     "alwaysStrict": true,
     "declaration": true,
+    "declarationMap": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
@@ -26,5 +27,5 @@
     "stripInternal": true,
     "target": "ES5"
   },
-  "include": ["./src", "./test", "./tools", "./scripts"]
+  "include": ["./src", "./test", "./tools", "./scripts", "src/Float64.ts"]
 }

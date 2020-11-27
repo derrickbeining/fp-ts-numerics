@@ -3,24 +3,22 @@ import { record } from 'fp-ts'
 import * as fptsLaws from 'fp-ts-laws'
 
 import { getCommutativeRingLaws } from '../src/CommutativeRing.Laws'
-import { NonZero } from '../src/NonZero'
-import { number } from '../src/number'
+import { Float64 } from '../src/Float64'
 import { getRingLaws } from '../src/Ring.Laws'
 import { getSemiringLaws } from '../src/Semiring.Laws'
-import { UInt8 } from '../src/UInt8'
 
-describe('number', () => {
+describe('Float64', () => {
   describe('Typeclasses', () => {
     describe(`Eq`, () => {
-      fptsLaws.eq(number, fc.double())
+      fptsLaws.eq(Float64, fc.double())
     })
 
     describe(`Ord`, () => {
-      fptsLaws.ord(number, fc.double())
+      fptsLaws.ord(Float64, fc.double())
     })
 
     describe('Semiring', () => {
-      const laws = getSemiringLaws(number, fc.float())
+      const laws = getSemiringLaws(Float64, fc.float())
 
       for (const [name, law] of Object.entries(laws)) {
         test(name, () => fc.assert(law, { numRuns: 1000 }))
@@ -28,14 +26,14 @@ describe('number', () => {
     })
 
     describe(`Ring`, () => {
-      const laws = getRingLaws(number, fc.double())
+      const laws = getRingLaws(Float64, fc.double())
       record.keys(laws).forEach((law) => {
         test(law, () => fc.assert(laws[law]))
       })
     })
 
     describe(`CommutativeRing`, () => {
-      const laws = getCommutativeRingLaws(number, fc.double())
+      const laws = getCommutativeRingLaws(Float64, fc.double())
       record.keys(laws).forEach((law) => {
         test(law, () => fc.assert(laws[law]))
       })
@@ -43,7 +41,7 @@ describe('number', () => {
 
     // can't reliably compare JS numbers, so property tests inevitably fails
     // describe(`Field`, () => {
-    //   const laws = getFieldLaws(number, NonZero.getArbitrary(number)(fc.double(-100, 100)))
+    //   const laws = getFieldLaws(Float64, NonZero.getArbitrary(Float64)(fc.double(-100, 100)))
     //   record.keys(laws).forEach((law) => {
     //     test(law, () => fc.assert(laws[law]))
     //   })

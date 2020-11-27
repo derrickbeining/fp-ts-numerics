@@ -1,6 +1,6 @@
 ---
 title: Fractional.ts
-nav_order: 20
+nav_order: 19
 parent: Modules
 ---
 

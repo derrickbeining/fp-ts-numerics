@@ -1,28 +1,28 @@
 ---
-title: Float.ts
-nav_order: 18
+title: Float32.ts
+nav_order: 16
 parent: Modules
 ---
 
-## Float overview
+## Float32 overview
 
 This module provides a way to construct and work with signed, 32-bit
 integers. They are just JavaScript`number`s under the hood, so they should
 be comparable in performance.
 
-Since they are limited to 32 bits, `Float`s are subject to overflowing if
+Since they are limited to 32 bits, `Float32`s are subject to overflowing if
 the result of any operation should exceed the range of -2^31 and 2^31 - 1.
 
 To avoid integer overflow, see [[Int]] for arbitrary precision integers.
 
-Like the rest of `fp-ts-numerics`, this module exposes the `Float` type
+Like the rest of `fp-ts-numerics`, this module exposes the `Float32` type
 and namespace as a single declaration. It is intended to be consumed like so:
 
 ```ts
-import { Float } from 'fp-ts-numerics'
+import { Float32 } from 'fp-ts-numerics'
 
-function isEven(n: Float): boolean {
-  return Float.equals(Float.zero, Float.mod(n, Float.of(2)))
+function isEven(n: Float32): boolean {
+  return Float32.equals(Float32.zero, Float32.mod(n, Float32.of(2)))
 }
 ```
 
@@ -33,24 +33,29 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [Typeclass Instance](#typeclass-instance)
-  - [boundedFloat](#boundedfloat)
-  - [commutativeRingFloat](#commutativeringfloat)
-  - [enumFloat](#enumfloat)
-  - [eqFloat](#eqfloat)
-  - [euclideanRingFloat](#euclideanringfloat)
-  - [hasPowFloat](#haspowfloat)
-  - [hasToIntFloat](#hastointfloat)
-  - [hasToRationalFloat](#hastorationalfloat)
-  - [integralFloat](#integralfloat)
-  - [numericFloat](#numericfloat)
-  - [ordFloat](#ordfloat)
-  - [ringFloat](#ringfloat)
-  - [semiringFloat](#semiringfloat)
-  - [showFloat](#showfloat)
+  - [Bounded](#bounded)
+  - [CommutativeRing](#commutativering)
+  - [DivisionRing](#divisionring)
+  - [Enum](#enum)
+  - [Eq](#eq)
+  - [EuclideanRing](#euclideanring)
+  - [Field](#field)
+  - [HasAdd](#hasadd)
+  - [HasMul](#hasmul)
+  - [HasOne](#hasone)
+  - [HasPow](#haspow)
+  - [HasSub](#hassub)
+  - [HasZero](#haszero)
+  - [Numeric](#numeric)
+  - [Ord](#ord)
+  - [Ring](#ring)
+  - [Semiring](#semiring)
+  - [Show](#show)
 - [utils](#utils)
+  - [Arbitrary](#arbitrary)
   - [Digits (type alias)](#digits-type-alias)
-  - [Float](#float)
-  - [Float (interface)](#float-interface)
+  - [Float32](#float32)
+  - [Float32 (interface)](#float32-interface)
   - [add](#add)
   - [bottom](#bottom)
   - [compare](#compare)
@@ -70,12 +75,12 @@ Added in v1.0.0
   - [pow](#pow)
   - [prev](#prev)
   - [quot](#quot)
+  - [recip](#recip)
   - [rem](#rem)
   - [sub](#sub)
   - [toInt](#toint)
   - [toInteger](#tointeger)
   - [toNumber](#tonumber)
-  - [toRational](#torational)
   - [top](#top)
   - [unsafeFromNumber](#unsafefromnumber)
   - [zero](#zero)
@@ -84,152 +89,208 @@ Added in v1.0.0
 
 # Typeclass Instance
 
-## boundedFloat
+## Bounded
 
 **Signature**
 
 ```ts
-export declare const boundedFloat: Bounded<Float>
+export declare const Bounded: Bounded<Float32>
 ```
 
 Added in v1.0.0
 
-## commutativeRingFloat
+## CommutativeRing
 
 **Signature**
 
 ```ts
-export declare const commutativeRingFloat: CommutativeRing<Float>
+export declare const CommutativeRing: Ring<Float32>
 ```
 
 Added in v1.0.0
 
-## enumFloat
+## DivisionRing
+
+Instance of [[DivisionRing]] for `Float32`
 
 **Signature**
 
 ```ts
-export declare const enumFloat: Enum<Float>
+export declare const DivisionRing: DivisionRing<Float32>
 ```
 
 Added in v1.0.0
 
-## eqFloat
+## Enum
 
 **Signature**
 
 ```ts
-export declare const eqFloat: Eq<Float>
+export declare const Enum: Enum<Float32>
 ```
 
 Added in v1.0.0
 
-## euclideanRingFloat
+## Eq
 
 **Signature**
 
 ```ts
-export declare const euclideanRingFloat: EuclideanRing<Float>
+export declare const Eq: Eq<Float32>
 ```
 
 Added in v1.0.0
 
-## hasPowFloat
+## EuclideanRing
 
 **Signature**
 
 ```ts
-export declare const hasPowFloat: HasPow<Float>
+export declare const EuclideanRing: EuclideanRing<Float32>
 ```
 
 Added in v1.0.0
 
-## hasToIntFloat
+## Field
+
+Instance of [[Field]] for `Float32`
 
 **Signature**
 
 ```ts
-export declare const hasToIntFloat: HasToInt<Float>
+export declare const Field: Field<Float32>
 ```
 
 Added in v1.0.0
 
-## hasToRationalFloat
+## HasAdd
 
 **Signature**
 
 ```ts
-export declare const hasToRationalFloat: HasToRational<Float>
+export declare const HasAdd: HasAdd<Float32>
 ```
 
 Added in v1.0.0
 
-## integralFloat
+## HasMul
 
 **Signature**
 
 ```ts
-export declare const integralFloat: Integral<Float>
+export declare const HasMul: HasMul<Float32>
 ```
 
 Added in v1.0.0
 
-## numericFloat
+## HasOne
 
 **Signature**
 
 ```ts
-export declare const numericFloat: Numeric<Float>
+export declare const HasOne: HasOne<Float32>
 ```
 
 Added in v1.0.0
 
-## ordFloat
+## HasPow
 
 **Signature**
 
 ```ts
-export declare const ordFloat: ord.Ord<Float>
+export declare const HasPow: HasPow<Float32>
 ```
 
 Added in v1.0.0
 
-## ringFloat
+## HasSub
 
 **Signature**
 
 ```ts
-export declare const ringFloat: Ring<Float>
+export declare const HasSub: HasSub<Float32>
 ```
 
 Added in v1.0.0
 
-## semiringFloat
+## HasZero
 
 **Signature**
 
 ```ts
-export declare const semiringFloat: Semiring<Float>
+export declare const HasZero: HasZero<Float32>
 ```
 
 Added in v1.0.0
 
-## showFloat
+## Numeric
 
 **Signature**
 
 ```ts
-export declare const showFloat: Show<Float>
+export declare const Numeric: Numeric<Float32>
+```
+
+Added in v1.0.0
+
+## Ord
+
+**Signature**
+
+```ts
+export declare const Ord: Ord<Float32>
+```
+
+Added in v1.0.0
+
+## Ring
+
+**Signature**
+
+```ts
+export declare const Ring: Ring<Float32>
+```
+
+Added in v1.0.0
+
+## Semiring
+
+**Signature**
+
+```ts
+export declare const Semiring: Semiring<Float32>
+```
+
+Added in v1.0.0
+
+## Show
+
+**Signature**
+
+```ts
+export declare const Show: Show<Float32>
 ```
 
 Added in v1.0.0
 
 # utils
 
+## Arbitrary
+
+`Arbitrary<Float32>` from `fast-check`
+
+**Signature**
+
+```ts
+export declare const Arbitrary: fc.Arbitrary<Float32>
+```
+
+Added in v1.0.0
+
 ## Digits (type alias)
 
 A tuple of literal integers representing every valid sequence of digits for
-[[Float]]
+[[Float32]]
 
 **Signature**
 
@@ -260,67 +321,59 @@ export type Digits =
 
 Added in v1.0.0
 
-## Float
+## Float32
 
 **Signature**
 
 ```ts
-export declare const Float: Bounded<Float> &
-  CommutativeRing<Float> &
-  Enum<Float> &
-  Eq<Float> &
-  EuclideanRing<Float> &
-  HasPow<Float> &
-  HasToInt<Float> &
-  HasToRational<Float> &
-  Integral<Float> &
-  Numeric<Float> &
-  ord.Ord<Float> &
-  Ring<Float> &
-  Semiring<Float> &
-  Show<Float> & {
-    add: typeof add
-    bottom: Float
-    compare: typeof compare
-    div: typeof div
-    equals: typeof equals
+export declare const Float32: Bounded<Float32> &
+  CommutativeRing<Float32> &
+  Enum<Float32> &
+  Eq<Float32> &
+  EuclideanRing<Float32> &
+  HasPow<Float32> &
+  Numeric<Float32> &
+  Ord<Float32> &
+  Ring<Float32> &
+  Semiring<Float32> &
+  Show<Float32> & {
+    Arbitrary: fc.Arbitrary<Float32>
+    Bounded: Bounded<Float32>
+    CommutativeRing: Ring<Float32>
+    Enum: Enum<Float32>
+    Eq: Eq<Float32>
+    EuclideanRing: EuclideanRing<Float32>
     fromInt: typeof fromInt
-    fromNumber: typeof fromNumber
     fromNumberLossy: typeof fromNumberLossy
+    HasAdd: HasAdd<Float32>
+    HasMul: HasMul<Float32>
+    HasOne: HasOne<Float32>
+    HasPow: HasPow<Float32>
+    HasSub: HasSub<Float32>
+    HasZero: HasZero<Float32>
     isTypeOf: typeof isTypeOf
-    mod: typeof mod
-    mul: typeof mul
     negate: typeof negate
-    next: typeof next
+    Numeric: Numeric<Float32>
     of: typeof of
-    one: Float
-    pow: typeof pow
-    prev: typeof prev
+    Ord: Ord<Float32>
     quot: typeof quot
     rem: typeof rem
-    sub: typeof sub
+    Ring: Ring<Float32>
+    Semiring: Semiring<Float32>
+    Show: Show<Float32>
     toInt: typeof toInt
-    toNumber: typeof toNumber
-    top: Float
-    toRational: typeof toRational
     unsafeFromNumber: typeof unsafeFromNumber
-    zero: Float
   }
 ```
 
 Added in v1.0.0
 
-## Float (interface)
+## Float32 (interface)
 
 **Signature**
 
 ```ts
-export interface Float {
-  /**
-   * @internal
-   */
-  readonly [FLOAT]: unique symbol
-}
+export interface Float32 extends Newtype<typeof FLOAT, Float64> {}
 ```
 
 Added in v1.0.0
@@ -330,7 +383,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function add(a: Float, b: Float): Float
+export declare function add(a: Float32, b: Float32): Float32
 ```
 
 Added in v1.0.0
@@ -340,7 +393,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const bottom: Float
+export declare const bottom: Float32
 ```
 
 Added in v1.0.0
@@ -350,7 +403,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function compare(a: Float, b: Float): -1 | 0 | 1
+export declare const compare: (x: Float32, y: Float32) => Ordering
 ```
 
 Added in v1.0.0
@@ -360,7 +413,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function degree(i: Float): Natural
+export declare function degree(i: Float32): Natural
 ```
 
 Added in v1.0.0
@@ -370,7 +423,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function div(n: Float, d: NonZero<Float>): Float
+export declare function div(n: Float32, d: NonZero<Float32>): Float32
 ```
 
 Added in v1.0.0
@@ -380,7 +433,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function equals(a: Float, b: Float): boolean
+export declare function equals(a: Float32, b: Float32): boolean
 ```
 
 Added in v1.0.0
@@ -390,7 +443,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function fromInt(int: Int): Option<Float>
+export declare function fromInt(int: Int): Option<Float32>
 ```
 
 Added in v1.0.0
@@ -400,17 +453,21 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function fromNumber(n: number): option.Option<Float>
+export declare function fromNumber(n: number): option.Option<Float32>
 ```
 
 Added in v1.0.0
 
 ## fromNumberLossy
 
+Coerces a Float64 to Float32, using `Math.fround` internally.
+If the input exceeds the range of `Float32`, it evaluates to
+`Infinity` or `-Infinity`.
+
 **Signature**
 
 ```ts
-export declare function fromNumberLossy(n: number): Float
+export declare function fromNumberLossy(n: number): Float32
 ```
 
 Added in v1.0.0
@@ -420,7 +477,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function isTypeOf(x: unknown): x is Float
+export declare function isTypeOf(x: unknown): x is Float32
 ```
 
 Added in v1.0.0
@@ -430,7 +487,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function mod(n: Float, d: NonZero<Float>): Float
+export declare function mod(n: Float32, d: NonZero<Float32>): Float32
 ```
 
 Added in v1.0.0
@@ -440,7 +497,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function mul(a: Float, b: Float): Float
+export declare function mul(a: Float32, b: Float32): Float32
 ```
 
 Added in v1.0.0
@@ -450,7 +507,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function negate(a: Float): Float
+export declare function negate(a: Float32): Float32
 ```
 
 Added in v1.0.0
@@ -460,7 +517,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function next(a: Float): Option<Float>
+export declare function next(a: Float32): Option<Float32>
 ```
 
 Added in v1.0.0
@@ -476,16 +533,16 @@ Math.pow(2, 127) \* (2 - 1 / Math.pow(2, 23))
 **Signature**
 
 ```ts
-export declare function of(zero: 0): Float
-export declare function of(...digits: Digits): NonZero<Float>
+export declare function of(zero: 0): Float32
+export declare function of(...digits: Digits): NonZero<Float32>
 ```
 
 **Example**
 
 ```ts
-import * as Float from 'fp-ts-numerics/Float'
+import * as Float32 from 'fp-ts-numerics/Float32'
 
-const f = Float.of(2, 1, 4, 7, 4, 8, 3, 6, 4, 7)
+const f = Float32.of(2, 1, 4, 7, 4, 8, 3, 6, 4, 7)
 ```
 
 Added in v1.0.0
@@ -495,7 +552,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const one: Float
+export declare const one: Float32
 ```
 
 Added in v1.0.0
@@ -505,7 +562,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function pow(n: Float, exp: Float): Float
+export declare function pow(n: Float32, exp: Float32): Float32
 ```
 
 Added in v1.0.0
@@ -515,7 +572,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function prev(a: Float): Option<Float>
+export declare function prev(a: Float32): Option<Float32>
 ```
 
 Added in v1.0.0
@@ -525,7 +582,17 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function quot(a: Float, b: NonZero<Float>): Float
+export declare function quot(a: Float32, b: NonZero<Float32>): Float32
+```
+
+Added in v1.0.0
+
+## recip
+
+**Signature**
+
+```ts
+export declare function recip(n: NonZero<Float32>): Float32
 ```
 
 Added in v1.0.0
@@ -535,7 +602,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function rem(a: Float, b: NonZero<Float>): Float
+export declare function rem(a: Float32, b: NonZero<Float32>): Float32
 ```
 
 Added in v1.0.0
@@ -545,7 +612,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function sub(a: Float, b: Float): Float
+export declare function sub(a: Float32, b: Float32): Float32
 ```
 
 Added in v1.0.0
@@ -555,7 +622,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function toInt(a: Float): Int
+export declare function toInt(a: Float32): Option<Int>
 ```
 
 Added in v1.0.0
@@ -565,7 +632,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function toInteger(a: Float): Int
+export declare function toInteger(a: Float32): Int
 ```
 
 Added in v1.0.0
@@ -575,17 +642,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function toNumber(i: Float): number
-```
-
-Added in v1.0.0
-
-## toRational
-
-**Signature**
-
-```ts
-export declare function toRational(a: Float): Rational
+export declare function toNumber(i: Float32): number
 ```
 
 Added in v1.0.0
@@ -595,7 +652,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const top: Float
+export declare const top: Float32
 ```
 
 Added in v1.0.0
@@ -605,7 +662,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function unsafeFromNumber(n: number): Float
+export declare function unsafeFromNumber(n: number): Float32
 ```
 
 Added in v1.0.0
@@ -615,7 +672,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const zero: Float
+export declare const zero: Float32
 ```
 
 Added in v1.0.0

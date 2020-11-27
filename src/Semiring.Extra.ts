@@ -8,8 +8,9 @@ import { pipe } from 'fp-ts/lib/pipeable'
 import { EuclideanRing } from './EuclideanRing'
 import { div, isEven } from './EuclideanRing.Extra'
 import { HasToInt } from './HasToInt'
-import { NonNegative, nonNegative } from './NonNegative'
-import { NonZero, nonZero } from './NonZero'
+import { NonNegative, toNonNegative } from './NonNegative'
+import { isNonZero, NonZero } from './NonZero'
+import { isPositive, Positive } from './Positive'
 import { Semiring } from './Semiring'
 
 /**
@@ -25,14 +26,14 @@ export function semiringPow<B, E>(
   B: Semiring<B>,
   E: Ord<E> & EuclideanRing<E> & HasToInt<E>
 ): (base: B, exponent: NonNegative<E>) => B {
-  const two: NonNegative<NonZero<E>> = pipe(
-    nonZero(E)(E.add(E.one, E.one)),
-    (x) => option.toUndefined(x)!, // <-- nothing case is expected to be impossible
-    nonNegative(E)
+  const two: Positive<E> = pipe(
+    E.add(E.one, E.one),
+    option.fromPredicate(isPositive(E)),
+    (twoOpt) => option.toUndefined(twoOpt)! // <-- nothing case is expected to be impossible
   )
 
   return (base, exponent) => {
-    return E.equals(E.zero, exponent) ? B.one : toNonZeroPow(base, exponent)
+    return isNonZero(E)(exponent) ? toNonZeroPow(base, exponent) : B.one
   }
 
   // where

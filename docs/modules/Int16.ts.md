@@ -1,6 +1,6 @@
 ---
 title: Int16.ts
-nav_order: 30
+nav_order: 32
 parent: Modules
 ---
 
@@ -36,20 +36,20 @@ Added in v1.0.0
   - [of](#of)
 - [Data Type](#data-type)
   - [Int16 (interface)](#int16-interface)
-- [Typeclass Instance](#typeclass-instance)
-  - [boundedInt16](#boundedint16)
-  - [commutativeRingInt16](#commutativeringint16)
-  - [enumInt16](#enumint16)
-  - [euclideanRingInt16](#euclideanringint16)
-  - [hasPowInt16](#haspowint16)
-  - [hasToIntInt16](#hastointint16)
-  - [hasToRationalInt16](#hastorationalint16)
-  - [integralInt16](#integralint16)
-  - [numericInt16](#numericint16)
-  - [ordInt16](#ordint16)
-  - [ringInt16](#ringint16)
-  - [semiringInt16](#semiringint16)
-  - [showInt16](#showint16)
+- [Instances](#instances)
+  - [Bounded](#bounded)
+  - [CommutativeRing](#commutativering)
+  - [Enum](#enum)
+  - [EuclideanRing](#euclideanring)
+  - [HasPow](#haspow)
+  - [HasToInt](#hastoint)
+  - [HasToRational](#hastorational)
+  - [Integral](#integral)
+  - [Numeric](#numeric)
+  - [Ord](#ord)
+  - [Ring](#ring)
+  - [Semiring](#semiring)
+  - [Show](#show)
 - [utils](#utils)
   - [Digits (type alias)](#digits-type-alias)
   - [Int16](#int16)
@@ -122,144 +122,139 @@ const myInt: Int = Int(1, 0, 0)
 **Signature**
 
 ```ts
-export interface Int16 extends Int32 {
-  /**
-   * @internal
-   */
-  readonly [INT_16]: unique symbol
-}
+export interface Int16 extends Branded<Int32, typeof INT_16> {}
 ```
 
 Added in v1.0.0
 
-# Typeclass Instance
+# Instances
 
-## boundedInt16
+## Bounded
 
 **Signature**
 
 ```ts
-export declare const boundedInt16: Bounded<Int16>
+export declare const Bounded: Bounded<Int16>
 ```
 
 Added in v1.0.0
 
-## commutativeRingInt16
+## CommutativeRing
 
 **Signature**
 
 ```ts
-export declare const commutativeRingInt16: CommutativeRing<Int16>
+export declare const CommutativeRing: CommutativeRing<Int16>
 ```
 
 Added in v1.0.0
 
-## enumInt16
+## Enum
 
 **Signature**
 
 ```ts
-export declare const enumInt16: Enum<Int16>
+export declare const Enum: Enum<Int16>
 ```
 
 Added in v1.0.0
 
-## euclideanRingInt16
+## EuclideanRing
 
 **Signature**
 
 ```ts
-export declare const euclideanRingInt16: EuclideanRing<Int16>
+export declare const EuclideanRing: EuclideanRing<Int16>
 ```
 
 Added in v1.0.0
 
-## hasPowInt16
+## HasPow
 
 **Signature**
 
 ```ts
-export declare const hasPowInt16: HasPow<Int16>
+export declare const HasPow: HasPow<Int16>
 ```
 
 Added in v1.0.0
 
-## hasToIntInt16
+## HasToInt
 
 **Signature**
 
 ```ts
-export declare const hasToIntInt16: HasToInt<Int16>
+export declare const HasToInt: HasToInt<Int16>
 ```
 
 Added in v1.0.0
 
-## hasToRationalInt16
+## HasToRational
 
 **Signature**
 
 ```ts
-export declare const hasToRationalInt16: HasToRational<Int16>
+export declare const HasToRational: HasToRational<Int16>
 ```
 
 Added in v1.0.0
 
-## integralInt16
+## Integral
 
 **Signature**
 
 ```ts
-export declare const integralInt16: Integral<Int16>
+export declare const Integral: Integral<Int16>
 ```
 
 Added in v1.0.0
 
-## numericInt16
+## Numeric
 
 **Signature**
 
 ```ts
-export declare const numericInt16: Numeric<Int16>
+export declare const Numeric: Numeric<Int16>
 ```
 
 Added in v1.0.0
 
-## ordInt16
+## Ord
 
 **Signature**
 
 ```ts
-export declare const ordInt16: ord.Ord<Int16>
+export declare const Ord: Ord<Int16>
 ```
 
 Added in v1.0.0
 
-## ringInt16
+## Ring
 
 **Signature**
 
 ```ts
-export declare const ringInt16: Ring<Int16>
+export declare const Ring: Ring<Int16>
 ```
 
 Added in v1.0.0
 
-## semiringInt16
+## Semiring
 
 **Signature**
 
 ```ts
-export declare const semiringInt16: Semiring<Int16>
+export declare const Semiring: Semiring<Int16>
 ```
 
 Added in v1.0.0
 
-## showInt16
+## Show
 
 **Signature**
 
 ```ts
-export declare const showInt16: Show<Int16>
+export declare const Show: Show<Int16>
 ```
 
 Added in v1.0.0
@@ -305,29 +300,43 @@ export declare const Int16: Bounded<Int16> &
   HasToRational<Int16> &
   Integral<Int16> &
   Numeric<Int16> &
-  ord.Ord<Int16> &
+  Ord<Int16> &
   Ring<Int16> &
   Semiring<Int16> &
   Show<Int16> & {
     add: typeof add
     bottom: Int16
-    compare: typeof compare
+    Bounded: Bounded<Int16>
+    CommutativeRing: CommutativeRing<Int16>
+    compare: (x: Int16, y: Int16) => Ordering
     div: typeof div
+    Enum: Enum<Int16>
+    Eq: Eq<Int16>
     equals: typeof equals
+    EuclideanRing: EuclideanRing<Int16>
     fromInt: typeof fromInt
     fromNumber: typeof fromNumber
     fromNumberLossy: typeof fromNumberLossy
+    HasPow: HasPow<Int16>
+    HasToInt: HasToInt<Int16>
+    HasToRational: HasToRational<Int16>
+    Integral: Integral<Int16>
     isTypeOf: typeof isTypeOf
     mod: typeof mod
     mul: typeof mul
     negate: typeof negate
     next: typeof next
+    Numeric: Numeric<Int16>
     of: typeof of
     one: Int16
+    Ord: Ord<Int16>
     pow: typeof pow
     prev: typeof prev
     quot: typeof quot
     rem: typeof rem
+    Ring: Ring<Int16>
+    Semiring: Semiring<Int16>
+    Show: Show<Int16>
     sub: typeof sub
     toInt: typeof toInt
     toNumber: typeof toNumber
@@ -365,7 +374,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function compare(a: Int16, b: Int16): -1 | 0 | 1
+export declare const compare: (x: Int16, y: Int16) => Ordering
 ```
 
 Added in v1.0.0
@@ -405,7 +414,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function fromInt(int: Int): Option<Int16>
+export declare function fromInt(n: Int): Option<Int16>
 ```
 
 Added in v1.0.0

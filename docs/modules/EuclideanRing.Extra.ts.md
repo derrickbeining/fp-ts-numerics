@@ -1,6 +1,6 @@
 ---
 title: EuclideanRing.Extra.ts
-nav_order: 12
+nav_order: 11
 parent: Modules
 ---
 
@@ -39,8 +39,8 @@ Calculates the _greatest common divisor_ of two values using the Euclidean
 algorithm. The result is always non-negative.
 
 This function is overloaded such that, when `a` or `b` is `NonZero<A>`, the
-result of `gcd(a, b)` is `NonNegative<NonZero<A>>`, otherwise it is just
-`NonZero<A>`.
+result of `gcd(a, b)` is `Positive<A>`, otherwise it is just
+`NonNegative<A>`.
 
 **Signature**
 
@@ -75,14 +75,10 @@ Added in v1.0.0
 Calculates the _least common multiple_ of two values. The result is always
 non-negative. It's implemented using {@link gcd} internally.
 
-This function is overloaded such that, when `a` or `b` is `NonZero<A>`, the
-result of `lcm(a, b)` is `NonNegative<NonZero<A>>`, otherwise it is just
-`NonZero<A>`.
-
 **Signature**
 
 ```ts
-export declare function lcm<A>(T: Ord<A> & EuclideanRing<A>): (a: A, b: A) => NonNegative<A>
+export declare function lcm<A>(T: Ord<A> & EuclideanRing<A>): (a: A, b: A) => A
 ```
 
 Added in v1.0.0

@@ -1,6 +1,6 @@
 ---
 title: Ring.Extra.ts
-nav_order: 43
+nav_order: 48
 parent: Modules
 ---
 
@@ -33,19 +33,19 @@ else return x
 **Signature**
 
 ```ts
-export declare function abs<A>(OR: Ord<A> & Ring<A>): (a: A) => NonNegative<A>
+export declare function abs<A>(OR: Ord<A> & HasSub<A> & HasZero<A>): (a: A) => A
 ```
 
 Added in v1.0.0
 
 ## negate
 
-`negate x` can be used as a shorthand for `zero - x`
+`negate(x)` can be used as a shorthand for `sub(zero, x)`
 
 **Signature**
 
 ```ts
-export declare function negate<A>(R: Ring<A>): (a: A) => A
+export declare function negate<A>(R: HasSub<A> & HasZero<A>): (a: A) => A
 ```
 
 Added in v1.0.0
@@ -58,7 +58,7 @@ any `x`, we should have `signum(x) * abs(x) == x`
 **Signature**
 
 ```ts
-export declare function signum<A>(T: Ord<A> & Ring<A>): (a: A) => A
+export declare function signum<A>(T: Ord<A> & HasSub<A> & HasZero<A> & HasOne<A>): (a: A) => A
 ```
 
 Added in v1.0.0

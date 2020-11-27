@@ -1,6 +1,6 @@
 ---
 title: Rational.ts
-nav_order: 42
+nav_order: 47
 parent: Modules
 ---
 

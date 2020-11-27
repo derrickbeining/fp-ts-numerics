@@ -19,7 +19,6 @@ Added in v1.0.0
 
 - [utils](#utils)
   - [CommutativeRing (interface)](#commutativering-interface)
-  - [instanceCommutativeRing](#instancecommutativering)
 
 ---
 
@@ -38,46 +37,7 @@ in addition to the {@link Ring} laws:
 **Signature**
 
 ```ts
-export interface CommutativeRing<A> extends Ring<A> {
-  /**
-   * @internal
-   */
-  readonly [COMMUTATIVE_RING]: typeof COMMUTATIVE_RING
-}
-```
-
-Added in v1.0.0
-
-## instanceCommutativeRing
-
-CommutativeRing instance constructor
-
-**Signature**
-
-```ts
-export declare function instanceCommutativeRing<A>(ring: Ring<A>): CommutativeRing<A>
-```
-
-**Example**
-
-```ts
-import { instanceSemiring } from 'fp-ts-numerics/Semiring'
-import { instanceRing } from 'fp-ts-numerics/Ring'
-import { instanceCommutativeRing } from 'fp-ts-numerics/CommutativeRing'
-
-const semiringNumber = instanceSemiring<number>({
-  add: (x, y) => x + y,
-  mul: (x, y) => x * y,
-  one: 1,
-  zero: 0,
-})
-
-const ringNumber = instanceRing<number>({
-  ...semiringNumber,
-  sub: (x, y) => x - y,
-})
-
-const commutativeRingMyType = instanceCommutativeRing<number>(ringNumber)
+export interface CommutativeRing<A> extends Ring<A> {}
 ```
 
 Added in v1.0.0

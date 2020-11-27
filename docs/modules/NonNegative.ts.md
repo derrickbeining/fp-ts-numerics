@@ -1,6 +1,6 @@
 ---
 title: NonNegative.ts
-nav_order: 37
+nav_order: 42
 parent: Modules
 ---
 
@@ -16,13 +16,15 @@ Added in v1.0.0
   - [NonNegative (type alias)](#nonnegative-type-alias)
   - [arbitraryNonNegative](#arbitrarynonnegative)
   - [isNonNegative](#isnonnegative)
-  - [nonNegative](#nonnegative)
+  - [toNonNegative](#tononnegative)
 
 ---
 
 # utils
 
 ## NonNegative (type alias)
+
+The type of values including `zero` and those greater than `zero`
 
 **Signature**
 
@@ -38,7 +40,7 @@ Added in v1.0.0
 
 ```ts
 export declare function arbitraryNonNegative<A>(
-  T: Ord<A> & Semiring<A>
+  T: Ord<A> & HasZero<A>
 ): (arb: fc.Arbitrary<A>) => fc.Arbitrary<NonNegative<A>>
 ```
 
@@ -49,19 +51,17 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function isNonNegative<A>(T: Ord<A> & Semiring<A>)
+export declare function isNonNegative<A>(T: Ord<A> & HasZero<A>)
 ```
 
 Added in v1.0.0
 
-## nonNegative
+## toNonNegative
 
 **Signature**
 
 ```ts
-export declare function nonNegative<A>(T: Ord<A> & Ring<A> & Bounded<A>): <A2>(a: A & A2) => Option<NonNegative<A & A2>>
-export declare function nonNegative<A>(T: Ord<A> & Ring<A>): <A2>(a: A & A2) => NonNegative<A & A2>
-export declare function nonNegative<A>(T: Ord<A> & Semiring<A>): <A2>(a: A & A2) => Option<NonNegative<A & A2>>
+export declare function toNonNegative<A>(T: Ord<A> & HasZero<A> & HasSub<A>): (a: A) => Option<NonNegative<A>>
 ```
 
 Added in v1.0.0

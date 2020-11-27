@@ -14,7 +14,6 @@ Added in v1.0.0
 
 - [utils](#utils)
   - [HasFromInt (interface)](#hasfromint-interface)
-  - [instanceHasFromInt](#instancehasfromint)
 
 ---
 
@@ -29,28 +28,12 @@ The class of values mapped to an [[Int]]
 ```ts
 export interface HasFromInt<A> {
   /**
-   * @internal
-   */
-  readonly [HAS_FROM_INT]: typeof HAS_FROM_INT
-  /**
    * Maps an Int to a value
    *
    * @since 1.0.0
    */
   readonly fromInt: (int: Int) => A
 }
-```
-
-Added in v1.0.0
-
-## instanceHasFromInt
-
-Instance constructor for HasFromInt typeclass
-
-**Signature**
-
-```ts
-export declare function instanceHasFromInt<A>(members: Methods<A>): HasFromInt<A>
 ```
 
 Added in v1.0.0

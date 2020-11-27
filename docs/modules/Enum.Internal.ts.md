@@ -1,6 +1,6 @@
 ---
 title: Enum.Internal.ts
-nav_order: 9
+nav_order: 8
 parent: Modules
 ---
 
@@ -14,7 +14,6 @@ Added in v1.0.0
 
 - [utils](#utils)
   - [Enum (interface)](#enum-interface)
-  - [instanceEnum](#instanceenum)
 
 ---
 
@@ -50,25 +49,9 @@ where `next(x) = some(x+2)`, and similarly `prev(x) = some(x-2)`.
 
 ```ts
 export interface Enum<A> extends Ord<A> {
-  /**
-   * @internal
-   */
-  readonly [ENUM]: typeof ENUM
   readonly next: (a: A) => Option<A>
   readonly prev: (a: A) => Option<A>
 }
-```
-
-Added in v1.0.0
-
-## instanceEnum
-
-Enum instance constructor
-
-**Signature**
-
-```ts
-export declare function instanceEnum<A>(e: EnumMethods<A>): Enum<A>
 ```
 
 Added in v1.0.0

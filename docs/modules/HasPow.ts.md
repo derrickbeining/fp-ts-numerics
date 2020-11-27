@@ -1,6 +1,6 @@
 ---
 title: HasPow.ts
-nav_order: 24
+nav_order: 26
 parent: Modules
 ---
 
@@ -14,7 +14,6 @@ Added in v1.0.0
 
 - [utils](#utils)
   - [HasPow (interface)](#haspow-interface)
-  - [instanceHasPow](#instancehaspow)
   - [toPowOf](#topowof)
 
 ---
@@ -29,10 +28,6 @@ The class of values which support exponentiation
 
 ````ts
 export interface HasPow<A> {
-  /**
-   * @internal
-   */
-  readonly [HAS_POW]: typeof HAS_POW
   /**
    * Exponentiates a value
    *
@@ -49,18 +44,6 @@ export interface HasPow<A> {
   readonly pow: (n: A, exponent: A) => A
 }
 ````
-
-Added in v1.0.0
-
-## instanceHasPow
-
-Instance constructor for HasPow typeclass
-
-**Signature**
-
-```ts
-export declare function instanceHasPow<A>(hasPow: Methods<A>): HasPow<A>
-```
 
 Added in v1.0.0
 
